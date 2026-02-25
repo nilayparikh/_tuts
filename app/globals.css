@@ -1,5 +1,5 @@
 /*
- * LocalM Tutorials — global stylesheet
+ * LocalM Tutorials — global stylesheet (Material Design 3)
  *
  * The @localm/tutorial-framework injects its own --tf-* CSS variables via
  * <TutorialGlobalStyles />.  This file is for site-specific overrides and
@@ -8,7 +8,8 @@
 
 /* ── Site-specific token overrides ─────────────────────────────────────── */
 :root {
-  /* Swap JetBrains Mono in for the mono stack */
+  --tf-font-display: "Inter", "Segoe UI", system-ui, sans-serif;
+  --tf-font-body: "Inter", "Segoe UI", system-ui, sans-serif;
   --tf-font-mono: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
 }
 

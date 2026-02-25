@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import {
-  TutorialLayout,
+  CoursePlayerLayout,
   LessonHeader,
   QABlock,
   QuizBlock,
@@ -15,6 +15,18 @@ import {
   TutorialNav,
   ConceptCard,
   ConceptGrid,
+  CalloutBox,
+  InfoBox,
+  NoteBox,
+  TipBox,
+  SuccessBox,
+  WarningBox,
+  DangerBox,
+  DescriptionBox,
+  StepByStepGuide,
+  MermaidDiagram,
+  PollBlock,
+  Paragraph,
 } from "@localm/tutorial-framework";
 import { SITE_CONFIG } from "@/config/site";
 import {
@@ -24,20 +36,6 @@ import {
   getAdjacentParts,
 } from "@/data/course";
 import type { CoursePartMeta } from "@/data/course";
-import { LessonTopBar } from "@/app/components/LessonTopBar";
-
-// ─── Type icons/labels (matches PartTypeBadge META) ───────────────────────
-
-const TYPE_META: Record<string, { icon: string; label: string }> = {
-  video: { icon: "▶", label: "Video" },
-  reading: { icon: "📖", label: "Reading" },
-  "video-code": { icon: "💻", label: "Video with Code" },
-  quiz: { icon: "📝", label: "Quiz" },
-  podcast: { icon: "🎙", label: "Podcast" },
-  slideshow: { icon: "📑", label: "Slides" },
-  article: { icon: "📰", label: "Article" },
-  lab: { icon: "🧪", label: "Lab" },
-};
 
 // ─── Static params (for output: 'export') ────────────────────────────────
 
@@ -79,45 +77,43 @@ export default async function LessonPage({
   if (!part) notFound();
 
   const { prev, next } = getAdjacentParts(slug);
-  const currentIndex = COURSE.parts.findIndex((p) => p.slug === slug);
-  const meta = TYPE_META[part.type] ?? { icon: "📄", label: part.type };
 
   return (
-    <TutorialLayout
+    <CoursePlayerLayout
       header={{
         ...SITE_CONFIG.header,
         currentPath: `/${slug}/`,
       }}
       footer={SITE_CONFIG.footer}
-      maxWidth="content"
+      sidebar={{
+        courseTitle: COURSE.title,
+        parts: COURSE.parts,
+        currentSlug: slug,
+        basePath: "",
+        totalDuration: COURSE.totalDuration,
+      }}
+      sidebarWidth={288}
     >
-      {/* ── Lesson navigation strip ────────────────────────────────────── */}
-      <LessonTopBar
-        currentIndex={currentIndex}
-        totalLessons={COURSE.parts.length}
-        title={part.title}
-        typeLabel={meta.label}
-        typeIcon={meta.icon}
+      {/* ── Lesson header ──────────────────────────────────────────────── */}
+      <LessonHeader
+        type={part.type}
         duration={part.duration}
-        prevHref={prev ? `/${prev.slug}/` : undefined}
-        nextHref={next ? `/${next.slug}/` : undefined}
-        courseHref="/"
+        title={part.title}
+        description={part.description}
       />
 
-      {/* ── Lesson content ─────────────────────────────────────────────── */}
-      <div className="lesson-content">
-        {/* Part header */}
-        <LessonHeader
-          type={part.type}
-          duration={part.duration}
-          title={part.title}
-          description={part.description}
-        />
-
-        {/* Content by type */}
+      {/* ── Main content by type ───────────────────────────────────────── */}
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: "var(--tf-space-8)",
+          maxWidth: "var(--tf-narrow-width)",
+        }}
+      >
         <PartContent part={part} />
 
-        {/* Navigation */}
+        {/* ── Navigation ─────────────────────────────────────────────── */}
         <SectionDivider />
         <TutorialNav
           prev={
@@ -144,7 +140,7 @@ export default async function LessonPage({
           }
         />
       </div>
-    </TutorialLayout>
+    </CoursePlayerLayout>
   );
 }
 
@@ -174,13 +170,7 @@ function PartContent({ part }: { part: CoursePartMeta }) {
 
 function VideoContent({ part }: { part: CoursePartMeta }) {
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        gap: "var(--tf-space-8)",
-      }}
-    >
+    <>
       {/* Video embed */}
       {part.videoId && (
         <YouTubeEmbed
@@ -191,15 +181,200 @@ function VideoContent({ part }: { part: CoursePartMeta }) {
         />
       )}
 
+      {/* ── Description Box (below video) ──────────────────────────────── */}
+      <DescriptionBox
+        title={part.title}
+        subtitle={part.description}
+        tags={part.tags}
+        meta={part.duration}
+      >
+        {part.objectives && part.objectives.length > 0 && (
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "var(--tf-space-3)",
+            }}
+          >
+            <Paragraph lead>
+              In this lesson you will learn the following concepts and gain
+              hands-on experience building real components.
+            </Paragraph>
+            <ul
+              style={{
+                margin: 0,
+                paddingLeft: "var(--tf-space-5)",
+                display: "flex",
+                flexDirection: "column",
+                gap: "var(--tf-space-2)",
+              }}
+            >
+              {part.objectives.map((obj, i) => (
+                <li
+                  key={i}
+                  style={{
+                    fontSize: "var(--tf-text-sm)",
+                    color: "var(--tf-text-secondary)",
+                    lineHeight: "var(--tf-leading-relaxed)",
+                  }}
+                >
+                  {obj}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </DescriptionBox>
+
+      {/* ── Callout Boxes Demo ──────────────────────────────────────────── */}
+      <InfoBox title="Prerequisites">
+        Make sure you have Python 3.11+ installed and a Google Cloud account
+        with Vertex AI enabled before starting this lesson.
+      </InfoBox>
+
+      {part.type === "video-code" && (
+        <NoteBox title="Follow along">
+          This lesson includes code examples. Open your terminal and follow each
+          step as shown in the video.
+        </NoteBox>
+      )}
+
+      {/* ── Step-by-step guide ─────────────────────────────────────────── */}
+      {part.codeUrl && (
+        <StepByStepGuide
+          title="Setup Instructions"
+          steps={[
+            {
+              title: "Clone the repository",
+              description:
+                "Clone the course repository to your local machine to follow along with the code examples.",
+              code: `git clone ${part.codeUrl}\ncd $(basename ${part.codeUrl})`,
+              codeLanguage: "bash",
+            },
+            {
+              title: "Create a virtual environment",
+              description:
+                "Create an isolated Python environment for the project dependencies.",
+              code: "python -m venv .venv\nsource .venv/bin/activate  # or .venv\\Scripts\\activate on Windows",
+              codeLanguage: "bash",
+            },
+            {
+              title: "Install dependencies",
+              description:
+                "Install all required packages from the requirements file.",
+              code: "pip install -r requirements.txt",
+              codeLanguage: "bash",
+              note: "This may take a few minutes depending on your internet connection.",
+            },
+            {
+              title: "Run the agent",
+              description:
+                "Start the A2A server and verify it is responding to requests.",
+              code: "python main.py",
+              codeLanguage: "bash",
+            },
+          ]}
+        />
+      )}
+
+      {/* ── Diagram example ────────────────────────────────────────────── */}
+      {part.slug === "a2a-architecture" && (
+        <MermaidDiagram
+          chart={`graph LR
+    A[Client] -->|sendTask| B[A2A Server]
+    B -->|Agent Card| A
+    B -->|SSE Stream| A
+    B --> C[Agent Logic]
+    C --> D[Tools / MCP]
+    C --> E[LLM Provider]
+    style A fill:#6366f1,stroke:#818cf8,color:#fff
+    style B fill:#14b8a6,stroke:#5eead4,color:#fff
+    style C fill:#1f222a,stroke:#8892a8,color:#e2e6f0
+    style D fill:#f59e0b,stroke:#fbbf24,color:#000
+    style E fill:#f59e0b,stroke:#fbbf24,color:#000`}
+          caption="Figure: A2A Protocol communication flow — Client ↔ Server ↔ Agent Logic"
+          alt="A2A Protocol architecture diagram showing client, server, agent logic, tools, and LLM provider"
+        />
+      )}
+
+      {/* ── Poll ────────────────────────────────────────────────────────── */}
+      {part.slug === "why-a2a" && (
+        <PollBlock
+          question="Which agent framework are you most interested in using with A2A?"
+          options={[
+            { id: "adk", text: "Google ADK" },
+            { id: "langgraph", text: "LangGraph" },
+            { id: "beeai", text: "BeeAI Framework" },
+            { id: "msft", text: "Microsoft Agent Framework" },
+            { id: "custom", text: "Custom implementation" },
+          ]}
+          simulatedVotes={{
+            adk: 42,
+            langgraph: 38,
+            beeai: 15,
+            msft: 22,
+            custom: 8,
+          }}
+        />
+      )}
+
+      {/* ── Success callout for code lessons ───────────────────────────── */}
+      {part.codeUrl && (
+        <SuccessBox title="Source Code">
+          The complete source code for this lesson is available on GitHub.{" "}
+          <a
+            href={part.codeUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ color: "var(--tf-color-success)", fontWeight: 600 }}
+          >
+            View on GitHub →
+          </a>
+        </SuccessBox>
+      )}
+
+      {/* ── Q&A ─────────────────────────────────────────────────────────── */}
+      {part.qa && part.qa.length > 0 && (
+        <section>
+          <SectionDivider label="Q & A" />
+          <QABlock items={part.qa} />
+        </section>
+      )}
+
+      {/* ── Warning callout example ────────────────────────────────────── */}
+      {part.slug === "advanced-concepts" && (
+        <WarningBox title="Security Notice">
+          When adding OAuth 2.0 to your Agent Card, never commit client secrets
+          to your repository. Use environment variables or a secret manager.
+        </WarningBox>
+      )}
+
+      {/* ── Danger callout example ─────────────────────────────────────── */}
+      {part.slug === "agent-stack" && (
+        <DangerBox title="Production Deployment">
+          Ensure your A2A agents are behind a reverse proxy with rate limiting
+          before exposing them to the internet. Unprotected agents can be
+          abused.
+        </DangerBox>
+      )}
+    </>
+  );
+}
+
+// ─── Reading ──────────────────────────────────────────────────────────────
+
+function ReadingContent({ part }: { part: CoursePartMeta }) {
+  return (
+    <>
       {/* Objectives */}
       {part.objectives && part.objectives.length > 0 && (
         <section>
-          <SectionDivider label="What you'll learn" />
-          <ConceptGrid columns={3}>
+          <SectionDivider label="In this reading" />
+          <ConceptGrid columns={2}>
             {part.objectives.map((obj, i) => (
               <ConceptCard
                 key={i}
-                title={`${i + 1}.`}
+                title={`Step ${i + 1}`}
                 description={obj}
                 variant={
                   (
@@ -219,106 +394,9 @@ function VideoContent({ part }: { part: CoursePartMeta }) {
         </section>
       )}
 
-      {/* Code link */}
-      {part.codeUrl && (
-        <KeyPoint variant="tip" title="Code for this lesson">
-          Follow along with the complete source code on GitHub:{" "}
-          <a
-            href={part.codeUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{ color: "var(--tf-color-primary-light)", fontWeight: 600 }}
-          >
-            View on GitHub →
-          </a>
-        </KeyPoint>
-      )}
-
-      {/* Q&A */}
-      {part.qa && part.qa.length > 0 && (
-        <section>
-          <SectionDivider label="Q & A" />
-          <QABlock items={part.qa} />
-        </section>
-      )}
-    </div>
-  );
-}
-
-// ─── Reading ──────────────────────────────────────────────────────────────
-
-function ReadingContent({ part }: { part: CoursePartMeta }) {
-  return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        gap: "var(--tf-space-8)",
-      }}
-    >
-      {/* Objectives */}
-      {part.objectives && part.objectives.length > 0 && (
-        <section>
-          <SectionDivider label="In this reading" />
-          <ul
-            style={{
-              listStyle: "none",
-              margin: 0,
-              padding: 0,
-              display: "flex",
-              flexDirection: "column",
-              gap: "var(--tf-space-3)",
-            }}
-          >
-            {part.objectives.map((obj, i) => (
-              <li
-                key={i}
-                style={{
-                  display: "flex",
-                  alignItems: "flex-start",
-                  gap: "var(--tf-space-3)",
-                  padding: "var(--tf-space-3) var(--tf-space-4)",
-                  borderRadius: "var(--tf-radius-lg)",
-                  background: "var(--tf-bg-surface)",
-                  border: "1px solid var(--tf-border-subtle)",
-                }}
-              >
-                <span
-                  style={{
-                    flexShrink: 0,
-                    width: 20,
-                    height: 20,
-                    borderRadius: "50%",
-                    background: "rgba(16,185,129,0.15)",
-                    border: "1px solid rgba(16,185,129,0.3)",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    fontSize: "0.65rem",
-                    color: "var(--tf-color-success)",
-                    marginTop: 2,
-                  }}
-                >
-                  ✓
-                </span>
-                <span
-                  style={{
-                    fontSize: "var(--tf-text-sm)",
-                    color: "var(--tf-text-secondary)",
-                    lineHeight: "var(--tf-leading-relaxed)",
-                  }}
-                >
-                  {obj}
-                </span>
-              </li>
-            ))}
-          </ul>
-        </section>
-      )}
-
       {/* External resource */}
       {part.readingUrl && (
-        <KeyPoint variant="info" title="External resource">
+        <InfoBox title="External resource">
           This lesson links to an external resource.{" "}
           <a
             href={part.readingUrl}
@@ -328,18 +406,36 @@ function ReadingContent({ part }: { part: CoursePartMeta }) {
           >
             Open resource →
           </a>
-        </KeyPoint>
+        </InfoBox>
       )}
 
-      {/* Code URL if also has code */}
+      {/* Step-by-step setup */}
       {part.codeUrl && (
-        <CodeBlock
-          code={`git clone ${part.codeUrl}\ncd $(basename ${part.codeUrl})\npip install -r requirements.txt`}
-          language="bash"
-          filename="Terminal"
+        <StepByStepGuide
+          title="Getting Started"
+          steps={[
+            {
+              title: "Clone the repository",
+              description: "Get the source code for this lesson.",
+              code: `git clone ${part.codeUrl}`,
+              codeLanguage: "bash",
+            },
+            {
+              title: "Navigate to the project",
+              description: "Open the folder in your terminal.",
+              code: `cd $(basename ${part.codeUrl})`,
+              codeLanguage: "bash",
+            },
+            {
+              title: "Install dependencies",
+              description: "Install all required packages.",
+              code: "pip install -r requirements.txt",
+              codeLanguage: "bash",
+            },
+          ]}
         />
       )}
-    </div>
+    </>
   );
 }
 
@@ -348,18 +444,25 @@ function ReadingContent({ part }: { part: CoursePartMeta }) {
 function QuizContent({ part }: { part: CoursePartMeta }) {
   if (!part.quizQuestions || part.quizQuestions.length === 0) {
     return (
-      <KeyPoint variant="warning" title="Quiz coming soon">
+      <CalloutBox variant="warning" title="Quiz Coming Soon">
         Questions for this quiz are being prepared. Check back soon!
-      </KeyPoint>
+      </CalloutBox>
     );
   }
 
   return (
-    <QuizBlock
-      title={part.title}
-      instructions="Choose the best answer for each question. You need 80% to pass."
-      questions={part.quizQuestions}
-    />
+    <>
+      <NoteBox title="Instructions">
+        Choose the best answer for each question. You need 80% to pass. Take
+        your time — there is no timer.
+      </NoteBox>
+
+      <QuizBlock
+        title={part.title}
+        instructions="Choose the best answer for each question. You need 80% to pass."
+        questions={part.quizQuestions}
+      />
+    </>
   );
 }
 
@@ -367,30 +470,54 @@ function QuizContent({ part }: { part: CoursePartMeta }) {
 
 function ArticleContent({ part }: { part: CoursePartMeta }) {
   return (
-    <ArticleBlock
-      title={part.title}
-      subtitle={part.description}
-      readingTime={part.duration}
-    >
-      {part.objectives && part.objectives.length > 0 && (
-        <>
-          <p>In this article, you will learn:</p>
-          <ul>
-            {part.objectives.map((obj, i) => (
-              <li key={i}>{obj}</li>
-            ))}
-          </ul>
-        </>
-      )}
-      {part.readingUrl && (
-        <p>
-          Read the full article:{" "}
-          <a href={part.readingUrl} target="_blank" rel="noopener noreferrer">
-            {part.readingUrl}
-          </a>
-        </p>
-      )}
-    </ArticleBlock>
+    <>
+      <ArticleBlock
+        title={part.title}
+        subtitle={part.description}
+        readingTime={part.duration}
+      >
+        {part.objectives && part.objectives.length > 0 && (
+          <>
+            <Paragraph lead>In this article, you will learn:</Paragraph>
+            <ul
+              style={{
+                margin: 0,
+                paddingLeft: "var(--tf-space-5)",
+                display: "flex",
+                flexDirection: "column",
+                gap: "var(--tf-space-2)",
+              }}
+            >
+              {part.objectives.map((obj, i) => (
+                <li
+                  key={i}
+                  style={{
+                    fontSize: "var(--tf-text-sm)",
+                    color: "var(--tf-text-secondary)",
+                    lineHeight: "var(--tf-leading-relaxed)",
+                  }}
+                >
+                  {obj}
+                </li>
+              ))}
+            </ul>
+          </>
+        )}
+        {part.readingUrl && (
+          <Paragraph>
+            Read the full article:{" "}
+            <a href={part.readingUrl} target="_blank" rel="noopener noreferrer">
+              {part.readingUrl}
+            </a>
+          </Paragraph>
+        )}
+      </ArticleBlock>
+
+      <TipBox title="Pro Tip">
+        Bookmark this article for reference — you will need these concepts in
+        later lessons.
+      </TipBox>
+    </>
   );
 }
 
@@ -398,13 +525,7 @@ function ArticleContent({ part }: { part: CoursePartMeta }) {
 
 function PodcastContent({ part }: { part: CoursePartMeta }) {
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        gap: "var(--tf-space-6)",
-      }}
-    >
+    <>
       <PodcastEmbed
         title={part.title}
         description={part.description}
@@ -428,14 +549,13 @@ function PodcastContent({ part }: { part: CoursePartMeta }) {
         </section>
       )}
 
-      {/* Q&A */}
       {part.qa && part.qa.length > 0 && (
         <section>
           <SectionDivider label="Q & A" />
           <QABlock items={part.qa} />
         </section>
       )}
-    </div>
+    </>
   );
 }
 
@@ -443,23 +563,17 @@ function PodcastContent({ part }: { part: CoursePartMeta }) {
 
 function SlideshowContent({ part }: { part: CoursePartMeta }) {
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        gap: "var(--tf-space-6)",
-      }}
-    >
+    <>
       <SlideshowEmbed
         title={part.title}
         embedUrl="about:blank"
         provider="google-slides"
         description={part.description}
       />
-      <KeyPoint variant="info" title="Slides embedded">
+      <InfoBox title="Slides embedded">
         Slides will appear above once the embed URL is configured.
-      </KeyPoint>
-    </div>
+      </InfoBox>
+    </>
   );
 }
 
@@ -467,8 +581,8 @@ function SlideshowContent({ part }: { part: CoursePartMeta }) {
 
 function GenericContent({ part }: { part: CoursePartMeta }) {
   return (
-    <KeyPoint variant="info" title="Content coming soon">
+    <CalloutBox variant="info" title="Content coming soon">
       This lesson ({part.type}) is being prepared.
-    </KeyPoint>
+    </CalloutBox>
   );
 }
