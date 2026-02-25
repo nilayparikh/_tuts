@@ -17,7 +17,7 @@
   ],
   "dependencies": {
     "@localm/tutorial-framework": "file:./packages/tutorial-framework",
-    "next": "^15.3.9",
+    "next": "^15.5.10",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },
