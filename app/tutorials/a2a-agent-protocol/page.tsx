@@ -2,105 +2,48 @@ import type { Metadata } from "next";
 import {
   TutorialLayout,
   HeroSection,
-  SectionHeading,
   SectionDivider,
+  SectionHeading,
   ConceptCard,
   ConceptGrid,
-  StepCard,
-  StepList,
-  CodeBlock,
   KeyPoint,
-  YouTubeEmbed,
   ShareButtons,
-  TutorialNav,
+  PartTypeBadge,
 } from "@localm/tutorial-framework";
 import { SITE_CONFIG } from "@/config/site";
+import { A2A_COURSE } from "@/data/courses/a2a-agent-protocol";
 
 export const metadata: Metadata = {
-  title: "A2A Agent-to-Agent Protocol",
+  title: "A2A: The Agent2Agent Protocol | LocalM Tutorials",
   description:
-    "Learn to build multi-agent systems with the Google A2A protocol. Covers agent cards, task delegation, and real-time streaming with Python and TypeScript.",
+    "Learn to build multi-agent AI systems with Google's A2A protocol. 16 lessons covering QA agents on Vertex AI, LangGraph, BeeAI, ADK, and production deployment.",
   openGraph: {
-    title: "A2A Agent-to-Agent Protocol | LocalM Tutorials",
+    title: "A2A: The Agent2Agent Protocol",
     description:
-      "Build multi-agent AI systems from scratch using the A2A spec.",
+      "Build multi-agent AI systems from scratch using the open A2A spec.",
     type: "article",
     publishedTime: "2025-02-25",
   },
 };
 
-const AGENT_CARD_CODE = `# agent_card.py
-from a2a.server import A2AServer, AgentCard, Capability, Skill
+// ─── Type icons ────────────────────────────────────────────────────────────
 
-card = AgentCard(
-    name="Weather Agent",
-    description="Provides current weather conditions for any city.",
-    url="https://weather-agent.example.com",
-    version="1.0.0",
-    capabilities=Capability(streaming=True),
-    skills=[
-        Skill(
-            id="get-weather",
-            name="Get Weather",
-            description="Returns current conditions for a given city.",
-            inputModes=["text/plain"],
-            outputModes=["text/plain", "application/json"],
-        )
-    ],
-)`;
+const TYPE_ICON: Record<string, string> = {
+  video: "▶",
+  reading: "📖",
+  "video-code": "💻",
+  quiz: "📝",
+  podcast: "🎙",
+  slideshow: "📑",
+  article: "📰",
+  lab: "🧪",
+};
 
-const TASK_HANDLER_CODE = `# handlers.py
-from a2a.server import TaskContext, TaskResult, TaskStatus
+// ─── Page ─────────────────────────────────────────────────────────────────
 
-async def handle_weather_task(ctx: TaskContext) -> TaskResult:
-    city = ctx.message.parts[0].text
-    
-    # Your business logic here
-    weather = await fetch_weather(city)
-    
-    return TaskResult(
-        status=TaskStatus.completed,
-        message={
-            "role": "agent",
-            "parts": [{"type": "text", "text": f"Weather in {city}: {weather}"}],
-        },
-    )`;
+export default function A2ACourseOverviewPage() {
+  const course = A2A_COURSE;
 
-const CLIENT_CODE = `// client.ts
-import { A2AClient } from '@google/a2a-sdk';
-
-const client = new A2AClient('https://weather-agent.example.com');
-
-// Discover agent capabilities
-const card = await client.getAgentCard();
-console.log('Skills:', card.skills.map(s => s.name));
-
-// Send a task
-const task = await client.sendTask({
-  message: {
-    role: 'user',
-    parts: [{ type: 'text', text: 'What is the weather in London?' }],
-  },
-});
-
-console.log(task.result.message.parts[0].text);
-// → Weather in London: 12°C, partly cloudy`;
-
-const STREAMING_CODE = `// streaming.ts
-import { A2AClient } from '@google/a2a-sdk';
-
-const client = new A2AClient('https://weather-agent.example.com');
-
-// Stream partial responses as the agent thinks
-for await (const update of client.streamTask({
-  message: { role: 'user', parts: [{ type: 'text', text: 'Analyse London weather trends' }] },
-})) {
-  if (update.status === 'working') {
-    process.stdout.write(update.artifact?.parts[0]?.text ?? '');
-  }
-}`;
-
-export default function A2ATutorialPage() {
   return (
     <TutorialLayout
       header={{
@@ -112,227 +55,193 @@ export default function A2ATutorialPage() {
     >
       {/* ── Hero ──────────────────────────────────────────────────────────── */}
       <HeroSection
-        eyebrow="Tutorial Series · Episode 1"
-        headline="**A2A** Agent-to-Agent Protocol"
-        subheading="Build multi-agent AI systems that discover each other, delegate tasks, and stream responses — using Google's open A2A specification."
-        primaryAction={{ label: "Jump to code →", href: "#implementation" }}
+        eyebrow="Full Course · 16 Lessons · ~70 mins"
+        headline="**A2A**: The Agent2Agent Protocol"
+        subheading="Build multi-agent AI systems that discover each other, delegate tasks, and stream results — using Google's open A2A specification. Covers six frameworks: Vertex AI, Google ADK, LangGraph, BeeAI, Microsoft Agent Framework, and Agent Stack."
+        primaryAction={{
+          label: "Start first lesson →",
+          href: "/tutorials/a2a-agent-protocol/introduction/",
+        }}
         secondaryAction={{
           label: "Source code",
-          href: "https://github.com/nilayparikh/a2a-agent2agent-protocol",
+          href: course.githubUrl ?? "#",
         }}
-        tags={[
-          "A2A",
-          "AI Agents",
-          "Python",
-          "TypeScript",
-          "Streaming",
-          "Open Source",
-        ]}
+        tags={course.tags}
       />
 
-      {/* ── Video ─────────────────────────────────────────────────────────── */}
-      <YouTubeEmbed
-        videoId="placeholder-video-id"
-        title="A2A Agent-to-Agent Protocol — Full Tutorial"
-        caption="Watch the complete tutorial — 45 minutes from zero to multi-agent system"
-        lazyLoad
-      />
-
-      {/* ── Concepts ──────────────────────────────────────────────────────── */}
-      <SectionDivider label="Core Concepts" />
-
-      <SectionHeading
-        eyebrow="Before We Code"
-        title="What is the A2A Protocol?"
-        subtitle="A2A (Agent-to-Agent) is an open protocol by Google that lets AI agents discover each other and delegate work across organisational boundaries."
-      />
-
-      <ConceptGrid columns={2}>
+      {/* ── Course stats ──────────────────────────────────────────────────── */}
+      <ConceptGrid columns={4}>
         <ConceptCard
-          title="Agent Card"
-          description="A JSON document describing what an agent can do — its name, endpoint URL, available skills, and supported streaming capabilities."
-          icon="🃏"
+          title={`${course.parts.length} Lessons`}
+          description="From introduction to advanced security concepts."
+          icon="📚"
           variant="primary"
-          tag="Discovery"
+          tag="Content"
         />
         <ConceptCard
-          title="Task"
-          description="A unit of work passed from one agent to another. Contains a message with user intent; the receiving agent executes and returns a result."
-          icon="📋"
+          title={course.totalDuration}
+          description="Focused, no-fluff video lessons."
+          icon="⏱"
           variant="accent"
-          tag="Execution"
+          tag="Duration"
         />
         <ConceptCard
-          title="Skill"
-          description="A named capability exposed by an agent. Skills define input/output modes and descriptions that help orchestrators pick the right agent."
+          title="6 Frameworks"
+          description="Vertex AI, ADK, LangGraph, BeeAI, MSFT AF, Agent Stack."
           icon="🔧"
           variant="success"
-          tag="Capability"
+          tag="Coverage"
         />
         <ConceptCard
-          title="Streaming (SSE)"
-          description="Agents can emit partial results in real time via Server-Sent Events. Ideal for long-running tasks like document analysis."
-          icon="⚡"
+          title="Open Source"
+          description="All code is on GitHub with MIT license."
+          icon="🔓"
           variant="default"
-          tag="Transport"
+          tag="License"
         />
       </ConceptGrid>
 
-      <KeyPoint variant="info" title="Why A2A?">
-        Unlike tool-calling within a single model, A2A lets agents run on
-        completely separate servers, written in any language, and still
-        collaborate — as long as they speak the A2A spec.
-      </KeyPoint>
-
-      {/* ── Implementation ────────────────────────────────────────────────── */}
-      <SectionDivider label="Implementation" />
+      {/* ── What you'll learn ─────────────────────────────────────────────── */}
+      <SectionDivider label="What You'll Learn" />
 
       <SectionHeading
-        eyebrow="Step by Step"
-        title="Build your first A2A agent"
-        subtitle="We'll build a Weather Agent in Python, then call it from a TypeScript client."
+        eyebrow="Course Curriculum"
+        title="16 lessons, zero fluff"
+        subtitle="Each lesson is focused and builds on the previous one — from first principles to production-ready multi-agent systems."
       />
 
-      <StepList>
-        <StepCard
-          step={1}
-          title="Install the A2A SDK"
-          description="Add the SDK to your Python project. A TypeScript SDK is also available."
-          code="pip install a2a-sdk fastapi uvicorn"
-          codeLanguage="bash"
-          note="Python 3.11+ required. Use a virtual environment."
-        />
+      {/* Lesson list */}
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: "var(--tf-space-2)",
+          marginTop: "var(--tf-space-2)",
+        }}
+      >
+        {course.parts.map((part, i) => (
+          <a
+            key={part.slug}
+            href={`/tutorials/a2a-agent-protocol/${part.slug}/`}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "var(--tf-space-4)",
+              padding: "var(--tf-space-4) var(--tf-space-5)",
+              borderRadius: "var(--tf-radius-xl)",
+              border: "1px solid var(--tf-border-subtle)",
+              background: "var(--tf-bg-surface)",
+              textDecoration: "none",
+              color: "inherit",
+              transition: "border-color 0.15s, background 0.15s",
+            }}
+          >
+            {/* Step number */}
+            <span
+              style={{
+                flexShrink: 0,
+                width: 32,
+                height: 32,
+                borderRadius: "50%",
+                border: "1px solid var(--tf-border-default)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontFamily: "var(--tf-font-mono)",
+                fontSize: "var(--tf-text-xs)",
+                fontWeight: 700,
+                color: "var(--tf-text-muted)",
+              }}
+            >
+              {i + 1}
+            </span>
 
-        <StepCard
-          step={2}
-          title="Define your Agent Card"
-          description="The agent card is the source of truth — it tells the world what your agent can do and where to find it."
-        />
-      </StepList>
+            {/* Type icon */}
+            <span
+              style={{
+                flexShrink: 0,
+                fontSize: 20,
+                lineHeight: 1,
+              }}
+            >
+              {TYPE_ICON[part.type] ?? "▶"}
+            </span>
 
-      <CodeBlock
-        code={AGENT_CARD_CODE}
-        language="python"
-        filename="agent_card.py"
-        showLineNumbers
-        highlightLines={[3, 4, 5, 6, 7]}
-      />
+            {/* Title + description */}
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <p
+                style={{
+                  margin: 0,
+                  fontWeight: 600,
+                  fontSize: "var(--tf-text-sm)",
+                  color: "var(--tf-text-primary)",
+                }}
+              >
+                {part.title}
+              </p>
+              {part.description && (
+                <p
+                  style={{
+                    margin: "2px 0 0",
+                    fontSize: "var(--tf-text-xs)",
+                    color: "var(--tf-text-muted)",
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                  }}
+                >
+                  {part.description}
+                </p>
+              )}
+            </div>
 
-      <StepList>
-        <StepCard
-          step={3}
-          title="Implement the task handler"
-          description="Write the function that receives incoming tasks and returns results. This is your agent's brain."
-        />
-      </StepList>
+            {/* Type badge + duration */}
+            <div
+              style={{
+                flexShrink: 0,
+                display: "flex",
+                alignItems: "center",
+                gap: "var(--tf-space-2)",
+              }}
+            >
+              <PartTypeBadge
+                type={part.type}
+                duration={part.duration}
+                size="sm"
+              />
+            </div>
 
-      <CodeBlock
-        code={TASK_HANDLER_CODE}
-        language="python"
-        filename="handlers.py"
-        showLineNumbers
-      />
+            {/* Arrow */}
+            <span
+              style={{
+                flexShrink: 0,
+                color: "var(--tf-text-muted)",
+                fontSize: "var(--tf-text-sm)",
+              }}
+            >
+              →
+            </span>
+          </a>
+        ))}
+      </div>
 
-      <KeyPoint variant="tip" title="Async all the way">
-        A2A handlers are async by default. Use <code>await</code> for all I/O —
-        HTTP calls, DB queries, model inference — to keep your agent responsive
-        under load.
+      {/* ── Prerequisites ─────────────────────────────────────────────────── */}
+      <SectionDivider label="Prerequisites" />
+
+      <KeyPoint variant="info" title="What you need before starting">
+        Basic Python (3.11+), familiarity with REST APIs, and a Google Cloud
+        account with Vertex AI enabled. No prior agent framework experience
+        required.
       </KeyPoint>
 
-      <StepList>
-        <StepCard
-          step={4}
-          title="Cal the agent from a TypeScript client"
-          description="The A2A TypeScript SDK auto-discovers skills from the agent card and provides a type-safe task API."
-        />
-      </StepList>
-
-      <CodeBlock
-        code={CLIENT_CODE}
-        language="typescript"
-        filename="client.ts"
-        showLineNumbers
-      />
-
-      <StepList>
-        <StepCard
-          step={5}
-          title="Enable streaming"
-          description="For long-running tasks, stream partial results using the async iterator API."
-          completed
-        />
-      </StepList>
-
-      <CodeBlock
-        code={STREAMING_CODE}
-        language="typescript"
-        filename="streaming.ts"
-        showLineNumbers
-      />
-
-      {/* ── Architecture diagram ──────────────────────────────────────────── */}
-      <SectionDivider label="Architecture" />
-
-      <SectionHeading eyebrow="Diagram" title="How the pieces fit together" />
-
-      <ConceptGrid columns={3}>
-        <ConceptCard
-          title="1. Discover"
-          description="Client fetches /.well-known/agent.json to get the Agent Card."
-          icon="🔍"
-          variant="primary"
-          tag="Step 1"
-        />
-        <ConceptCard
-          title="2. Delegate"
-          description="Client POSTs a task to /tasks/send with the user message."
-          icon="📤"
-          variant="accent"
-          tag="Step 2"
-        />
-        <ConceptCard
-          title="3. Respond"
-          description="Agent executes and returns result — or streams updates via SSE."
-          icon="📥"
-          variant="success"
-          tag="Step 3"
-        />
-      </ConceptGrid>
-
-      <KeyPoint variant="warning" title="Security reminder">
-        A2A agents are network-accessible. Always add authentication (API keys
-        or OAuth 2.0) before deploying to production. The spec supports{" "}
-        <a
-          href="https://google.github.io/A2A/specification"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          securitySchemes
-        </a>{" "}
-        in the agent card.
-      </KeyPoint>
-
-      {/* ── Share + nav ───────────────────────────────────────────────────── */}
+      {/* ── Share ─────────────────────────────────────────────────────────── */}
       <SectionDivider variant="gradient" />
 
       <ShareButtons
-        title="A2A Agent-to-Agent Protocol Tutorial"
-        description="Build multi-agent AI systems from scratch with the Google A2A protocol."
-        hashtags={["A2A", "AIAgents", "tutorial", "python"]}
+        title="A2A: The Agent2Agent Protocol — Full Course"
+        description="Learn to build multi-agent AI systems with Google's open A2A protocol."
+        hashtags={["A2A", "AIAgents", "MultiAgent", "python"]}
         platforms={["twitter", "linkedin", "email"]}
-      />
-
-      <TutorialNav
-        prev={{
-          label: "All Tutorials",
-          href: "/tutorials/",
-          description: "Browse the full library",
-        }}
-        next={{
-          label: "Agent Cards Deep Dive",
-          href: "/tutorials/a2a-agent-protocol/agent-cards/",
-          description: "Capabilities, skills, and discovery",
-        }}
       />
     </TutorialLayout>
   );

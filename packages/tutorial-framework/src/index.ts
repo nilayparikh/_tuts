@@ -75,3 +75,30 @@ export type {
 // Sharing
 export { ShareButtons } from "./components/sharing";
 export type { ShareButtonsProps } from "./components/sharing";
+
+// Course
+export {
+  CourseSidebar,
+  CoursePlayerLayout,
+  QuizBlock,
+  ArticleBlock,
+  PodcastEmbed,
+  SlideshowEmbed,
+  PartTypeBadge,
+} from "./components/course";
+export type {
+  CourseSidebarProps,
+  CoursePart,
+  PartType,
+  CoursePlayerLayoutProps,
+  QuizBlockProps,
+  QuizQuestion,
+  QuizOption,
+  ArticleBlockProps,
+  ArticleAuthor,
+  PodcastEmbedProps,
+  PodcastProvider,
+  SlideshowEmbedProps,
+  SlideshowProvider,
+  PartTypeBadgeProps,
+} from "./components/course";
