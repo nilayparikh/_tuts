@@ -1,0 +1,32 @@
+{
+  "name": "localm-tutorials",
+  "version": "1.0.0",
+  "description": "LocalM Tutorial static websites — powered by @localm/tutorial-framework",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "start": "next start",
+    "type-check": "tsc --noEmit",
+    "lint": "next lint",
+    "export": "next build",
+    "preview": "npx serve out"
+  },
+  "workspaces": [
+    "packages/*"
+  ],
+  "dependencies": {
+    "@localm/tutorial-framework": "file:./packages/tutorial-framework",
+    "next": "^15.3.9",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "eslint": "^9",
+    "eslint-config-next": "15.3.9",
+    "typescript": "^5.7.0"
+  }
+}

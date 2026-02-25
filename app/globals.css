@@ -1,0 +1,39 @@
+/*
+ * LocalM Tutorials — global stylesheet
+ *
+ * The @localm/tutorial-framework injects its own --tf-* CSS variables via
+ * <TutorialGlobalStyles />.  This file is for site-specific overrides and
+ * any additional global rules that don't belong in components.
+ */
+
+/* ── Site-specific token overrides ─────────────────────────────────────── */
+:root {
+  /* Swap JetBrains Mono in for the mono stack */
+  --tf-font-mono: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+}
+
+/* ── Smooth anchor scrolling offset (accounts for sticky header) ────────── */
+:target {
+  scroll-margin-top: calc(var(--tf-header-height) + 1.5rem);
+}
+
+/* ── Responsive grid collapse ────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  /* ConceptGrid and SidebarLayout fall to 1-column on mobile */
+  [style*="grid-template-columns: repeat(3"] {
+    grid-template-columns: 1fr !important;
+  }
+  [style*="grid-template-columns: repeat(2"] {
+    grid-template-columns: 1fr !important;
+  }
+  [style*="grid-template-columns: var(--tf-sidebar-width)"] {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+@media (max-width: 640px) {
+  /* Header inner overflow */
+  nav ul {
+    display: none !important;
+  }
+}
