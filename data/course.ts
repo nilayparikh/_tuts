@@ -1,20 +1,21 @@
 /**
- * A2A: The Agent2Agent Protocol — Course Data
+ * Course Data — A2A: The Agent2Agent Protocol
  *
- * Defines the full course structure used by the course overview
- * and dynamic [part] page route.
+ * This is the SINGLE course definition for this tutorial site.
+ * The entire site renders this one course: overview + per-part pages.
+ *
+ * To create a new tutorial site, clone this template repo and replace
+ * this file with your own course data.
  */
 
-import type { CoursePart } from "@localm/tutorial-framework";
+import type { CoursePart, PartType } from "@localm/tutorial-framework";
 
-// ─── Part type: QA pairs ───────────────────────────────────────────────────
+// ─── Extended part metadata ────────────────────────────────────────────────
 
 export interface PartQA {
   question: string;
   answer: string;
 }
-
-// ─── Part type: Quiz question ──────────────────────────────────────────────
 
 export interface PartQuizQuestion {
   id: string;
@@ -24,24 +25,22 @@ export interface PartQuizQuestion {
   explanation?: string;
 }
 
-// ─── Extended part metadata used for rendering ────────────────────────────
-
 export interface CoursePartMeta extends CoursePart {
-  /** YouTube video ID (if type is "video" or "video-code") */
+  /** YouTube video ID (type "video" | "video-code") */
   videoId?: string;
-  /** Description shown on the part page hero */
+  /** Part description for the lesson hero */
   description?: string;
-  /** Key learning objectives */
+  /** Learning objectives */
   objectives?: string[];
   /** Q&A pairs shown after video */
   qa?: PartQA[];
-  /** Quiz questions (type === "quiz") */
+  /** Quiz questions (type "quiz") */
   quizQuestions?: PartQuizQuestion[];
-  /** GitHub repo / code URL */
+  /** GitHub code URL */
   codeUrl?: string;
-  /** Direct link to course resource reading URL */
+  /** Reading / resource URL */
   readingUrl?: string;
-  /** Tags */
+  /** Tags for SEO */
   tags?: string[];
 }
 
@@ -57,9 +56,9 @@ export interface CourseDefinition {
   parts: CoursePartMeta[];
 }
 
-// ─── A2A Course ───────────────────────────────────────────────────────────
+// ─── THE course ───────────────────────────────────────────────────────────
 
-export const A2A_COURSE: CourseDefinition = {
+export const COURSE: CourseDefinition = {
   slug: "a2a-agent-protocol",
   title: "A2A: The Agent2Agent Protocol",
   description:
@@ -68,6 +67,7 @@ export const A2A_COURSE: CourseDefinition = {
   tags: ["A2A", "AI Agents", "Python", "LangGraph", "Google ADK", "BeeAI"],
   githubUrl: "https://github.com/nilayparikh/a2a-agent2agent-protocol",
   parts: [
+    // ── 1. Introduction ──────────────────────────────────────────────────
     {
       slug: "introduction",
       title: "Introduction",
@@ -83,6 +83,8 @@ export const A2A_COURSE: CourseDefinition = {
       ],
       tags: ["introduction", "overview"],
     },
+
+    // ── 2. Why Agent2Agent? ──────────────────────────────────────────────
     {
       slug: "why-a2a",
       title: "Why Agent2Agent Protocol?",
@@ -110,6 +112,8 @@ export const A2A_COURSE: CourseDefinition = {
       ],
       tags: ["overview", "motivation"],
     },
+
+    // ── 3. Architecture ──────────────────────────────────────────────────
     {
       slug: "a2a-architecture",
       title: "A2A Architecture",
@@ -143,6 +147,8 @@ export const A2A_COURSE: CourseDefinition = {
       ],
       tags: ["architecture", "spec", "agent-card", "sse"],
     },
+
+    // ── 4. Course Repos ──────────────────────────────────────────────────
     {
       slug: "course-repos",
       title: "Course Repos & Resources",
@@ -158,6 +164,8 @@ export const A2A_COURSE: CourseDefinition = {
       ],
       tags: ["resources", "setup"],
     },
+
+    // ── 5. QA Agent on Vertex AI ─────────────────────────────────────────
     {
       slug: "qa-agent-vertex-ai",
       title: "Building a QA Agent with Claude on Vertex AI",
@@ -182,6 +190,8 @@ export const A2A_COURSE: CourseDefinition = {
       ],
       tags: ["claude", "vertex-ai", "python", "qa"],
     },
+
+    // ── 6. Wrapping as A2A Server ────────────────────────────────────────
     {
       slug: "wrapping-qa-a2a-server",
       title: "Wrapping the QA Agent into an A2A Server",
@@ -200,6 +210,8 @@ export const A2A_COURSE: CourseDefinition = {
         "https://github.com/nilayparikh/a2a-agent2agent-protocol/tree/main/02-a2a-server",
       tags: ["a2a-server", "fastapi", "python"],
     },
+
+    // ── 7. A2A Client ────────────────────────────────────────────────────
     {
       slug: "a2a-client",
       title: "Calling an A2A Agent using an A2A Client",
@@ -224,6 +236,8 @@ export const A2A_COURSE: CourseDefinition = {
       ],
       tags: ["client", "python", "sdk"],
     },
+
+    // ── 8. Health Research Agent (ADK) ───────────────────────────────────
     {
       slug: "health-research-agent-adk",
       title: "Creating an A2A Health Research Agent using Google ADK",
@@ -241,6 +255,8 @@ export const A2A_COURSE: CourseDefinition = {
         "https://github.com/nilayparikh/a2a-agent2agent-protocol/tree/main/04-health-research-adk",
       tags: ["google-adk", "research-agent", "tools"],
     },
+
+    // ── 9. Sequential Chain (ADK) ────────────────────────────────────────
     {
       slug: "sequential-chain-adk",
       title: "Creating an A2A Sequential Chain Agent with ADK",
@@ -258,6 +274,8 @@ export const A2A_COURSE: CourseDefinition = {
         "https://github.com/nilayparikh/a2a-agent2agent-protocol/tree/main/05-sequential-chain",
       tags: ["sequential", "chain", "adk"],
     },
+
+    // ── 10. Healthcare LangGraph + MCP ──────────────────────────────────
     {
       slug: "healthcare-langgraph-mcp",
       title:
@@ -289,6 +307,8 @@ export const A2A_COURSE: CourseDefinition = {
       ],
       tags: ["langgraph", "mcp", "healthcare", "advanced"],
     },
+
+    // ── 11. Microsoft Agent Framework ───────────────────────────────────
     {
       slug: "microsoft-agent-framework",
       title: "Creating an A2A Client using Microsoft Agent Framework",
@@ -306,6 +326,8 @@ export const A2A_COURSE: CourseDefinition = {
         "https://github.com/nilayparikh/a2a-agent2agent-protocol/tree/main/07-msft-agent-framework",
       tags: ["microsoft", "agent-framework", "interop"],
     },
+
+    // ── 12. BeeAI Multi-Agent ────────────────────────────────────────────
     {
       slug: "beeai-multi-agent",
       title: "Creating a Multi-Agent System using A2A with BeeAI Framework",
@@ -336,6 +358,8 @@ export const A2A_COURSE: CourseDefinition = {
       ],
       tags: ["beeai", "multi-agent", "orchestration", "ibm"],
     },
+
+    // ── 13. Agent Stack ──────────────────────────────────────────────────
     {
       slug: "agent-stack",
       title: "Running A2A Agents on Agent Stack",
@@ -352,6 +376,8 @@ export const A2A_COURSE: CourseDefinition = {
       ],
       tags: ["deployment", "agent-stack", "production"],
     },
+
+    // ── 14. Advanced Concepts ────────────────────────────────────────────
     {
       slug: "advanced-concepts",
       title: "Advanced A2A Concepts — Extensions and Security",
@@ -374,6 +400,8 @@ export const A2A_COURSE: CourseDefinition = {
       ],
       tags: ["security", "oauth", "extensions", "advanced"],
     },
+
+    // ── 15. Conclusion ───────────────────────────────────────────────────
     {
       slug: "conclusion",
       title: "Conclusion",
@@ -388,6 +416,8 @@ export const A2A_COURSE: CourseDefinition = {
       ],
       tags: ["conclusion"],
     },
+
+    // ── 16. Quiz ─────────────────────────────────────────────────────────
     {
       slug: "quiz",
       title: "Quiz",
@@ -465,7 +495,10 @@ export const A2A_COURSE: CourseDefinition = {
           question:
             "In A2A task execution, what does a 'working' status indicate?",
           options: [
-            { id: "a", text: "The task has been received but not yet started" },
+            {
+              id: "a",
+              text: "The task has been received but not yet started",
+            },
             {
               id: "b",
               text: "The agent is actively processing and may emit partial artifacts",
@@ -486,7 +519,7 @@ export const A2A_COURSE: CourseDefinition = {
 
 /** Find a part by slug */
 export function findPart(slug: string): CoursePartMeta | undefined {
-  return A2A_COURSE.parts.find((p) => p.slug === slug);
+  return COURSE.parts.find((p) => p.slug === slug);
 }
 
 /** Get prev/next parts for navigation */
@@ -494,13 +527,13 @@ export function getAdjacentParts(slug: string): {
   prev: CoursePartMeta | null;
   next: CoursePartMeta | null;
 } {
-  const idx = A2A_COURSE.parts.findIndex((p) => p.slug === slug);
+  const idx = COURSE.parts.findIndex((p) => p.slug === slug);
   if (idx === -1) return { prev: null, next: null };
   return {
-    prev: idx > 0 ? A2A_COURSE.parts[idx - 1] : null,
-    next: idx < A2A_COURSE.parts.length - 1 ? A2A_COURSE.parts[idx + 1] : null,
+    prev: idx > 0 ? COURSE.parts[idx - 1] : null,
+    next: idx < COURSE.parts.length - 1 ? COURSE.parts[idx + 1] : null,
   };
 }
 
 /** All part slugs (for generateStaticParams) */
-export const A2A_PART_SLUGS = A2A_COURSE.parts.map((p) => p.slug);
+export const COURSE_SLUGS = COURSE.parts.map((p) => p.slug);

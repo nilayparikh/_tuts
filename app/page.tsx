@@ -2,155 +2,116 @@ import type { Metadata } from "next";
 import {
   TutorialLayout,
   HeroSection,
+  SectionDivider,
   SectionHeading,
   ConceptCard,
   ConceptGrid,
-  SectionDivider,
+  KeyPoint,
+  ShareButtons,
+  LessonList,
 } from "@localm/tutorial-framework";
 import { SITE_CONFIG } from "@/config/site";
+import { COURSE } from "@/data/course";
+
+// ─── Metadata ─────────────────────────────────────────────────────────────
 
 export const metadata: Metadata = {
-  title: "LocalM Tutorials — Learn by Building",
-  description:
-    "Hands-on video tutorials covering AI agents, developer tools, and modern software engineering. Build real projects from scratch.",
+  title: `${COURSE.title} | LocalM Tutorials`,
+  description: COURSE.description,
   openGraph: {
-    title: "LocalM Tutorials — Learn by Building",
-    description:
-      "Hands-on video tutorials covering AI, developer tools, and software engineering.",
-    type: "website",
+    title: COURSE.title,
+    description: COURSE.description,
+    type: "article",
+    publishedTime: "2025-02-25",
   },
 };
 
-const SERIES = [
-  {
-    title: "A2A: Agent-to-Agent Protocol",
-    description:
-      "Build multi-agent systems using the Google A2A protocol. Covers card discovery, task delegation, and streaming.",
-    icon: "🤖",
-    variant: "primary" as const,
-    tag: "AI Agents",
-    href: "/tutorials/a2a-agent-protocol/",
-  },
-  {
-    title: "MCP: Model Context Protocol",
-    description:
-      "Connect your AI agents to real data sources with the Model Context Protocol. Servers, tools, and resources.",
-    icon: "🔌",
-    variant: "accent" as const,
-    tag: "AI Protocol",
-    href: "/tutorials/mcp-model-context-protocol/",
-  },
-  {
-    title: "Next.js Static Sites",
-    description:
-      "Deploy fast, SEO-optimised sites with Next.js static export and GitHub Pages. No server required.",
-    icon: "⚡",
-    variant: "success" as const,
-    tag: "Web Dev",
-    href: "/tutorials/nextjs-static/",
-  },
-  {
-    title: "Component Showcase",
-    description:
-      "A live showcase of every component in the @localm/tutorial-framework library with code examples.",
-    icon: "🎨",
-    variant: "default" as const,
-    tag: "Framework",
-    href: "/tutorials/component-showcase/",
-  },
-  {
-    title: "Python FastAPI in 30 min",
-    description:
-      "Build a production-ready REST API with FastAPI, async SQLAlchemy, and type-safe Pydantic models.",
-    icon: "🐍",
-    variant: "default" as const,
-    tag: "Backend",
-    href: "/tutorials/fastapi-quickstart/",
-  },
-  {
-    title: "GitHub Actions CI/CD",
-    description:
-      "Automate testing, building, and deployment with GitHub Actions. Includes matrix builds and environments.",
-    icon: "🚀",
-    variant: "default" as const,
-    tag: "DevOps",
-    href: "/tutorials/github-actions/",
-  },
-];
+// ─── Page ─────────────────────────────────────────────────────────────────
 
-export default function HomePage() {
+export default function CourseOverviewPage() {
   return (
     <TutorialLayout
       header={{ ...SITE_CONFIG.header, currentPath: "/" }}
       footer={SITE_CONFIG.footer}
+      maxWidth="narrow"
     >
       {/* ── Hero ──────────────────────────────────────────────────────────── */}
       <HeroSection
-        eyebrow="LocalM · Learn by Building"
-        headline="Real **tutorials**. Real **code**."
-        subheading="Hands-on video series covering AI agents, developer tools, and modern software engineering. Every concept is explained, every line of code is shown."
-        primaryAction={{ label: "Browse tutorials", href: "/tutorials/" }}
-        secondaryAction={{
-          label: "Watch on YouTube",
-          href: "https://youtube.com/@localm",
+        eyebrow={`Full Course · ${COURSE.parts.length} Lessons · ${COURSE.totalDuration}`}
+        headline={`**${COURSE.title.split(":")[0]}**: ${COURSE.title.split(":").slice(1).join(":").trim()}`}
+        subheading={COURSE.description}
+        primaryAction={{
+          label: "Start first lesson →",
+          href: `/${COURSE.parts[0].slug}/`,
         }}
-        tags={[
-          "AI Agents",
-          "A2A Protocol",
-          "MCP",
-          "Next.js",
-          "Python",
-          "GitHub Actions",
-        ]}
+        secondaryAction={{
+          label: "Source code",
+          href: COURSE.githubUrl ?? "#",
+        }}
+        tags={COURSE.tags}
       />
 
+      {/* ── Course stats ──────────────────────────────────────────────────── */}
+      <ConceptGrid columns={4}>
+        <ConceptCard
+          title={`${COURSE.parts.length} Lessons`}
+          description="From introduction to advanced security concepts."
+          icon="📚"
+          variant="primary"
+          tag="Content"
+        />
+        <ConceptCard
+          title={COURSE.totalDuration}
+          description="Focused, no-fluff video lessons."
+          icon="⏱"
+          variant="accent"
+          tag="Duration"
+        />
+        <ConceptCard
+          title="6 Frameworks"
+          description="Vertex AI, ADK, LangGraph, BeeAI, MSFT AF, Agent Stack."
+          icon="🔧"
+          variant="success"
+          tag="Coverage"
+        />
+        <ConceptCard
+          title="Open Source"
+          description="All code is on GitHub with MIT license."
+          icon="🔓"
+          variant="default"
+          tag="License"
+        />
+      </ConceptGrid>
+
+      {/* ── Lesson List ───────────────────────────────────────────────────── */}
+      <SectionDivider label="What You'll Learn" />
+
+      <SectionHeading
+        eyebrow="Course Curriculum"
+        title={`${COURSE.parts.length} lessons, zero fluff`}
+        subtitle="Each lesson is focused and builds on the previous one — from first principles to production-ready multi-agent systems."
+      />
+
+      <LessonList parts={COURSE.parts} basePath="" />
+
+      {/* ── Prerequisites ─────────────────────────────────────────────────── */}
+      <SectionDivider label="Prerequisites" />
+
+      <KeyPoint variant="info" title="What you need before starting">
+        Basic Python (3.11+), familiarity with REST APIs, and a Google Cloud
+        account with Vertex AI enabled. No prior agent framework experience
+        required.
+      </KeyPoint>
+
+      {/* ── Share ─────────────────────────────────────────────────────────── */}
       <SectionDivider variant="gradient" />
 
-      {/* ── Tutorial Series ───────────────────────────────────────────────── */}
-      <SectionHeading
-        eyebrow="Tutorial Series"
-        title="What would you like to build?"
-        subtitle="Each series is a complete video course with companion code and docs."
-        align="center"
+      <ShareButtons
+        title={`${COURSE.title} — Full Course`}
+        description={COURSE.description}
+        hashtags={["A2A", "AIAgents", "MultiAgent", "python"]}
+        platforms={["twitter", "linkedin", "email"]}
       />
-
-      <ConceptGrid columns={3}>
-        {SERIES.map((s) => (
-          <ConceptCard key={s.href} {...s} />
-        ))}
-      </ConceptGrid>
-
-      <SectionDivider variant="dots" />
-
-      {/* ── Value props ───────────────────────────────────────────────────── */}
-      <SectionHeading
-        eyebrow="Why LocalM?"
-        title="Everything open source, everything local"
-        align="center"
-      />
-
-      <ConceptGrid columns={3}>
-        <ConceptCard
-          title="Free & Open Source"
-          description="Every tutorial, every line of code — publicly available on GitHub. No paywalls."
-          icon="🔓"
-          tag="Open"
-        />
-        <ConceptCard
-          title="Video + Docs"
-          description="YouTube walkthroughs paired with searchable, structured companion docs."
-          icon="🎥"
-          tag="Format"
-          variant="primary"
-        />
-        <ConceptCard
-          title="Runs Locally"
-          description="No cloud APIs needed. Pull the code, run it on your machine, own the output."
-          icon="💻"
-          tag="Local-first"
-          variant="accent"
-        />
-      </ConceptGrid>
     </TutorialLayout>
   );
 }

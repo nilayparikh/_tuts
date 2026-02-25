@@ -85,6 +85,9 @@ export {
   PodcastEmbed,
   SlideshowEmbed,
   PartTypeBadge,
+  QABlock,
+  LessonHeader,
+  LessonList,
 } from "./components/course";
 export type {
   CourseSidebarProps,
@@ -101,4 +104,8 @@ export type {
   SlideshowEmbedProps,
   SlideshowProvider,
   PartTypeBadgeProps,
+  QABlockProps,
+  QAItem,
+  LessonHeaderProps,
+  LessonListProps,
 } from "./components/course";

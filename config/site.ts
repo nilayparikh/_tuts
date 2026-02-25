@@ -1,8 +1,8 @@
 /**
- * SITE_CONFIG — shared header and footer props used on every tutorial page.
+ * SITE_CONFIG — shared header and footer props for this tutorial site.
  *
- * Edit this file to update the global site name, navigation, and social links.
- * All tutorial pages import SITE_CONFIG from here — one change propagates everywhere.
+ * This template renders a SINGLE course. Navigation reflects that:
+ * "Home" → course overview, "GitHub" → course repo.
  */
 
 import type {
@@ -13,22 +13,24 @@ import type {
 } from "@localm/tutorial-framework";
 
 const NAV_ITEMS: NavItem[] = [
-  { label: "Tutorials", href: "/tutorials/" },
-  { label: "Concepts", href: "/concepts/" },
+  { label: "Course", href: "/" },
   { label: "About", href: "/about/" },
 ];
 
 const FOOTER_LINKS: FooterLink[] = [
-  { label: "Tutorials", href: "/tutorials/" },
-  { label: "Concepts", href: "/concepts/" },
-  { label: "GitHub", href: "https://github.com/nilayparikh", external: true },
+  { label: "Course Overview", href: "/" },
+  {
+    label: "GitHub",
+    href: "https://github.com/nilayparikh/a2a-agent2agent-protocol",
+    external: true,
+  },
   { label: "YouTube", href: "https://youtube.com/@localm", external: true },
 ];
 
 export const SITE_HEADER: TutorialHeaderProps = {
   siteName: "LocalM Tutorials",
   navItems: NAV_ITEMS,
-  githubUrl: "https://github.com/nilayparikh",
+  githubUrl: "https://github.com/nilayparikh/a2a-agent2agent-protocol",
   youtubeUrl: "https://youtube.com/@localm",
 };
 

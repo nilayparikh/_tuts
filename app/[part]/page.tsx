@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import {
   CoursePlayerLayout,
-  PartTypeBadge,
+  LessonHeader,
+  QABlock,
   QuizBlock,
   ArticleBlock,
   PodcastEmbed,
@@ -17,16 +18,17 @@ import {
 } from "@localm/tutorial-framework";
 import { SITE_CONFIG } from "@/config/site";
 import {
-  A2A_COURSE,
-  A2A_PART_SLUGS,
+  COURSE,
+  COURSE_SLUGS,
   findPart,
   getAdjacentParts,
-} from "@/data/courses/a2a-agent-protocol";
+} from "@/data/course";
+import type { CoursePartMeta } from "@/data/course";
 
 // ─── Static params (for output: 'export') ────────────────────────────────
 
 export function generateStaticParams(): Array<{ part: string }> {
-  return A2A_PART_SLUGS.map((slug) => ({ part: slug }));
+  return COURSE_SLUGS.map((slug) => ({ part: slug }));
 }
 
 // ─── Dynamic metadata ─────────────────────────────────────────────────────
@@ -41,11 +43,11 @@ export async function generateMetadata({
   if (!part) return {};
 
   return {
-    title: `${part.title} | ${A2A_COURSE.title} | LocalM Tutorials`,
-    description: part.description ?? A2A_COURSE.description,
+    title: `${part.title} | ${COURSE.title}`,
+    description: part.description ?? COURSE.description,
     openGraph: {
-      title: `${part.title} · ${A2A_COURSE.title}`,
-      description: part.description ?? A2A_COURSE.description,
+      title: `${part.title} · ${COURSE.title}`,
+      description: part.description ?? COURSE.description,
       type: "article",
     },
   };
@@ -53,7 +55,7 @@ export async function generateMetadata({
 
 // ─── Page ─────────────────────────────────────────────────────────────────
 
-export default async function CoursePartPage({
+export default async function LessonPage({
   params,
 }: {
   params: Promise<{ part: string }>;
@@ -65,62 +67,30 @@ export default async function CoursePartPage({
   const { prev, next } = getAdjacentParts(slug);
 
   const sidebarProps = {
-    courseTitle: A2A_COURSE.title,
-    parts: A2A_COURSE.parts,
+    courseTitle: COURSE.title,
+    parts: COURSE.parts,
     currentSlug: slug,
-    basePath: "/tutorials/a2a-agent-protocol",
-    totalDuration: A2A_COURSE.totalDuration,
+    basePath: "",
+    totalDuration: COURSE.totalDuration,
   };
 
   return (
     <CoursePlayerLayout
       header={{
         ...SITE_CONFIG.header,
-        currentPath: `/tutorials/a2a-agent-protocol/${slug}/`,
+        currentPath: `/${slug}/`,
       }}
       footer={SITE_CONFIG.footer}
       sidebar={sidebarProps}
       showFooter={false}
     >
       {/* ── Part header ─────────────────────────────────────────────────── */}
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "var(--tf-space-3)",
-          marginBottom: "var(--tf-space-8)",
-        }}
-      >
-        <PartTypeBadge type={part.type} duration={part.duration} />
-
-        <h1
-          style={{
-            margin: 0,
-            fontFamily: "var(--tf-font-display)",
-            fontWeight: 800,
-            fontSize: "var(--tf-text-3xl)",
-            color: "var(--tf-text-primary)",
-            lineHeight: "var(--tf-leading-snug)",
-            letterSpacing: "var(--tf-tracking-tight)",
-          }}
-        >
-          {part.title}
-        </h1>
-
-        {part.description && (
-          <p
-            style={{
-              margin: 0,
-              fontSize: "var(--tf-text-lg)",
-              color: "var(--tf-text-secondary)",
-              lineHeight: "var(--tf-leading-relaxed)",
-              maxWidth: "60ch",
-            }}
-          >
-            {part.description}
-          </p>
-        )}
-      </div>
+      <LessonHeader
+        type={part.type}
+        duration={part.duration}
+        title={part.title}
+        description={part.description}
+      />
 
       {/* ── Content by type ─────────────────────────────────────────────── */}
       <PartContent part={part} />
@@ -132,12 +102,12 @@ export default async function CoursePartPage({
           prev
             ? {
                 label: prev.title,
-                href: `/tutorials/a2a-agent-protocol/${prev.slug}/`,
+                href: `/${prev.slug}/`,
                 description: prev.duration,
               }
             : {
                 label: "Course Overview",
-                href: "/tutorials/a2a-agent-protocol/",
+                href: "/",
                 description: "All lessons",
               }
         }
@@ -145,7 +115,7 @@ export default async function CoursePartPage({
           next
             ? {
                 label: next.title,
-                href: `/tutorials/a2a-agent-protocol/${next.slug}/`,
+                href: `/${next.slug}/`,
                 description: next.duration,
               }
             : undefined
@@ -156,8 +126,6 @@ export default async function CoursePartPage({
 }
 
 // ─── Per-type content renderers ───────────────────────────────────────────
-
-import type { CoursePartMeta } from "@/data/courses/a2a-agent-protocol";
 
 function PartContent({ part }: { part: CoursePartMeta }) {
   switch (part.type) {
@@ -190,7 +158,7 @@ function VideoContent({ part }: { part: CoursePartMeta }) {
         gap: "var(--tf-space-8)",
       }}
     >
-      {/* Embed */}
+      {/* Video embed */}
       {part.videoId && (
         <YouTubeEmbed
           videoId={part.videoId}
@@ -246,111 +214,10 @@ function VideoContent({ part }: { part: CoursePartMeta }) {
       {/* Q&A */}
       {part.qa && part.qa.length > 0 && (
         <section>
-          <SectionDivider label="Q &amp; A" />
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: "var(--tf-space-4)",
-            }}
-          >
-            {part.qa.map((item, i) => (
-              <QAItem
-                key={i}
-                question={item.question}
-                answer={item.answer}
-                index={i}
-              />
-            ))}
-          </div>
+          <SectionDivider label="Q & A" />
+          <QABlock items={part.qa} />
         </section>
       )}
-    </div>
-  );
-}
-
-// ─── Q&A item (accordion-style) ──────────────────────────────────────────
-
-function QAItem({
-  question,
-  answer,
-  index,
-}: {
-  question: string;
-  answer: string;
-  index: number;
-}) {
-  return (
-    <div
-      style={{
-        padding: "var(--tf-space-5)",
-        borderRadius: "var(--tf-radius-xl)",
-        border: "1px solid var(--tf-border-default)",
-        background: "var(--tf-bg-surface)",
-        display: "flex",
-        flexDirection: "column",
-        gap: "var(--tf-space-3)",
-      }}
-    >
-      <div
-        style={{
-          display: "flex",
-          alignItems: "flex-start",
-          gap: "var(--tf-space-3)",
-        }}
-      >
-        <span
-          style={{
-            flexShrink: 0,
-            width: 24,
-            height: 24,
-            borderRadius: "50%",
-            background: "rgba(99,102,241,0.15)",
-            border: "1px solid rgba(99,102,241,0.3)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            fontSize: "0.65rem",
-            fontWeight: 700,
-            fontFamily: "var(--tf-font-mono)",
-            color: "var(--tf-color-primary-light)",
-            marginTop: 2,
-          }}
-        >
-          Q
-        </span>
-        <p
-          style={{
-            margin: 0,
-            fontWeight: 600,
-            fontSize: "var(--tf-text-md)",
-            color: "var(--tf-text-primary)",
-            lineHeight: "var(--tf-leading-snug)",
-          }}
-        >
-          {question}
-        </p>
-      </div>
-
-      <div
-        style={{
-          paddingLeft: "calc(24px + var(--tf-space-3))",
-          display: "flex",
-          alignItems: "flex-start",
-          gap: "var(--tf-space-3)",
-        }}
-      >
-        <p
-          style={{
-            margin: 0,
-            fontSize: "var(--tf-text-sm)",
-            color: "var(--tf-text-secondary)",
-            lineHeight: "var(--tf-leading-relaxed)",
-          }}
-        >
-          {answer}
-        </p>
-      </div>
     </div>
   );
 }
@@ -366,7 +233,7 @@ function ReadingContent({ part }: { part: CoursePartMeta }) {
         gap: "var(--tf-space-8)",
       }}
     >
-      {/* Objectives as setup steps */}
+      {/* Objectives */}
       {part.objectives && part.objectives.length > 0 && (
         <section>
           <SectionDivider label="In this reading" />
@@ -426,7 +293,7 @@ function ReadingContent({ part }: { part: CoursePartMeta }) {
         </section>
       )}
 
-      {/* External resource link */}
+      {/* External resource */}
       {part.readingUrl && (
         <KeyPoint variant="info" title="External resource">
           This lesson links to an external resource.{" "}
@@ -519,7 +386,7 @@ function PodcastContent({ part }: { part: CoursePartMeta }) {
         title={part.title}
         description={part.description}
         duration={part.duration}
-        showName={A2A_COURSE.title}
+        showName={COURSE.title}
       />
 
       {part.objectives && part.objectives.length > 0 && (
@@ -535,6 +402,14 @@ function PodcastContent({ part }: { part: CoursePartMeta }) {
               />
             ))}
           </ConceptGrid>
+        </section>
+      )}
+
+      {/* Q&A */}
+      {part.qa && part.qa.length > 0 && (
+        <section>
+          <SectionDivider label="Q & A" />
+          <QABlock items={part.qa} />
         </section>
       )}
     </div>
