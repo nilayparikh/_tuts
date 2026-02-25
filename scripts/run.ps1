@@ -37,7 +37,7 @@ try {
     # ── 2. Install dependencies ─────────────────────────────────────────
     if (-not $SkipInstall) {
         if (-not (Test-Path "node_modules")) {
-            Write-Host "`n[1/3] Installing dependencies..." -ForegroundColor Yellow
+            Write-Host "`n[1/4] Installing root dependencies..." -ForegroundColor Yellow
             npm install
             if ($LASTEXITCODE -ne 0) { throw "npm install failed" }
         } else {
@@ -47,8 +47,25 @@ try {
         Write-Host "[SKIP] Dependency install" -ForegroundColor DarkGray
     }
 
-    # ── 3. Type check ──────────────────────────────────────────────────
-    Write-Host "`n[2/3] Type-checking..." -ForegroundColor Yellow
+    # ── 3. Build the framework package ─────────────────────────────────
+    $fwPath = Join-Path $ProjectRoot "_common/frontend/tutorial-framework"
+    if (Test-Path $fwPath) {
+        Write-Host "`n[2/4] Building @localm/tutorial-framework..." -ForegroundColor Yellow
+        Push-Location $fwPath
+        try {
+            if (-not (Test-Path "node_modules")) { npm install }
+            npm run build
+            if ($LASTEXITCODE -ne 0) { throw "Framework build failed" }
+            Write-Host "[OK] Framework built" -ForegroundColor Green
+        } finally {
+            Pop-Location
+        }
+    } else {
+        Write-Host "[WARN] Framework path not found: $fwPath" -ForegroundColor DarkYellow
+    }
+
+    # ── 4. Type check ──────────────────────────────────────────────────
+    Write-Host "`n[3/4] Type-checking..." -ForegroundColor Yellow
     npx tsc --noEmit 2>&1 | Out-Null
     if ($LASTEXITCODE -ne 0) {
         Write-Host "WARNING: TypeScript errors found. Run 'npm run type-check' for details." -ForegroundColor DarkYellow
@@ -56,9 +73,9 @@ try {
         Write-Host "[OK] TypeScript clean" -ForegroundColor Green
     }
 
-    # ── 4. Build or Dev ────────────────────────────────────────────────
+    # ── 5. Build or Dev ────────────────────────────────────────────────
     if ($Build) {
-        Write-Host "`n[3/3] Building static site..." -ForegroundColor Yellow
+        Write-Host "`n[4/4] Building static site..." -ForegroundColor Yellow
         npm run build
         if ($LASTEXITCODE -ne 0) { throw "Build failed" }
         Write-Host "`n[OK] Static site built → out/" -ForegroundColor Green
@@ -76,7 +93,7 @@ try {
         Write-Host "`nStarting preview server..." -ForegroundColor Yellow
         npx serve out -l 3000
     } else {
-        Write-Host "`n[3/3] Starting dev server (Turbopack)..." -ForegroundColor Yellow
+        Write-Host "`n[4/4] Starting dev server (Turbopack)..." -ForegroundColor Yellow
         Write-Host "       → http://localhost:3000" -ForegroundColor Cyan
         Write-Host "       Press Ctrl+C to stop.`n" -ForegroundColor DarkGray
         npm run dev
