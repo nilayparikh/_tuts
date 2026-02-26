@@ -1,5 +1,5 @@
 ---
-name: Tutorial Page Agent
+name: _tuts_agent
 description: Agent for creating and editing tutorial pages in the _tuts Next.js project. Uses @localm/tutorial-framework exclusively — no custom components allowed.
 tools:
   [

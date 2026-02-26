@@ -1,5 +1,5 @@
 ---
-mode: agent
+agent: _tuts_agent
 description: Create a new tutorial page in the _tuts Next.js project
 ---
 
@@ -24,7 +24,7 @@ Following the rules in `.github/instructions/tutorial.instructions.md` and the c
 2. **Wraps content in `<TutorialLayout>`** with `SITE_CONFIG.header` and `SITE_CONFIG.footer`.
 3. **Opens with `<HeroSection>`** — use `**double asterisks**` around the key word in the headline for gradient highlight.
 4. **Teaches the concept end-to-end** in logical steps:
-   - Start with a "Core Concepts" section using `ConceptGrid` + `ConceptCard`  
+   - Start with a "Core Concepts" section using `ConceptGrid` + `ConceptCard`
    - Walk through implementation with `StepList` + `StepCard` + `CodeBlock`
    - Add `KeyPoint` callouts at the natural decision points
 5. **Declares all multi-line code** as `const CODE_STRING = \`...\`` outside the component.

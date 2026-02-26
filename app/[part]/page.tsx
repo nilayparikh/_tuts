@@ -92,7 +92,7 @@ export default async function LessonPage({
         basePath: "",
         totalDuration: COURSE.totalDuration,
       }}
-      sidebarWidth={288}
+      sidebarWidth={384}
     >
       {/* ── All lesson content in a single constrained column ──────── */}
       <div

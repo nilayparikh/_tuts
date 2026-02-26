@@ -155,7 +155,31 @@
   color: var(--tf-text-muted);
 }
 
+/* ── Viewport constraints ─────────────────────────────────────────────────
+ * min-width prevents the layout from collapsing below 320px (smallest phone).
+ * The 2-column course page is centered via --tf-course-max-width with equal
+ * gutters on ultra-wide screens (> 1600px).
+ * ─────────────────────────────────────────────────────────────────────────── */
+html {
+  min-width: 320px;
+}
+
+/* ── Side gutter treatment for 2-col layout ──────────────────────────────── */
+/* On wide viewports the centered body leaves gutters; fill with surface bg */
+body:has(.tf-course-player-body) {
+  background: var(--tf-bg-surface);
+}
+
 /* ── Responsive ──────────────────────────────────────────────────────────── */
+
+/* Extra-large screens: boost horizontal padding for breathing room */
+@media (min-width: 1600px) {
+  .tf-course-player-main {
+    padding-left: var(--tf-space-12) !important;
+    padding-right: var(--tf-space-12) !important;
+  }
+}
+
 @media (max-width: 768px) {
   /* Grid responsiveness is handled by the framework (.tf-concept-grid,
    * .tf-sidebar-layout, .tf-step-card classes in GlobalStyles). */

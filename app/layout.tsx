@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
-import { TutorialGlobalStyles } from "@localm/tutorial-framework";
+import {
+  TutorialGlobalStyles,
+  ThemeProvider,
+} from "@localm/tutorial-framework";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -47,7 +50,7 @@ export default function RootLayout({
       <body>
         {/* Inject --tf-* CSS variables and base resets */}
         <TutorialGlobalStyles />
-        {children}
+        <ThemeProvider>{children}</ThemeProvider>
       </body>
     </html>
   );
