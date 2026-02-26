@@ -3,8 +3,8 @@
  *
  * © 2026 LocalM™. All rights reserved.
  *
- * This template renders a SINGLE course. Navigation reflects that:
- * "Home" → course overview, "GitHub" → course repo.
+ * Multi-course site. Navigation reflects that:
+ * "Courses" → topic home listing all courses.
  */
 
 import type {
@@ -36,12 +36,12 @@ export const BRAND = {
 /* ─── Navigation ───────────────────────────────────────────────────────── */
 
 const NAV_ITEMS: NavItem[] = [
-  { label: "Course", href: "/" },
+  { label: "Courses", href: "/" },
   { label: "Examples", href: "/examples/" },
 ];
 
 const FOOTER_LINKS: FooterLink[] = [
-  { label: "Course Overview", href: "/" },
+  { label: "Courses", href: "/" },
   { label: "Examples", href: "/examples/" },
   { label: "Terms", href: "/terms/" },
   { label: "Privacy", href: "/privacy/" },
@@ -54,7 +54,7 @@ export const SITE_HEADER: TutorialHeaderProps = {
   siteName: BRAND.name,
   logoUrl: BRAND.logoUrl,
   navItems: NAV_ITEMS,
-  githubUrl: "https://github.com/nilayparikh/a2a-agent2agent-protocol",
+  githubUrl: BRAND.socials.github,
   youtubeUrl: BRAND.socials.youtube,
   twitterUrl: BRAND.socials.twitter,
   linkedinUrl: BRAND.socials.linkedin,

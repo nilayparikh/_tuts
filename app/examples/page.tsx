@@ -9,7 +9,7 @@ import {
   ConceptGrid,
 } from "@localm/tutorial-framework";
 import { SITE_CONFIG, BRAND } from "@/config/site";
-import { COURSE } from "@/data/course";
+import { ALL_COURSES } from "@/data/courses";
 
 // ─── Metadata ─────────────────────────────────────────────────────────────
 
@@ -27,15 +27,18 @@ export const metadata: Metadata = {
 
 // ─── Helpers ──────────────────────────────────────────────────────────────
 
-const codeExamples = COURSE.parts
-  .filter((p) => p.codeUrl)
-  .map((p, i) => ({
-    title: p.title,
-    description: p.description ?? "",
-    slug: p.slug,
-    codeUrl: p.codeUrl!,
-    index: i + 1,
-  }));
+const codeExamples = ALL_COURSES.flatMap((course) =>
+  course.parts
+    .filter((p) => p.codeUrl)
+    .map((p) => ({
+      title: p.title,
+      description: p.description ?? "",
+      slug: p.slug,
+      codeUrl: p.codeUrl!,
+      courseTitle: course.title,
+      courseSlug: course.slug,
+    })),
+).map((ex, i) => ({ ...ex, index: i + 1 }));
 
 // ─── Page ─────────────────────────────────────────────────────────────────
 
@@ -52,7 +55,7 @@ export default function ExamplesPage() {
         subheading="Runnable code from every hands-on lesson. Clone the repo and follow along."
         primaryAction={{
           label: "View on GitHub",
-          href: COURSE.githubUrl ?? "#",
+          href: ALL_COURSES[0]?.githubUrl ?? "#",
         }}
         tags={["Python", "A2A", "Google ADK", "LangGraph", "BeeAI"]}
       />
@@ -96,7 +99,7 @@ export default function ExamplesPage() {
       <NoteBox title="Getting Started">
         Clone the{" "}
         <a
-          href={COURSE.githubUrl}
+          href={ALL_COURSES[0]?.githubUrl}
           target="_blank"
           rel="noopener noreferrer"
           style={{ color: "var(--tf-color-primary-light)" }}

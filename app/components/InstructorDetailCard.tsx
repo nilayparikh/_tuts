@@ -9,8 +9,8 @@ export interface InstructorDetailCardProps {
   name: string;
   /** Photo src (not logo) */
   imageSrc: string;
-  /** Short bio paragraph */
-  bio: string;
+  /** Short bio — string or JSX with links */
+  bio: React.ReactNode;
   /** Role / title under the name */
   role?: string;
   /** Social links */
@@ -207,7 +207,7 @@ export function InstructorDetailCard({
           {role && <p style={s.role}>{role}</p>}
         </div>
 
-        <p style={s.bio}>{bio}</p>
+        <div style={s.bio}>{bio}</div>
 
         {socialEntries.length > 0 && (
           <div style={s.socials}>
@@ -221,8 +221,7 @@ export function InstructorDetailCard({
                 aria-label={entry.label}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.color = "var(--tf-text-primary)";
-                  e.currentTarget.style.borderColor =
-                    "var(--tf-border-strong)";
+                  e.currentTarget.style.borderColor = "var(--tf-border-strong)";
                   e.currentTarget.style.background = "var(--tf-bg-surface)";
                 }}
                 onMouseLeave={(e) => {

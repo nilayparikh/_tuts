@@ -1,70 +1,19 @@
 /**
- * Course Data — A2A: The Agent2Agent Protocol
+ * Course: A2A — The Agent2Agent Protocol
  *
- * This is the SINGLE course definition for this tutorial site.
- * The entire site renders this one course: overview + per-part pages.
- *
- * To create a new tutorial site, clone this template repo and replace
- * this file with your own course data.
+ * Slug: "a2a"  →  /a2a/, /a2a/introduction/, /a2a/why-a2a/, …
  */
 
-import type { CoursePart, PartType } from "@localm/tutorial-framework";
+import type { CourseDefinition } from "./types";
 
-// ─── Extended part metadata ────────────────────────────────────────────────
-
-export interface PartQA {
-  question: string;
-  answer: string;
-}
-
-export interface PartQuizQuestion {
-  id: string;
-  question: string;
-  options: Array<{ id: string; text: string }>;
-  correctOptionId: string;
-  explanation?: string;
-}
-
-export interface CoursePartMeta extends CoursePart {
-  /** YouTube video ID (type "video" | "video-code") */
-  videoId?: string;
-  /** Part description for the lesson hero */
-  description?: string;
-  /** Learning objectives */
-  objectives?: string[];
-  /** Q&A pairs shown after video */
-  qa?: PartQA[];
-  /** Quiz questions (type "quiz") */
-  quizQuestions?: PartQuizQuestion[];
-  /** GitHub code URL */
-  codeUrl?: string;
-  /** Reading / resource URL */
-  readingUrl?: string;
-  /** Tags for SEO */
-  tags?: string[];
-}
-
-// ─── Course definition ────────────────────────────────────────────────────
-
-export interface CourseDefinition {
-  slug: string;
-  title: string;
-  description: string;
-  totalDuration: string;
-  tags: string[];
-  githubUrl?: string;
-  parts: CoursePartMeta[];
-}
-
-// ─── THE course ───────────────────────────────────────────────────────────
-
-export const COURSE: CourseDefinition = {
-  slug: "a2a-agent-protocol",
+export const A2A_COURSE: CourseDefinition = {
+  slug: "a2a",
   title: "A2A: The Agent2Agent Protocol",
   description:
     "Learn to build multi-agent AI systems using Google's A2A protocol. Covers QA agents on Vertex AI, sequential chain agents, LangGraph, BeeAI, and deploying on Agent Stack.",
   totalDuration: "~70 mins",
   tags: ["A2A", "AI Agents", "Python", "LangGraph", "Google ADK", "BeeAI"],
+  icon: "🔌",
   githubUrl: "https://github.com/nilayparikh/a2a-agent2agent-protocol",
   parts: [
     // ── 1. Introduction ──────────────────────────────────────────────────
@@ -514,26 +463,3 @@ export const COURSE: CourseDefinition = {
     },
   ],
 };
-
-// ─── Helpers ──────────────────────────────────────────────────────────────
-
-/** Find a part by slug */
-export function findPart(slug: string): CoursePartMeta | undefined {
-  return COURSE.parts.find((p) => p.slug === slug);
-}
-
-/** Get prev/next parts for navigation */
-export function getAdjacentParts(slug: string): {
-  prev: CoursePartMeta | null;
-  next: CoursePartMeta | null;
-} {
-  const idx = COURSE.parts.findIndex((p) => p.slug === slug);
-  if (idx === -1) return { prev: null, next: null };
-  return {
-    prev: idx > 0 ? COURSE.parts[idx - 1] : null,
-    next: idx < COURSE.parts.length - 1 ? COURSE.parts[idx + 1] : null,
-  };
-}
-
-/** All part slugs (for generateStaticParams) */
-export const COURSE_SLUGS = COURSE.parts.map((p) => p.slug);

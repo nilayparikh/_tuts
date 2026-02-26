@@ -31,20 +31,23 @@ import {
 } from "@localm/tutorial-framework";
 import { SITE_CONFIG, BRAND } from "@/config/site";
 import {
-  COURSE,
-  COURSE_SLUGS,
-  findPart,
+  findCourse,
+  findCoursePart,
   getAdjacentParts,
-} from "@/data/course";
-import type { CoursePartMeta } from "@/data/course";
+  allCoursePartParams,
+} from "@/data/courses";
+import type { CoursePartMeta } from "@/data/courses";
+
+// ─── Types ────────────────────────────────────────────────────────────────
+
+type Params = { course: string; part: string };
 
 // ─── Static params (for output: 'export') ────────────────────────────────
 
-export function generateStaticParams(): Array<{ part: string }> {
-  return COURSE_SLUGS.filter(
-    (slug): slug is string =>
-      typeof slug === "string" && slug.trim().length > 0,
-  ).map((slug) => ({ part: slug }));
+export function generateStaticParams(): Array<Params> {
+  return allCoursePartParams().filter(
+    (p) => p.course.trim().length > 0 && p.part.trim().length > 0,
+  );
 }
 
 export const dynamicParams = false;
@@ -54,18 +57,19 @@ export const dynamicParams = false;
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ part: string }>;
+  params: Promise<Params>;
 }): Promise<Metadata> {
-  const { part: slug } = await params;
-  const part = findPart(slug);
-  if (!part) return {};
+  const { course: courseSlug, part: partSlug } = await params;
+  const course = findCourse(courseSlug);
+  const part = findCoursePart(courseSlug, partSlug);
+  if (!course || !part) return {};
 
   return {
-    title: `${part.title} | ${COURSE.title}`,
-    description: part.description ?? COURSE.description,
+    title: `${part.title} | ${course.title}`,
+    description: part.description ?? course.description,
     openGraph: {
-      title: `${part.title} · ${COURSE.title}`,
-      description: part.description ?? COURSE.description,
+      title: `${part.title} · ${course.title}`,
+      description: part.description ?? course.description,
       type: "article",
     },
   };
@@ -76,27 +80,28 @@ export async function generateMetadata({
 export default async function LessonPage({
   params,
 }: {
-  params: Promise<{ part: string }>;
+  params: Promise<Params>;
 }) {
-  const { part: slug } = await params;
-  const part = findPart(slug);
-  if (!part) notFound();
+  const { course: courseSlug, part: partSlug } = await params;
+  const course = findCourse(courseSlug);
+  const part = findCoursePart(courseSlug, partSlug);
+  if (!course || !part) notFound();
 
-  const { prev, next } = getAdjacentParts(slug);
+  const { prev, next } = getAdjacentParts(courseSlug, partSlug);
 
   return (
     <CoursePlayerLayout
       header={{
         ...SITE_CONFIG.header,
-        currentPath: `/${slug}/`,
+        currentPath: `/${courseSlug}/${partSlug}/`,
       }}
       footer={SITE_CONFIG.footer}
       sidebar={{
-        courseTitle: COURSE.title,
-        parts: COURSE.parts,
-        currentSlug: slug,
-        basePath: "",
-        totalDuration: COURSE.totalDuration,
+        courseTitle: course.title,
+        parts: course.parts,
+        currentSlug: partSlug,
+        basePath: `/${courseSlug}`,
+        totalDuration: course.totalDuration,
       }}
       sidebarWidth={384}
     >
@@ -129,9 +134,9 @@ export default async function LessonPage({
             twitterHandle={BRAND.socials.twitterHandle}
             linkedinNewsletterUrl={BRAND.socials.linkedinNewsletter}
             youtubeSubscribeUrl={BRAND.socials.youtube}
-            shareTitle={`${part.title} — ${COURSE.title}`}
-            shareDescription={part.description ?? COURSE.description}
-            shareHashtags={part.tags ?? COURSE.tags}
+            shareTitle={`${part.title} — ${course.title}`}
+            shareDescription={part.description ?? course.description}
+            shareHashtags={part.tags ?? course.tags}
           />
         </div>
 
@@ -139,7 +144,7 @@ export default async function LessonPage({
         {part.description && <Paragraph>{part.description}</Paragraph>}
 
         {/* ── Main content by type ─────────────────────────────────── */}
-        <PartContent part={part} />
+        <PartContent part={part} courseTitle={course.title} />
 
         {/* ── Navigation ───────────────────────────────────────────────── */}
         <TutorialNav
@@ -147,12 +152,12 @@ export default async function LessonPage({
             prev
               ? {
                   label: prev.title,
-                  href: `/${prev.slug}/`,
+                  href: `/${courseSlug}/${prev.slug}/`,
                   description: prev.duration,
                 }
               : {
                   label: "Course Overview",
-                  href: "/",
+                  href: `/${courseSlug}/`,
                   description: "All lessons",
                 }
           }
@@ -160,7 +165,7 @@ export default async function LessonPage({
             next
               ? {
                   label: next.title,
-                  href: `/${next.slug}/`,
+                  href: `/${courseSlug}/${next.slug}/`,
                   description: next.duration,
                 }
               : undefined
@@ -173,11 +178,17 @@ export default async function LessonPage({
 
 // ─── Per-type content renderers ───────────────────────────────────────────
 
-function PartContent({ part }: { part: CoursePartMeta }) {
+function PartContent({
+  part,
+  courseTitle,
+}: {
+  part: CoursePartMeta;
+  courseTitle: string;
+}) {
   switch (part.type) {
     case "video":
     case "video-code":
-      return <VideoContent part={part} />;
+      return <VideoContent part={part} courseTitle={courseTitle} />;
     case "reading":
       return <ReadingContent part={part} />;
     case "quiz":
@@ -185,7 +196,7 @@ function PartContent({ part }: { part: CoursePartMeta }) {
     case "article":
       return <ArticleContent part={part} />;
     case "podcast":
-      return <PodcastContent part={part} />;
+      return <PodcastContent part={part} courseTitle={courseTitle} />;
     case "slideshow":
       return <SlideshowContent part={part} />;
     default:
@@ -195,7 +206,13 @@ function PartContent({ part }: { part: CoursePartMeta }) {
 
 // ─── Video / video-code ───────────────────────────────────────────────────
 
-function VideoContent({ part }: { part: CoursePartMeta }) {
+function VideoContent({
+  part,
+  courseTitle,
+}: {
+  part: CoursePartMeta;
+  courseTitle: string;
+}) {
   return (
     <>
       {/* Video embed */}
@@ -253,7 +270,7 @@ function VideoContent({ part }: { part: CoursePartMeta }) {
         )}
       </DescriptionBox>
 
-      {/* ── Callout Boxes Demo ──────────────────────────────────────────── */}
+      {/* ── Callout Boxes ──────────────────────────────────────────────── */}
       <InfoBox title="Prerequisites">
         Make sure you have Python 3.11+ installed and a Google Cloud account
         with Vertex AI enabled before starting this lesson.
@@ -415,7 +432,7 @@ function VideoContent({ part }: { part: CoursePartMeta }) {
         />
       )}
 
-      {/* ── Video Transcript (for video lessons with transcripts) ──────── */}
+      {/* ── Video Transcript ───────────────────────────────────────────── */}
       {part.slug === "introduction" && (
         <VideoTranscript
           title="Video Transcript"
@@ -534,7 +551,6 @@ function VideoContent({ part }: { part: CoursePartMeta }) {
 function ReadingContent({ part }: { part: CoursePartMeta }) {
   return (
     <>
-      {/* Objectives */}
       {part.objectives && part.objectives.length > 0 && (
         <section>
           <SectionDivider label="In this reading" />
@@ -552,7 +568,6 @@ function ReadingContent({ part }: { part: CoursePartMeta }) {
         </section>
       )}
 
-      {/* External resource */}
       {part.readingUrl && (
         <InfoBox title="External resource">
           This lesson links to an external resource.{" "}
@@ -567,7 +582,6 @@ function ReadingContent({ part }: { part: CoursePartMeta }) {
         </InfoBox>
       )}
 
-      {/* Step-by-step setup */}
       {part.codeUrl && (
         <StepByStepGuide
           title="Getting Started"
@@ -681,14 +695,20 @@ function ArticleContent({ part }: { part: CoursePartMeta }) {
 
 // ─── Podcast ──────────────────────────────────────────────────────────────
 
-function PodcastContent({ part }: { part: CoursePartMeta }) {
+function PodcastContent({
+  part,
+  courseTitle,
+}: {
+  part: CoursePartMeta;
+  courseTitle: string;
+}) {
   return (
     <>
       <PodcastEmbed
         title={part.title}
         description={part.description}
         duration={part.duration}
-        showName={COURSE.title}
+        showName={courseTitle}
       />
 
       {part.objectives && part.objectives.length > 0 && (
