@@ -5,8 +5,8 @@ This is a **template repository** for creating single-course tutorial websites. 
 ## Quick Start
 
 ```powershell
-# Clone and run
-git clone https://github.com/your-org/your-tutorial.git
+# Clone (with submodules!) and run
+git clone --recurse-submodules https://github.com/your-org/your-tutorial.git
 cd your-tutorial
 ./scripts/run.ps1
 ```
@@ -14,33 +14,53 @@ cd your-tutorial
 Or step-by-step:
 
 ```bash
+git clone --recurse-submodules https://github.com/your-org/your-tutorial.git
+cd your-tutorial
 npm install
 npm run dev          # → http://localhost:3000
 ```
+
+> **Important**: Always clone with `--recurse-submodules`. The `_common/` directory is a git submodule containing the shared component library.
 
 ## Architecture
 
 ```
 _tuts/                          # ← Your forked repo
+├── _common/                    # Git submodule → nilayparikh/_tuts_common
+│   ├── frontend/
+│   │   └── tutorial-framework/ # @localm/tutorial-framework (source)
+│   ├── .github/                # Shared agent configs, instructions, skills
+│   └── docs/                   # Framework documentation
 ├── app/
 │   ├── layout.tsx              # Root layout (global styles, fonts)
 │   ├── page.tsx                # Course overview (lesson list)
 │   ├── globals.css             # Token overrides
+│   ├── components/             # Site-specific data wrappers
 │   └── [part]/
 │       └── page.tsx            # Individual lesson page (sidebar + content)
 ├── config/
 │   └── site.ts                 # Header, footer, nav links, social URLs
 ├── data/
 │   └── course.ts               # THE course definition (all lessons)
-├── packages/
-│   └── tutorial-framework/     # Vendored copy of @localm/tutorial-framework
+├── .github/
+│   ├── agents/                 # Copilot agent definitions
+│   ├── instructions/           # AI coding rules (auto-applied)
+│   ├── prompts/                # Reusable prompt templates
+│   ├── skills/                 # Copilot agent skills
+│   └── workflows/              # GitHub Actions (deploy to Pages)
 ├── scripts/
 │   ├── run.ps1                 # One-command dev launcher
-│   └── sync-common.ps1         # Pull latest common components
+│   └── sync-common.ps1         # Pull latest _common submodule
 ├── docs/                       # This directory
-├── next.config.ts              # Static export config
+├── next.config.ts              # Static export + framework alias config
 └── package.json
 ```
+
+## The `_common` Submodule
+
+The shared component library and AI agent configurations live in a separate repository ([`nilayparikh/_tuts_common`](https://github.com/nilayparikh/_tuts_common)) and are included as a git submodule at `_common/`.
+
+See [\_common-submodule.md](_common-submodule.md) for the full guide on how `_common` works, when to edit it, and how to sync updates.
 
 ## How to Create Your Own Tutorial
 
@@ -50,6 +70,8 @@ Use the GitHub "Use this template" button or:
 
 ```bash
 gh repo create my-tutorial --template nilayparikh/a2a-agent2agent-protocol-tutorial
+cd my-tutorial
+git submodule update --init --recursive
 ```
 
 ### 2. Replace course data
@@ -99,6 +121,16 @@ Override tokens in `app/globals.css`:
 npm run build        # Generates out/ with static HTML
 ```
 
+## Documentation Index
+
+| Document                                      | Content                                    |
+| --------------------------------------------- | ------------------------------------------ |
+| [README.md](README.md)                        | This file — overview + quick start         |
+| [\_common-submodule.md](_common-submodule.md) | How the `_common` submodule works          |
+| [design-principles.md](design-principles.md)  | Architecture, component rules, guardrails  |
+| [deployment.md](deployment.md)                | GitHub Pages deployment guide              |
+| [`_common/docs/`](../_common/docs/README.md)  | Framework library + AI agent documentation |
+
 ## Part Types
 
 Each lesson in `data/course.ts` has a `type` that controls how it renders:
@@ -119,17 +151,19 @@ See [deployment.md](deployment.md) for the full CI/CD setup.
 
 ## Updating the Framework
 
-The component library lives at `packages/tutorial-framework/` (vendored copy). To pull updates from the upstream `common/` repo:
+The component library lives in the `_common/` git submodule (→ `nilayparikh/_tuts_common`). To pull the latest changes:
 
 ```powershell
 ./scripts/sync-common.ps1
+git add _common
+git commit -m "chore: update _common submodule"
 ```
 
-This copies `common/frontend/tutorial-framework/src/` → `packages/tutorial-framework/src/`.
+See [\_common-submodule.md](_common-submodule.md) for the full guide.
 
 ## Scripts
 
-| Script                    | Purpose                         |
-| ------------------------- | ------------------------------- |
-| `scripts/run.ps1`         | Install deps + start dev server |
-| `scripts/sync-common.ps1` | Sync framework from common/     |
+| Script                    | Purpose                                 |
+| ------------------------- | --------------------------------------- |
+| `scripts/run.ps1`         | Install deps + start dev server         |
+| `scripts/sync-common.ps1` | Pull latest `_common` submodule changes |

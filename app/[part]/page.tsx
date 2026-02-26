@@ -28,6 +28,8 @@ import {
   PollBlock,
   Paragraph,
   ShareButtons,
+  CodePreview,
+  VideoTranscript,
 } from "@localm/tutorial-framework";
 import { SITE_CONFIG } from "@/config/site";
 import {
@@ -350,6 +352,87 @@ function VideoContent({ part }: { part: CoursePartMeta }) {
           <SectionDivider label="Q & A" />
           <QABlock items={part.qa} />
         </section>
+      )}
+
+      {/* ── Code Preview (for code-along lessons) ──────────────────── */}
+      {part.type === "video-code" && part.slug === "qa-agent-vertex-ai" && (
+        <CodePreview
+          title="Code Walkthrough"
+          description="Key code from this lesson, explained step by step."
+          segments={[
+            {
+              code: `import anthropic\nfrom google.auth import default\n\ncredentials, project = default()\nclient = anthropic.AnthropicVertex(\n    region="us-east5",\n    project_id=project,\n)`,
+              language: "python",
+              filename: "qa_agent.py",
+              explanation:
+                "First we import the Anthropic SDK and use Google Cloud default credentials to authenticate with Vertex AI. This avoids hardcoding any API keys.",
+            },
+            {
+              code: `async def ask(question: str) -> str:\n    message = client.messages.create(\n        model="claude-sonnet-4-20250514",\n        max_tokens=1024,\n        messages=[{"role": "user", "content": question}],\n    )\n    return message.content[0].text`,
+              language: "python",
+              filename: "qa_agent.py",
+              explanation:
+                "The core QA function sends a user question to Claude via the Vertex AI endpoint and returns the text response. We use async for non-blocking I/O.",
+            },
+          ]}
+        />
+      )}
+
+      {part.type === "video-code" && part.slug === "wrapping-qa-a2a-server" && (
+        <CodePreview
+          title="A2A Server Setup"
+          description="Key excerpts from wrapping the QA agent as an A2A server."
+          segments={[
+            {
+              code: `AGENT_CARD = {\n    "name": "QA Agent",\n    "url": "http://localhost:8000",\n    "version": "1.0.0",\n    "skills": [{\n        "id": "qa",\n        "name": "Question Answering",\n        "description": "Answer general knowledge questions",\n    }],\n}`,
+              language: "python",
+              filename: "server.py",
+              explanation:
+                "The Agent Card is the discovery document that tells other agents what this agent can do. It is served at /.well-known/agent.json.",
+            },
+            {
+              code: `@app.post("/tasks/send")\nasync def send_task(request: TaskRequest):\n    answer = await ask(request.message)\n    return TaskResponse(\n        status="completed",\n        artifacts=[{"text": answer}],\n    )`,
+              language: "python",
+              filename: "server.py",
+              explanation:
+                "The /tasks/send endpoint receives a task, invokes our QA function, and returns the result as a completed task with an artifact.",
+            },
+          ]}
+        />
+      )}
+
+      {/* ── Video Transcript (for video lessons with transcripts) ──────── */}
+      {part.slug === "introduction" && (
+        <VideoTranscript
+          title="Video Transcript"
+          defaultCollapsed
+          entries={[
+            { time: 0, speaker: "Instructor", text: "Welcome to the A2A Agent-to-Agent Protocol course. In this series, we are going to build production-grade multi-agent AI systems from scratch." },
+            { time: 12, speaker: "Instructor", text: "Agentic AI is one of the most exciting frontiers in artificial intelligence. But here is the problem — most agents today operate in isolation." },
+            { time: 24, speaker: "Instructor", text: "They can call tools, they can access data, but they cannot talk to other agents in a standardised way." },
+            { time: 35, speaker: "Instructor", text: "That is exactly what the A2A protocol solves. It gives agents a common language to discover each other, delegate tasks, and stream results." },
+            { time: 48, speaker: "Instructor", text: "Over the next 16 lessons you will build QA agents, chain agents, orchestrate multi-agent systems, and deploy to production." },
+            { time: 62, speaker: "Instructor", text: "We will use Python, Google ADK, LangGraph, BeeAI, and Microsoft Agent Framework — covering the entire ecosystem." },
+            { time: 78, speaker: "Instructor", text: "By the end, you will have a complete understanding of A2A and hands-on experience building real, production-ready agent systems." },
+            { time: 92, speaker: "Instructor", text: "Let us get started by understanding why we even need agent-to-agent communication in the first place." },
+          ]}
+        />
+      )}
+
+      {part.slug === "why-a2a" && (
+        <VideoTranscript
+          title="Video Transcript"
+          defaultCollapsed
+          entries={[
+            { time: 0, speaker: "Instructor", text: "So why do we need A2A? Let us start by looking at the landscape of agent communication." },
+            { time: 10, speaker: "Instructor", text: "Today we have tool calling — where a model invokes functions. And we have MCP, the Model Context Protocol, which connects models to structured data sources." },
+            { time: 22, speaker: "Instructor", text: "But neither of these solves agent-to-agent communication. Tool calling is synchronous and one-directional. MCP is about connecting to data, not to other agents." },
+            { time: 36, speaker: "Instructor", text: "A2A fills this gap. It is an open protocol — created by Google — that lets autonomous agents discover each other and delegate tasks." },
+            { time: 48, speaker: "Instructor", text: "The key concepts are Agent Cards for discovery, Tasks for work delegation, and Server-Sent Events for streaming results back." },
+            { time: 60, speaker: "Instructor", text: "What makes A2A powerful is that it is framework-agnostic. An ADK agent can talk to a LangGraph agent, which can talk to a BeeAI agent. They just need to speak A2A." },
+            { time: 75, speaker: "Instructor", text: "Think of it like HTTP for agents. You do not need to know the implementation — just the contract." },
+          ]}
+        />
       )}
 
       {/* ── Warning callout example ────────────────────────────────────── */}

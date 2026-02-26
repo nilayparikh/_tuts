@@ -244,9 +244,8 @@ export default function CourseOverviewPage() {
       <SectionDivider label="Tips & Notices" />
 
       <TipBox title="Learning Strategy">
-        Watch each video lesson at 1x speed first, then code along in the
-        second pass. This two-pass method is proven to improve retention by
-        40%.
+        Watch each video lesson at 1x speed first, then code along in the second
+        pass. This two-pass method is proven to improve retention by 40%.
       </TipBox>
 
       <SuccessBox title="Certification Available">
@@ -255,8 +254,8 @@ export default function CourseOverviewPage() {
       </SuccessBox>
 
       <NoteBox title="Self-Paced">
-        This course is completely self-paced. Each lesson builds on the
-        previous one, but you can revisit any lesson at any time.
+        This course is completely self-paced. Each lesson builds on the previous
+        one, but you can revisit any lesson at any time.
       </NoteBox>
 
       {/* ── Course Stats ──────────────────────────────────────────────────── */}

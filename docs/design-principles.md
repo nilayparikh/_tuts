@@ -15,9 +15,11 @@ This document captures the design decisions, constraints, and guardrails for the
 
 ### Single Package, Source-linked
 
-- The framework (`@localm/tutorial-framework`) lives at `_common/frontend/tutorial-framework/`.
+- The framework (`@localm/tutorial-framework`) lives in the `_common/` git submodule (→ [`nilayparikh/_tuts_common`](https://github.com/nilayparikh/_tuts_common)).
+- Source path: `_common/frontend/tutorial-framework/`.
 - Next.js **transpiles it from source** via `transpilePackages` + Turbopack alias — no pre-build needed during development.
 - The framework build (`tsup`) is only required for production builds and CI.
+- See [`docs/_common-submodule.md`](_common-submodule.md) for the full submodule guide.
 
 ### Dev Workflow
 
@@ -209,6 +211,14 @@ data/
 
 ## 10. Agent Instructions Alignment
 
-The agent mode instructions (`.github/agents/tutorial.agent.md`) and the instruction file (`.github/instructions/tutorial.instructions.md`) are the canonical references for AI agents working on this codebase.
+AI context is layered to avoid duplication:
+
+| Layer                     | File                                                              | Scope                                                                  |
+| ------------------------- | ----------------------------------------------------------------- | ---------------------------------------------------------------------- |
+| **Agent**                 | `.github/agents/tutorial.agent.md`                                | Project structure, component catalogue, page patterns, workflow        |
+| **Instructions**          | `.github/instructions/tutorial.instructions.md`                   | Auto-applied constraints for `app/**` (forbidden patterns, checklists) |
+| **Framework constraints** | `_common/.github/instructions/tutorial-framework.instructions.md` | Auto-applied tech rules (static export, tokens, layout architecture)   |
+| **Skill**                 | `.github/skills/working-with-common/SKILL.md`                     | On-demand `_common` submodule operations guide                         |
+| **Prompts**               | `.github/prompts/*.prompt.md`                                     | Task-specific templates (create page, modify page, add lesson)         |
 
 This document (`docs/design-principles.md`) is the **human-readable** counterpart that explains the **why** behind each rule. When rules conflict, the instruction files take precedence for file-level constraints; this document takes precedence for architectural decisions.

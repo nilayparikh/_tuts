@@ -7,12 +7,16 @@ A single-course tutorial website built with the [LocalM Tutorial Template](https
 ## Quick Start
 
 ```powershell
+git clone --recurse-submodules https://github.com/nilayparikh/_tuts.git
+cd _tuts
 ./scripts/run.ps1
 ```
 
 Or manually:
 
 ```bash
+git clone --recurse-submodules https://github.com/nilayparikh/_tuts.git
+cd _tuts
 npm install
 npm run dev          # → http://localhost:3000
 ```
@@ -28,24 +32,43 @@ npm run dev          # → http://localhost:3000
 ## Structure
 
 ```
-app/
-├── layout.tsx           # Root layout
-├── page.tsx             # Course overview
-├── globals.css          # Theme overrides
-└── [part]/page.tsx      # Lesson pages
+_common/                     # Git submodule → nilayparikh/_tuts_common
+├── frontend/
+│   └── tutorial-framework/  # @localm/tutorial-framework (40+ components)
+├── .github/                 # Shared agent configs, instructions, skills
+└── docs/                    # Framework documentation
 
-config/site.ts           # Site name, nav, social links
-data/course.ts           # Course definition (all lessons)
-packages/tutorial-framework/  # Vendored component library
+app/
+├── layout.tsx               # Root layout
+├── page.tsx                 # Course overview
+├── globals.css              # Theme overrides
+└── [part]/page.tsx          # Lesson pages
+
+config/site.ts               # Site name, nav, social links
+data/course.ts               # Course definition (all lessons)
 scripts/
-├── run.ps1              # Dev launcher
-└── sync-common.ps1      # Sync framework from common/
-docs/                    # Template documentation
+├── run.ps1                  # Dev launcher
+└── sync-common.ps1          # Sync _common submodule
+docs/                        # Template documentation
+.github/
+├── agents/                  # Copilot agent definitions
+├── instructions/            # AI coding rules (auto-applied)
+├── prompts/                 # Reusable prompt templates
+├── skills/                  # Copilot agent skills
+└── workflows/               # GitHub Actions (deploy)
 ```
+
+## The `_common` Submodule
+
+The shared component library (`@localm/tutorial-framework`) and AI agent configurations live in [`nilayparikh/_tuts_common`](https://github.com/nilayparikh/_tuts_common), included as a git submodule at `_common/`.
+
+- **Always clone with submodules**: `git clone --recurse-submodules <url>`
+- **Sync updates**: `./scripts/sync-common.ps1`
+- **Full guide**: [`docs/_common-submodule.md`](docs/_common-submodule.md)
 
 ## Create Your Own Tutorial
 
-1. Fork this repo (or "Use this template")
+1. Fork this repo (or "Use this template"), then `git submodule update --init --recursive`
 2. Edit `data/course.ts` with your lessons
 3. Edit `config/site.ts` with your branding
 4. `npm run build` → deploy `out/` to GitHub Pages

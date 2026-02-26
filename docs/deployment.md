@@ -2,37 +2,36 @@
 
 This template generates a fully static site (`output: 'export'`) that can be deployed to GitHub Pages via GitHub Actions.
 
-## The `common` Package Problem
+## The `_common` Submodule
 
-This template includes `@localm/tutorial-framework` as a **vendored copy** at `packages/tutorial-framework/`. This means:
+This template includes `@localm/tutorial-framework` via a **git submodule** at `_common/`. This means:
 
-- **No external dependency** — the template is 100% self-contained
-- **GitHub Actions just works** — no need to checkout a second repo
-- **Forks work immediately** — anyone who forks gets everything they need
+- **Single source of truth** — framework code lives in one repo, shared across all tutorial sites
+- **Source-linked development** — Next.js transpiles from TypeScript source, no pre-build in dev
+- **GitHub Actions works with one flag** — `submodules: recursive` in the checkout step
+- **Forks work** — `git clone --recurse-submodules` gives a fully working site
 
 ### Alternative Approaches
 
-If you prefer not to vendor the framework, here are other options:
-
 | Approach                          | Pros                           | Cons                                                         |
 | --------------------------------- | ------------------------------ | ------------------------------------------------------------ |
-| **Vendored copy** (current)       | Self-contained, zero config CI | Must sync manually                                           |
-| **Git submodule**                 | Always latest, single source   | Forks must init submodules, CI needs `submodules: recursive` |
+| **Git submodule** (current)       | Single source, live updates    | Forks must init submodules, CI needs `submodules: recursive` |
+| **Vendored copy**                 | Self-contained, zero config CI | Must copy files manually on every change                     |
 | **npm/GitHub Packages**           | Standard npm workflow, semver  | Must publish on every change, needs auth token in CI         |
 | **GitHub Actions multi-checkout** | Live common repo, no vendoring | Only works in your org, forks break                          |
 
-### Recommended: Vendored Copy (current setup)
+### Why Submodule (current setup)
 
-The vendored approach is best for template repos because:
+The submodule approach is best for this monorepo because:
 
-1. `gh repo create --template` copies everything
-2. `npm install` works with zero config
-3. GitHub Actions needs no special auth or checkout steps
-4. Forks in other orgs work identically
+1. Changes to `_tuts_common` propagate to all tutorial sites via `sync-common.ps1`
+2. `npm install` works with the `file:` reference — no npm registry needed
+3. GitHub Actions needs only `submodules: recursive` — no auth tokens
+4. Dev server transpiles from source — instant feedback when editing components
 
 ## GitHub Actions Workflow
 
-Create `.github/workflows/deploy.yml`:
+The actual workflow is at `.github/workflows/deploy.yml`. Key points:
 
 ```yaml
 name: Deploy to GitHub Pages
@@ -49,28 +48,33 @@ permissions:
 
 concurrency:
   group: "pages"
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          submodules: recursive # ← fetches _common submodule
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: "20"
           cache: npm
+          cache-dependency-path: package-lock.json
 
       - name: Install dependencies
         run: npm ci
 
-      - name: Build static site
+      - name: Build static export
         run: npm run build
+        env:
+          NODE_ENV: production
 
-      - name: Upload artifact
+      - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: out
@@ -82,10 +86,15 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
 ```
+
+> **Critical**: The `submodules: recursive` flag in the checkout step is required. Without it, `_common/` will be empty and the build will fail.
 
 ## Configuration for Sub-Path Deployment
 
@@ -98,40 +107,16 @@ assetPrefix: '/repo-name',
 
 For a custom domain or user/org page (`user.github.io`), leave them commented out.
 
-## Alternative: Git Submodule Setup
+## Alternative: npm Registry (GitHub Packages)
 
-If you choose the submodule approach instead of vendoring:
-
-```bash
-# Remove vendored copy
-rm -rf packages/tutorial-framework
-
-# Add submodule
-git submodule add https://github.com/your-org/common.git packages/common
-
-# Symlink (or update package.json path)
-# package.json: "@localm/tutorial-framework": "file:./packages/common/frontend/tutorial-framework"
-```
-
-Update GitHub Actions:
-
-```yaml
-- name: Checkout
-  uses: actions/checkout@v4
-  with:
-    submodules: recursive
-```
-
-## Alternative: GitHub Packages (npm)
-
-Publish the framework to GitHub Packages:
+If you prefer a standard npm workflow over the submodule approach:
 
 ```bash
-# In common/frontend/tutorial-framework/
+# In _common/frontend/tutorial-framework/
 npm publish --registry=https://npm.pkg.github.com
 ```
 
-Then in the template:
+Then in `package.json`:
 
 ```json
 "@localm/tutorial-framework": "^1.0.0"
@@ -144,16 +129,9 @@ Add `.npmrc`:
 //npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}
 ```
 
-Update GitHub Actions:
+Update GitHub Actions to pass the auth token:
 
 ```yaml
-- name: Setup Node.js
-  uses: actions/setup-node@v4
-  with:
-    node-version: 22
-    registry-url: https://npm.pkg.github.com
-    cache: npm
-
 - name: Install dependencies
   run: npm ci
   env:

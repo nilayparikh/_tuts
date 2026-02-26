@@ -204,8 +204,9 @@ body:has(.tf-course-player-body) {
   }
 
   .course-stats-bar {
-    flex-direction: column;
-    align-items: center;
-    gap: var(--tf-space-3);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    justify-items: center;
+    gap: var(--tf-space-4);
   }
 }
