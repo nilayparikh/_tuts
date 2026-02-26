@@ -42,7 +42,7 @@ export default function CourseOverviewPage() {
     <TutorialLayout
       header={{ ...SITE_CONFIG.header, currentPath: "/" }}
       footer={SITE_CONFIG.footer}
-      maxWidth="content"
+      maxWidth="narrow"
     >
       {/* ── Hero ──────────────────────────────────────────────────────────── */}
       <HeroSection
@@ -62,13 +62,14 @@ export default function CourseOverviewPage() {
 
       {/* ── What You'll Build ─────────────────────────────────────────────── */}
       <SectionDivider label="What You'll Build" />
-      <Paragraph lead center>
-        By the end of this course you will be able to build production-grade
-        multi-agent systems using the A2A protocol, from architecture to
-        deployment.
-      </Paragraph>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--tf-space-8)', alignItems: 'center' }}>
+        <Paragraph lead center>
+          By the end of this course you will be able to build production-grade
+          multi-agent systems using the A2A protocol, from architecture to
+          deployment.
+        </Paragraph>
 
-      <ConceptGrid columns={3}>
+        <ConceptGrid columns={3}>
         <ConceptCard
           title="Agent Cards"
           description="Design self-describing JSON-LD agent metadata that enables discovery and capability negotiation."
@@ -84,7 +85,8 @@ export default function CourseOverviewPage() {
           description="Wire multiple agents together with push notifications and real-time SSE streaming."
           variant="success"
         />
-      </ConceptGrid>
+        </ConceptGrid>
+      </div>
 
       {/* ── Architecture Diagram ──────────────────────────────────────────── */}
       <SectionDivider label="Architecture Overview" />
@@ -216,20 +218,22 @@ export default function CourseOverviewPage() {
       {/* ── Callout Box Showcase ──────────────────────────────────────────── */}
       <SectionDivider label="Tips & Notices" />
 
-      <TipBox title="Learning Strategy">
-        Watch each video lesson at 1x speed first, then code along in the second
-        pass. This two-pass method is proven to improve retention by 40%.
-      </TipBox>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--tf-space-4)' }}>
+        <TipBox title="Learning Strategy">
+          Watch each video lesson at 1x speed first, then code along in the second
+          pass. This two-pass method is proven to improve retention by 40%.
+        </TipBox>
 
-      <SuccessBox title="Certification Available">
-        Complete all lessons and pass the final quiz to earn your A2A Protocol
-        Developer certificate.
-      </SuccessBox>
+        <SuccessBox title="Certification Available">
+          Complete all lessons and pass the final quiz to earn your A2A Protocol
+          Developer certificate.
+        </SuccessBox>
 
-      <NoteBox title="Self-Paced">
-        This course is completely self-paced. Each lesson builds on the previous
-        one, but you can revisit any lesson at any time.
-      </NoteBox>
+        <NoteBox title="Self-Paced">
+          This course is completely self-paced. Each lesson builds on the previous
+          one, but you can revisit any lesson at any time.
+        </NoteBox>
+      </div>
 
       {/* ── Course Stats ──────────────────────────────────────────────────── */}
       <SectionDivider />

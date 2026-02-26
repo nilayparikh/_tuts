@@ -83,6 +83,21 @@ try {
     }
 
     # ── 5. Build or Dev ────────────────────────────────────────────────
+    # Clear stale .next cache when switching between webpack (build) and
+    # Turbopack (dev) to prevent "Cannot find module" runtime errors.
+    $nextDir = Join-Path $ProjectRoot ".next"
+    if (Test-Path $nextDir) {
+        $marker = Join-Path $nextDir "BUILD_ID"
+        $turboMarker = Join-Path $nextDir "server" "chunks" "ssr"
+        $wasBuild = Test-Path $marker
+        $wasTurbo = Test-Path $turboMarker
+        $wantDev = -not $Build -and -not $Preview
+        if (($wasBuild -and $wantDev) -or ($wasTurbo -and $Build)) {
+            Write-Host "[CLEAN] Removing stale .next/ cache (mode switch detected)" -ForegroundColor DarkYellow
+            Remove-Item -Recurse -Force $nextDir
+        }
+    }
+
     if ($Build) {
         Write-Host "`n[4/4] Building static site..." -ForegroundColor Yellow
         npm run build
