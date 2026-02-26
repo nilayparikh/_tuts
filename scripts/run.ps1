@@ -48,8 +48,11 @@ try {
     }
 
     # ── 3. Build the framework package ─────────────────────────────────
+    # In dev mode, Next.js transpiles the framework from source via
+    # transpilePackages + Turbopack alias, so no pre-build is needed.
+    # Only build the framework for production (--Build / --Preview).
     $fwPath = Join-Path $ProjectRoot "_common/frontend/tutorial-framework"
-    if (Test-Path $fwPath) {
+    if (($Build -or $Preview) -and (Test-Path $fwPath)) {
         Write-Host "`n[2/4] Building @localm/tutorial-framework..." -ForegroundColor Yellow
         Push-Location $fwPath
         try {
@@ -60,17 +63,23 @@ try {
         } finally {
             Pop-Location
         }
-    } else {
+    } elseif (-not (Test-Path $fwPath)) {
         Write-Host "[WARN] Framework path not found: $fwPath" -ForegroundColor DarkYellow
+    } else {
+        Write-Host "[SKIP] Framework build (dev mode uses source directly)" -ForegroundColor DarkGray
     }
 
     # ── 4. Type check ──────────────────────────────────────────────────
-    Write-Host "`n[3/4] Type-checking..." -ForegroundColor Yellow
-    npx tsc --noEmit 2>&1 | Out-Null
-    if ($LASTEXITCODE -ne 0) {
-        Write-Host "WARNING: TypeScript errors found. Run 'npm run type-check' for details." -ForegroundColor DarkYellow
+    if ($Build) {
+        Write-Host "`n[3/4] Type-checking..." -ForegroundColor Yellow
+        npx tsc --noEmit 2>&1 | Out-Null
+        if ($LASTEXITCODE -ne 0) {
+            Write-Host "WARNING: TypeScript errors found. Run 'npm run type-check' for details." -ForegroundColor DarkYellow
+        } else {
+            Write-Host "[OK] TypeScript clean" -ForegroundColor Green
+        }
     } else {
-        Write-Host "[OK] TypeScript clean" -ForegroundColor Green
+        Write-Host "[SKIP] Type-check (deferred to dev server)" -ForegroundColor DarkGray
     }
 
     # ── 5. Build or Dev ────────────────────────────────────────────────

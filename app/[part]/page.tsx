@@ -27,6 +27,7 @@ import {
   MermaidDiagram,
   PollBlock,
   Paragraph,
+  ShareButtons,
 } from "@localm/tutorial-framework";
 import { SITE_CONFIG } from "@/config/site";
 import {
@@ -115,8 +116,14 @@ export default async function LessonPage({
         {/* ── Main content by type ─────────────────────────────────── */}
         <PartContent part={part} />
 
-        {/* ── Navigation ─────────────────────────────────────────────── */}
+        {/* ── Share + Navigation ────────────────────────────────────── */}
         <SectionDivider />
+        <ShareButtons
+          title={`${part.title} — ${COURSE.title}`}
+          description={part.description ?? COURSE.description}
+          hashtags={part.tags ?? COURSE.tags}
+          platforms={["twitter", "linkedin", "email"]}
+        />
         <TutorialNav
           prev={
             prev
@@ -180,6 +187,8 @@ function VideoContent({ part }: { part: CoursePartMeta }) {
           title={part.title}
           lazyLoad
           caption={`${part.title} · ${part.duration}`}
+          showShare
+          shareHashtags={part.tags ?? []}
         />
       )}
 

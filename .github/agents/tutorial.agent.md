@@ -59,7 +59,7 @@ Full component catalogue:
 | Layout    | `TutorialLayout`, `SidebarLayout`                                          |
 | Content   | `HeroSection`, `ConceptCard`, `ConceptGrid`, `StepCard`, `StepList`        |
 | Content   | `CodeBlock`, `KeyPoint`, `TutorialNav`, `SectionDivider`, `SectionHeading` |
-| Embeds    | `YouTubeEmbed`, `GitHubGistEmbed`, `TwitterEmbed`, `LinkedInEmbed`         |
+| Embeds    | `YouTubeEmbed` (supports `showShare`), `GitHubGistEmbed`, `TwitterEmbed`, `LinkedInEmbed` |
 | Sharing   | `ShareButtons`                                                             |
 | Theme     | `TutorialGlobalStyles` (root layout only)                                  |
 
@@ -98,6 +98,10 @@ export default function MyTutorialPage() {
 5. **Every heading has an eyebrow** — use `SectionHeading eyebrow="..."`.
 6. **ShareButtons at the bottom** — every tutorial page ends with sharing + `TutorialNav`.
 7. **`metadata` export required** — for Open Graph and SEO.
+8. **Footer is slim** — single row layout, no tagline. Do not add multi-row footer content.
+9. **No progress tracking** — no progress bars, completion checkmarks, or "X/Y completed" counters in the sidebar.
+10. **Video sharing** — use `<YouTubeEmbed showShare shareHashtags={[...]} />` to enable share buttons under video embeds.
+11. **Page sharing** — every page must have `<ShareButtons>` before `<TutorialNav>` at the bottom.
 
 ## KeyPoint Variant Guide
 

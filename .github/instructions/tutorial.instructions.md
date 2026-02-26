@@ -99,6 +99,19 @@ import { Icon } from 'lucide-react';
 - [ ] `metadata.openGraph.publishedTime` — ISO date string
 - [ ] `HeroSection` `tags` prop — 3–6 relevant keywords
 
+## Sharing Checklist (every page)
+
+- [ ] `<ShareButtons>` placed before `<TutorialNav>` at the bottom of every page.
+- [ ] `<YouTubeEmbed showShare shareHashtags={[...]} />` on video lesson pages.
+- [ ] Page-level share includes `title`, `description`, `hashtags`, and `platforms`.
+
+## Layout Constraints
+
+- **Footer**: Single slim row — brand, copyright, links, socials. No tagline rendered.
+- **Sidebar**: No progress bars, no completion status, no "X/Y" counters.
+- **Course title in sidebar**: Clickable link back to course overview.
+- **Lesson header title**: Responsive `clamp()` font size, max `40ch` width.
+
 ## Content Quality
 
 - Each tutorial must stand alone — don't assume the reader read another page.
