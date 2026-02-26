@@ -43,25 +43,25 @@ _tuts/
 Every tutorial page **must** start with:
 
 ```tsx
-import type { Metadata } from 'next';
+import type { Metadata } from "next";
 import {
   TutorialLayout,
   HeroSection,
   // ... pick what you need
-} from '@localm/tutorial-framework';
-import { SITE_CONFIG } from '@/config/site';
+} from "@localm/tutorial-framework";
+import { SITE_CONFIG } from "@/config/site";
 ```
 
 Full component catalogue:
 
-| Group     | Components                                                                 |
-|-----------|----------------------------------------------------------------------------|
-| Layout    | `TutorialLayout`, `SidebarLayout`                                          |
-| Content   | `HeroSection`, `ConceptCard`, `ConceptGrid`, `StepCard`, `StepList`        |
-| Content   | `CodeBlock`, `KeyPoint`, `TutorialNav`, `SectionDivider`, `SectionHeading` |
-| Embeds    | `YouTubeEmbed` (supports `showShare`), `GitHubGistEmbed`, `TwitterEmbed`, `LinkedInEmbed` |
-| Sharing   | `ShareButtons`                                                             |
-| Theme     | `TutorialGlobalStyles` (root layout only)                                  |
+| Group   | Components                                                                                |
+| ------- | ----------------------------------------------------------------------------------------- |
+| Layout  | `TutorialLayout`, `SidebarLayout`                                                         |
+| Content | `HeroSection`, `ConceptCard`, `ConceptGrid`, `StepCard`, `StepList`                       |
+| Content | `CodeBlock`, `KeyPoint`, `TutorialNav`, `SectionDivider`, `SectionHeading`                |
+| Embeds  | `YouTubeEmbed` (supports `showShare`), `GitHubGistEmbed`, `TwitterEmbed`, `LinkedInEmbed` |
+| Sharing | `ShareButtons`                                                                            |
+| Theme   | `TutorialGlobalStyles` (root layout only)                                                 |
 
 ## Page Skeleton
 
@@ -105,23 +105,23 @@ export default function MyTutorialPage() {
 
 ## KeyPoint Variant Guide
 
-| Variant   | Use for                                        |
-|-----------|------------------------------------------------|
-| `info`    | Background context or explanatory notes        |
-| `tip`     | Best-practice advice the reader should follow  |
-| `success` | What success looks like at this step           |
-| `warning` | Common mistakes or things to watch out for     |
-| `danger`  | Breaking changes, security issues              |
+| Variant   | Use for                                       |
+| --------- | --------------------------------------------- |
+| `info`    | Background context or explanatory notes       |
+| `tip`     | Best-practice advice the reader should follow |
+| `success` | What success looks like at this step          |
+| `warning` | Common mistakes or things to watch out for    |
+| `danger`  | Breaking changes, security issues             |
 
 ## CodeBlock Usage
 
 ```tsx
 <CodeBlock
   code={MY_CODE_STRING}
-  language="typescript"    // python | bash | json | yaml | tsx etc.
-  filename="example.ts"    // shown in header
-  showLineNumbers          // default: false
-  highlightLines={[3, 7]}  // zero-indexed? no — 1-indexed line numbers
+  language="typescript" // python | bash | json | yaml | tsx etc.
+  filename="example.ts" // shown in header
+  showLineNumbers // default: false
+  highlightLines={[3, 7]} // zero-indexed? no — 1-indexed line numbers
 />
 ```
 

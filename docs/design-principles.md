@@ -34,22 +34,23 @@ All UI is composed from `@localm/tutorial-framework` exports. **No custom compon
 
 ### Forbidden Patterns
 
-| Pattern | Why | Alternative |
-|---------|-----|-------------|
-| `<pre><code>` for code | Inconsistent styling | `<CodeBlock>` |
-| `<div style={{ background: 'red' }}>` | Violates token system | Use `--tf-*` CSS variables |
-| Hardcoded hex/rgba colors | Theme-breaking | `var(--tf-text-primary)`, `var(--tf-color-*)` |
-| Bare pixel values for layout | Not scalable | `rem` or `var(--tf-space-*)` tokens |
-| `letterSpacing: "0.06em"` | Inconsistent | `var(--tf-tracking-wide)` |
-| `transition: "all 0.15s ease"` | Inconsistent | `var(--tf-transition-fast)` |
-| External icon libraries (lucide, etc.) | Bundle bloat | Material Symbols or inline SVG |
-| `!important` overrides on `.tf-*` classes | Specificity war | Override via CSS variables |
+| Pattern                                   | Why                   | Alternative                                   |
+| ----------------------------------------- | --------------------- | --------------------------------------------- |
+| `<pre><code>` for code                    | Inconsistent styling  | `<CodeBlock>`                                 |
+| `<div style={{ background: 'red' }}>`     | Violates token system | Use `--tf-*` CSS variables                    |
+| Hardcoded hex/rgba colors                 | Theme-breaking        | `var(--tf-text-primary)`, `var(--tf-color-*)` |
+| Bare pixel values for layout              | Not scalable          | `rem` or `var(--tf-space-*)` tokens           |
+| `letterSpacing: "0.06em"`                 | Inconsistent          | `var(--tf-tracking-wide)`                     |
+| `transition: "all 0.15s ease"`            | Inconsistent          | `var(--tf-transition-fast)`                   |
+| External icon libraries (lucide, etc.)    | Bundle bloat          | Material Symbols or inline SVG                |
+| `!important` overrides on `.tf-*` classes | Specificity war       | Override via CSS variables                    |
 
 ### Token System (`--tf-*` prefix)
 
 All spacing, color, typography, and layout values use CSS custom properties prefixed with `--tf-`. Override only in `app/globals.css` `:root` scope.
 
 Key token groups:
+
 - **Color**: `--tf-color-primary`, `--tf-color-accent`, `--tf-color-success`, etc.
 - **Text**: `--tf-text-primary`, `--tf-text-secondary`, `--tf-text-muted`
 - **Spacing**: `--tf-space-1` through `--tf-space-16`
@@ -69,11 +70,13 @@ The footer is a single-row flex layout: `[Brand] [©] [Links] ← spacer → [So
 ### Sidebar — No Progress Tracking
 
 The course sidebar shows:
+
 - Course title (linked to course overview)
 - Duration + lesson count
 - Numbered lesson list with type icons
 
 It does **not** show:
+
 - Progress bars
 - Completion checkmarks
 - "X/Y completed" counters
@@ -83,6 +86,7 @@ Rationale: This is a static site — there's no backend to persist progress. Sho
 ### Lesson Header
 
 Each lesson page shows a `LessonHeader` with:
+
 - `PartTypeBadge` (type + duration pill)
 - Title (clamped to `40ch` max-width, responsive `clamp()` font size)
 - Description (muted, `60ch` max-width)
@@ -100,6 +104,7 @@ Every page ends with `<ShareButtons>` supporting X (Twitter), LinkedIn, and Emai
 ### Video-level Sharing
 
 `<YouTubeEmbed showShare>` renders a compact share bar directly below the video with:
+
 - X (Twitter) share link (with optional hashtags)
 - LinkedIn share link
 - Copy video URL button
@@ -120,13 +125,13 @@ Every page must export:
 
 ```tsx
 export const metadata: Metadata = {
-  title: '...',           // ≤ 60 chars, unique
-  description: '...',     // ≤ 155 chars, compelling  
+  title: "...", // ≤ 60 chars, unique
+  description: "...", // ≤ 155 chars, compelling
   openGraph: {
-    title: '...',
-    description: '...',
-    type: 'article',
-    publishedTime: '...',  // ISO date
+    title: "...",
+    description: "...",
+    type: "article",
+    publishedTime: "...", // ISO date
   },
 };
 ```
@@ -138,11 +143,13 @@ The `HeroSection` must include 3–6 `tags` for keyword discoverability.
 ## 6. Responsive Design
 
 The framework handles most responsive behavior via internal CSS classes:
+
 - `.tf-concept-grid` collapses columns on mobile
 - `.tf-course-player-sidebar` hides below 768px
 - `.tf-step-card` stacks vertically
 
 Site-specific responsive rules live in `app/globals.css`:
+
 - `@media (max-width: 768px)` — hide lesson topbar center info
 - `@media (max-width: 640px)` — collapse header nav, simplify stats bar
 - `@media (min-width: 1600px)` — extra padding on wide screens
