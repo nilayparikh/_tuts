@@ -199,6 +199,13 @@ body:has(.tf-course-player-body) {
     display: none !important;
   }
 
+  /* Hide follow pill buttons on narrow viewports */
+  header a[href*="x.com"],
+  header a[href*="linkedin.com"],
+  header a[href*="youtube.com"] {
+    display: none !important;
+  }
+
   .lesson-topbar {
     padding: 0.5rem 0;
   }

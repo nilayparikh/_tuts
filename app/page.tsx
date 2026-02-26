@@ -18,15 +18,16 @@ import {
   ConceptCard,
   ConceptGrid,
   LabSettings,
+  FollowBar,
 } from "@localm/tutorial-framework";
-import { SITE_CONFIG } from "@/config/site";
+import { SITE_CONFIG, BRAND } from "@/config/site";
 import { COURSE } from "@/data/course";
 import { CourseStatsBar } from "./components/CourseStatsBar";
 
 // ─── Metadata ─────────────────────────────────────────────────────────────
 
 export const metadata: Metadata = {
-  title: `${COURSE.title} | LocalM Tutorials`,
+  title: `${COURSE.title} | LocalM\u2122 Tuts`,
   description: COURSE.description,
   openGraph: {
     title: COURSE.title,
@@ -59,6 +60,13 @@ export default function CourseOverviewPage() {
           href: COURSE.githubUrl ?? "#",
         }}
         tags={COURSE.tags}
+      />
+
+      {/* ── Follow / Subscribe ────────────────────────────────────────────── */}
+      <FollowBar
+        twitterUrl={BRAND.socials.twitter}
+        twitterHandle={BRAND.socials.twitterHandle}
+        linkedinNewsletterUrl={BRAND.socials.linkedinNewsletter}
       />
 
       {/* ── What You'll Build ─────────────────────────────────────────────── */}
@@ -264,6 +272,12 @@ export default function CourseOverviewPage() {
 
       {/* ── Share ─────────────────────────────────────────────────────────── */}
       <SectionDivider variant="gradient" />
+
+      <FollowBar
+        twitterUrl={BRAND.socials.twitter}
+        twitterHandle={BRAND.socials.twitterHandle}
+        linkedinNewsletterUrl={BRAND.socials.linkedinNewsletter}
+      />
 
       <ShareButtons
         title={`${COURSE.title} — Full Course`}

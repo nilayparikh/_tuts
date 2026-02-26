@@ -96,4 +96,4 @@ For GitHub Actions CI/CD, see [`docs/deployment.md`](docs/deployment.md).
 
 ## License
 
-MIT
+© 2026 LocalM™. All rights reserved.

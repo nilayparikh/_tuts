@@ -62,7 +62,7 @@ export const COURSE: CourseDefinition = {
   slug: "a2a-agent-protocol",
   title: "A2A: The Agent2Agent Protocol",
   description:
-    "Learn to build multi-agent AI systems using Google's open A2A spec. Covers QA agents on Vertex AI, sequential chain agents, LangGraph, BeeAI, and deploying on Agent Stack.",
+    "Learn to build multi-agent AI systems using Google's A2A protocol. Covers QA agents on Vertex AI, sequential chain agents, LangGraph, BeeAI, and deploying on Agent Stack.",
   totalDuration: "~70 mins",
   tags: ["A2A", "AI Agents", "Python", "LangGraph", "Google ADK", "BeeAI"],
   githubUrl: "https://github.com/nilayparikh/a2a-agent2agent-protocol",
@@ -92,7 +92,7 @@ export const COURSE: CourseDefinition = {
       duration: "4 mins",
       videoId: "placeholder-why-a2a",
       description:
-        "Explore the motivation behind A2A — how it differs from MCP, tool-calling, and why open interoperability matters.",
+        "Explore the motivation behind A2A — how it differs from MCP, tool-calling, and why interoperability matters.",
       objectives: [
         "Compare A2A to tool-calling and MCP",
         "Understand the interoperability problem A2A solves",

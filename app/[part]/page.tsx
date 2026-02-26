@@ -30,8 +30,9 @@ import {
   ShareButtons,
   CodePreview,
   VideoTranscript,
+  FollowBar,
 } from "@localm/tutorial-framework";
-import { SITE_CONFIG } from "@/config/site";
+import { SITE_CONFIG, BRAND } from "@/config/site";
 import {
   COURSE,
   COURSE_SLUGS,
@@ -43,8 +44,13 @@ import type { CoursePartMeta } from "@/data/course";
 // ─── Static params (for output: 'export') ────────────────────────────────
 
 export function generateStaticParams(): Array<{ part: string }> {
-  return COURSE_SLUGS.map((slug) => ({ part: slug }));
+  return COURSE_SLUGS.filter(
+    (slug): slug is string =>
+      typeof slug === "string" && slug.trim().length > 0,
+  ).map((slug) => ({ part: slug }));
 }
+
+export const dynamicParams = false;
 
 // ─── Dynamic metadata ─────────────────────────────────────────────────────
 
@@ -115,11 +121,23 @@ export default async function LessonPage({
           description={part.description}
         />
 
+        {/* ── Follow / Subscribe ───────────────────────────────────── */}
+        <FollowBar
+          twitterUrl={BRAND.socials.twitter}
+          twitterHandle={BRAND.socials.twitterHandle}
+          linkedinNewsletterUrl={BRAND.socials.linkedinNewsletter}
+        />
+
         {/* ── Main content by type ─────────────────────────────────── */}
         <PartContent part={part} />
 
         {/* ── Share + Navigation ────────────────────────────────────── */}
         <SectionDivider />
+        <FollowBar
+          twitterUrl={BRAND.socials.twitter}
+          twitterHandle={BRAND.socials.twitterHandle}
+          linkedinNewsletterUrl={BRAND.socials.linkedinNewsletter}
+        />
         <ShareButtons
           title={`${part.title} — ${COURSE.title}`}
           description={part.description ?? COURSE.description}
