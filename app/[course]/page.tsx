@@ -72,12 +72,8 @@ export default async function CourseOverviewPage({
       {/* ── Breadcrumb ────────────────────────────────────────────────────── */}
       <nav aria-label="Breadcrumb" className="tf-breadcrumb">
         <ol>
-          <li>
-            <a href="/">Courses</a>
-          </li>
-          <li aria-hidden="true" className="tf-breadcrumb-sep">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M9 6l6 6-6 6"/></svg>
-          </li>
+          <li><a href="/">Courses</a></li>
+          <li aria-hidden="true" className="tf-breadcrumb-sep">/</li>
           <li aria-current="page">{course.title}</li>
         </ol>
       </nav>
@@ -100,7 +96,7 @@ export default async function CourseOverviewPage({
       />
 
       {/* ── Difficulty ────────────────────────────────────────────────────── */}
-      <DifficultyBar difficulty={course.difficulty ?? "beginner"} />
+      <DifficultyIndicator difficulty={course.difficulty ?? "beginner"} />
 
       {/* ── What You'll Learn ─────────────────────────────────────────────── */}
       {ov?.learnItems && ov.learnItems.length > 0 && (
@@ -255,62 +251,57 @@ function formatHeadline(title: string): string {
 const DIFFICULTY_LEVELS = ["beginner", "moderate", "expert"] as const;
 type Difficulty = (typeof DIFFICULTY_LEVELS)[number];
 
-const DIFFICULTY_COLORS: Record<Difficulty, string> = {
-  beginner: "var(--tf-color-success)",
-  moderate: "var(--tf-color-warning)",
-  expert: "var(--tf-color-danger)",
+const DIFFICULTY_META: Record<Difficulty, { color: string; label: string }> = {
+  beginner: { color: "#66bb6a", label: "Beginner" },
+  moderate: { color: "#ffa726", label: "Moderate" },
+  expert: { color: "#ef5350", label: "Expert" },
 };
 
-function DifficultyBar({ difficulty }: { difficulty: Difficulty }) {
+function DifficultyIndicator({ difficulty }: { difficulty: Difficulty }) {
+  const active = DIFFICULTY_META[difficulty];
+  const dotSize = 8;
+
   return (
     <div
       style={{
         display: "flex",
         alignItems: "center",
-        gap: "var(--tf-space-4)",
-        padding: "var(--tf-space-3) var(--tf-space-5)",
-        borderRadius: "var(--tf-radius-lg)",
-        border: "1px solid var(--tf-border-subtle)",
-        background: "var(--tf-bg-surface)",
+        gap: "0.65rem",
+        alignSelf: "center",
       }}
     >
-      <span
-        style={{
-          fontFamily: "var(--tf-font-mono)",
-          fontSize: "var(--tf-text-xs)",
-          fontWeight: 600,
-          color: "var(--tf-text-muted)",
-          letterSpacing: "var(--tf-tracking-wide)",
-          textTransform: "uppercase",
-          flexShrink: 0,
-        }}
-      >
-        Difficulty
-      </span>
-      <div style={{ display: "flex", gap: "var(--tf-space-3)", alignItems: "center" }}>
+      {/* Dots */}
+      <div style={{ display: "flex", gap: "0.35rem", alignItems: "center" }}>
         {DIFFICULTY_LEVELS.map((level) => {
           const isActive = level === difficulty;
+          const meta = DIFFICULTY_META[level];
           return (
             <span
               key={level}
               style={{
-                fontFamily: "var(--tf-font-mono)",
-                fontSize: "var(--tf-text-xs)",
-                fontWeight: isActive ? 700 : 500,
-                letterSpacing: "var(--tf-tracking-wide)",
-                textTransform: "uppercase",
-                color: isActive
-                  ? DIFFICULTY_COLORS[level]
-                  : "var(--tf-text-muted)",
-                opacity: isActive ? 1 : 0.35,
-                transition: "opacity 0.2s ease",
+                width: dotSize,
+                height: dotSize,
+                borderRadius: "50%",
+                background: isActive ? meta.color : "var(--tf-border-default)",
+                opacity: isActive ? 1 : 0.3,
+                transition: "opacity 0.2s ease, background 0.2s ease",
               }}
-            >
-              {level}
-            </span>
+            />
           );
         })}
       </div>
+      {/* Active label */}
+      <span
+        style={{
+          fontFamily: "var(--tf-font-body)",
+          fontSize: "var(--tf-text-sm)",
+          fontWeight: 600,
+          color: active.color,
+          letterSpacing: "0.02em",
+        }}
+      >
+        {active.label}
+      </span>
     </div>
   );
 }

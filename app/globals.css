@@ -43,44 +43,38 @@ body:has(.tf-course-player-body) {
 }
 
 /* ── Breadcrumb navigation ────────────────────────────────────────────────
- * Styled pill breadcrumb with chevron separators.
+ * Minimal inline breadcrumb with / separators.
  * ─────────────────────────────────────────────────────────────────────────── */
 .tf-breadcrumb {
-  margin-bottom: var(--tf-space-1);
+  margin: 0;
 }
 .tf-breadcrumb ol {
   display: flex;
   align-items: center;
-  gap: 0.3rem;
+  gap: 0.4rem;
   list-style: none;
   margin: 0;
-  padding: var(--tf-space-2) var(--tf-space-4);
-  border-radius: var(--tf-radius-full);
-  background: var(--tf-bg-elevated);
-  border: 1px solid var(--tf-border-subtle);
-  width: fit-content;
-  font-family: var(--tf-font-mono);
-  font-size: var(--tf-text-xs);
-  letter-spacing: var(--tf-tracking-wide);
+  padding: 0;
+  font-family: var(--tf-font-body);
+  font-size: var(--tf-text-sm);
 }
 .tf-breadcrumb a {
-  color: var(--tf-color-primary-light);
+  color: var(--tf-text-muted);
   text-decoration: none;
   transition: color 0.15s ease;
 }
 .tf-breadcrumb a:hover {
   color: var(--tf-color-primary);
-  text-decoration: underline;
 }
 .tf-breadcrumb [aria-current="page"] {
   color: var(--tf-text-secondary);
-  font-weight: 600;
 }
 .tf-breadcrumb-sep {
   display: flex;
   align-items: center;
   color: var(--tf-text-muted);
-  opacity: 0.5;
+  opacity: 0.35;
+  font-size: 0.7em;
 }
 
 /* ── Clickable card hover treatment ───────────────────────────────────────

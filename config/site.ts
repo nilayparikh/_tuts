@@ -35,9 +35,7 @@ export const BRAND = {
 
 /* ─── Navigation ───────────────────────────────────────────────────────── */
 
-const NAV_ITEMS: NavItem[] = [
-  { label: "Courses", href: "/" },
-];
+const NAV_ITEMS: NavItem[] = [{ label: "Courses", href: "/" }];
 
 const FOOTER_LINKS: FooterLink[] = [
   { label: "Courses", href: "/" },

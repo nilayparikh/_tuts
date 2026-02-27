@@ -117,18 +117,10 @@ export default async function LessonPage({
         {/* ── Breadcrumb ──────────────────────────────────────────── */}
         <nav aria-label="Breadcrumb" className="tf-breadcrumb">
           <ol>
-            <li>
-              <a href="/">Courses</a>
-            </li>
-            <li aria-hidden="true" className="tf-breadcrumb-sep">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M9 6l6 6-6 6"/></svg>
-            </li>
-            <li>
-              <a href={`/${courseSlug}/`}>{course.title}</a>
-            </li>
-            <li aria-hidden="true" className="tf-breadcrumb-sep">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M9 6l6 6-6 6"/></svg>
-            </li>
+            <li><a href="/">Courses</a></li>
+            <li aria-hidden="true" className="tf-breadcrumb-sep">/</li>
+            <li><a href={`/${courseSlug}/`}>{course.title}</a></li>
+            <li aria-hidden="true" className="tf-breadcrumb-sep">/</li>
             <li aria-current="page">{part.title}</li>
           </ol>
         </nav>
