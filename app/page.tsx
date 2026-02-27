@@ -3,12 +3,13 @@ import {
   TutorialLayout,
   HeroSection,
   SectionDivider,
-  ConceptCard,
-  ConceptGrid,
+  SectionHeading,
   Paragraph,
+  ShareButtons,
 } from "@localm/tutorial-framework";
 import { SITE_CONFIG, BRAND } from "@/config/site";
 import { SITE_TOPIC, ALL_COURSES } from "@/data/courses";
+import { CourseGrid } from "./components/CourseGrid";
 import { InstructorDetailCard } from "./components/InstructorDetailCard";
 
 // ─── Metadata ─────────────────────────────────────────────────────────────
@@ -40,7 +41,7 @@ export default function TopicHomePage() {
         headline={`**${SITE_TOPIC.topicName}** Tutorials`}
         subheading={SITE_TOPIC.tagline}
         primaryAction={{
-          label: "Browse courses ↓",
+          label: "Browse courses",
           href: "#courses",
         }}
         tags={SITE_TOPIC.tags}
@@ -51,28 +52,14 @@ export default function TopicHomePage() {
 
       <Paragraph>{SITE_TOPIC.description}</Paragraph>
 
-      {/* ── Courses ───────────────────────────────────────────────────────── */}
+      {/* ── Courses (filterable) ──────────────────────────────────────────── */}
       <span
         id="courses"
         style={{ display: "block", height: 0, margin: 0, padding: 0 }}
       />
-      <SectionDivider label="Courses" />
+      <SectionHeading eyebrow="Catalog" title="Courses" />
 
-      <ConceptGrid columns={2}>
-        {ALL_COURSES.map((course) => (
-          <a
-            key={course.slug}
-            href={`/${course.slug}/`}
-            style={{ textDecoration: "none", color: "inherit" }}
-          >
-            <ConceptCard
-              icon={course.icon ?? "📚"}
-              title={course.title}
-              description={`${course.parts.length} lessons · ${course.totalDuration} · ${(course.difficulty ?? "beginner").charAt(0).toUpperCase() + (course.difficulty ?? "beginner").slice(1)} — ${course.description}`}
-            />
-          </a>
-        ))}
-      </ConceptGrid>
+      <CourseGrid courses={ALL_COURSES} />
 
       {/* ── Instructor ────────────────────────────────────────────────────── */}
       <SectionDivider label="Instructor" />
@@ -113,6 +100,13 @@ export default function TopicHomePage() {
           youtube: BRAND.socials.youtube,
           github: BRAND.socials.github,
         }}
+      />
+
+      {/* ── Share ─────────────────────────────────────────────────────────── */}
+      <ShareButtons
+        title={`${SITE_TOPIC.topicName} Tutorials`}
+        description={SITE_TOPIC.tagline}
+        hashtags={["AgenticAI", "AI", "Tutorials", "LocalM"]}
       />
     </TutorialLayout>
   );

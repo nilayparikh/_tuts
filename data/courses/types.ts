@@ -66,6 +66,17 @@ export interface CourseOverview {
   audienceCards?: Array<{ icon: string; title: string; description: string }>;
 }
 
+// ─── Instructor ───────────────────────────────────────────────────────────
+
+export interface CourseInstructor {
+  /** Instructor full name */
+  name: string;
+  /** Avatar / photo path */
+  imageSrc: string;
+  /** Role / title */
+  role: string;
+}
+
 // ─── Course definition ────────────────────────────────────────────────────
 
 export interface CourseDefinition {
@@ -85,6 +96,8 @@ export interface CourseDefinition {
   icon?: string;
   /** Difficulty level */
   difficulty?: "beginner" | "moderate" | "expert";
+  /** Course instructor */
+  instructor?: CourseInstructor;
   /** Ordered parts (lessons) */
   parts: CoursePartMeta[];
   /** Rich overview content for the course page */

@@ -15,6 +15,7 @@
 
 export type {
   CourseDefinition,
+  CourseInstructor,
   CoursePartMeta,
   CourseOverview,
   PartQA,

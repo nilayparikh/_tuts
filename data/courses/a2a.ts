@@ -15,6 +15,11 @@ export const A2A_COURSE: CourseDefinition = {
   tags: ["A2A", "AI Agents", "Python", "LangGraph", "Google ADK", "BeeAI"],
   icon: "🔌",
   difficulty: "beginner",
+  instructor: {
+    name: "Nilay Parikh",
+    imageSrc: "/brand/nilay_parikh.jpeg",
+    role: "Founder · LocalM · ErgoSum",
+  },
   githubUrl: "https://github.com/nilayparikh/a2a-agent2agent-protocol",
   parts: [
     // ── 1. Introduction ──────────────────────────────────────────────────

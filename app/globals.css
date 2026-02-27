@@ -95,6 +95,27 @@ a:hover > [style*="border-radius"] {
   border-color: var(--tf-color-primary-border) !important;
 }
 
+/* ── Course card hover ────────────────────────────────────────────────────
+ * Extended glow effect for the new course cards.
+ * ─────────────────────────────────────────────────────────────────────────── */
+.course-card-link .course-card {
+  transition:
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.course-card-link:hover .course-card {
+  box-shadow:
+    0 0 20px 3px rgba(99, 102, 241, 0.14),
+    0 0 0 1px rgba(99, 102, 241, 0.10);
+  border-color: var(--tf-color-primary-border);
+}
+
+/* ── Course grid responsive ───────────────────────────────────────────────── */
+.course-grid {
+  grid-template-columns: repeat(2, 1fr);
+}
+
 /* ── Responsive ──────────────────────────────────────────────────────────── */
 
 /* Extra-large screens: boost horizontal padding for breathing room */
@@ -108,6 +129,11 @@ a:hover > [style*="border-radius"] {
 @media (max-width: 768px) {
   /* Grid responsiveness is handled by the framework (.tf-concept-grid,
    * .tf-sidebar-layout, .tf-step-card classes in GlobalStyles). */
+
+  /* Course grid → single column on tablet & mobile */
+  .course-grid {
+    grid-template-columns: 1fr !important;
+  }
 }
 
 @media (max-width: 640px) {
