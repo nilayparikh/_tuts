@@ -72,8 +72,12 @@ export default async function CourseOverviewPage({
       {/* ── Breadcrumb ────────────────────────────────────────────────────── */}
       <nav aria-label="Breadcrumb" className="tf-breadcrumb">
         <ol>
-          <li><a href="/">Courses</a></li>
-          <li aria-hidden="true" className="tf-breadcrumb-sep">/</li>
+          <li>
+            <a href="/">Courses</a>
+          </li>
+          <li aria-hidden="true" className="tf-breadcrumb-sep">
+            /
+          </li>
           <li aria-current="page">{course.title}</li>
         </ol>
       </nav>
@@ -246,62 +250,58 @@ function formatHeadline(title: string): string {
   return title;
 }
 
-// ─── Difficulty bar ───────────────────────────────────────────────────────
+// ─── Difficulty indicator ──────────────────────────────────────────────────
 
 const DIFFICULTY_LEVELS = ["beginner", "moderate", "expert"] as const;
 type Difficulty = (typeof DIFFICULTY_LEVELS)[number];
 
-const DIFFICULTY_META: Record<Difficulty, { color: string; label: string }> = {
-  beginner: { color: "#66bb6a", label: "Beginner" },
-  moderate: { color: "#ffa726", label: "Moderate" },
-  expert: { color: "#ef5350", label: "Expert" },
+const DIFFICULTY_META: Record<
+  Difficulty,
+  { color: string; bg: string; label: string }
+> = {
+  beginner: { color: "#66bb6a", bg: "rgba(102,187,106,0.12)", label: "Beginner" },
+  moderate: { color: "#ffa726", bg: "rgba(255,167,38,0.12)", label: "Moderate" },
+  expert: { color: "#ef5350", bg: "rgba(239,83,80,0.12)", label: "Expert" },
 };
 
 function DifficultyIndicator({ difficulty }: { difficulty: Difficulty }) {
-  const active = DIFFICULTY_META[difficulty];
-  const dotSize = 8;
-
   return (
     <div
       style={{
-        display: "flex",
+        display: "inline-flex",
         alignItems: "center",
-        gap: "0.65rem",
         alignSelf: "center",
+        borderRadius: "var(--tf-radius-full)",
+        border: "1px solid var(--tf-border-subtle)",
+        background: "var(--tf-bg-elevated)",
+        padding: "3px",
+        gap: 0,
       }}
     >
-      {/* Dots */}
-      <div style={{ display: "flex", gap: "0.35rem", alignItems: "center" }}>
-        {DIFFICULTY_LEVELS.map((level) => {
-          const isActive = level === difficulty;
-          const meta = DIFFICULTY_META[level];
-          return (
-            <span
-              key={level}
-              style={{
-                width: dotSize,
-                height: dotSize,
-                borderRadius: "50%",
-                background: isActive ? meta.color : "var(--tf-border-default)",
-                opacity: isActive ? 1 : 0.3,
-                transition: "opacity 0.2s ease, background 0.2s ease",
-              }}
-            />
-          );
-        })}
-      </div>
-      {/* Active label */}
-      <span
-        style={{
-          fontFamily: "var(--tf-font-body)",
-          fontSize: "var(--tf-text-sm)",
-          fontWeight: 600,
-          color: active.color,
-          letterSpacing: "0.02em",
-        }}
-      >
-        {active.label}
-      </span>
+      {DIFFICULTY_LEVELS.map((level) => {
+        const isActive = level === difficulty;
+        const meta = DIFFICULTY_META[level];
+        return (
+          <span
+            key={level}
+            style={{
+              padding: "0.3rem 0.85rem",
+              borderRadius: "var(--tf-radius-full)",
+              fontFamily: "var(--tf-font-body)",
+              fontSize: "var(--tf-text-xs)",
+              fontWeight: isActive ? 600 : 400,
+              letterSpacing: "0.03em",
+              color: isActive ? meta.color : "var(--tf-text-muted)",
+              background: isActive ? meta.bg : "transparent",
+              opacity: isActive ? 1 : 0.4,
+              transition: "all 0.2s ease",
+              lineHeight: 1.4,
+            }}
+          >
+            {meta.label}
+          </span>
+        );
+      })}
     </div>
   );
 }
