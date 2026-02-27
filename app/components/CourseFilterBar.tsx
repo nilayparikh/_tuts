@@ -144,7 +144,8 @@ export function CourseFilterBar({
                 ...(active
                   ? {
                       background: `color-mix(in srgb, ${meta?.color ?? "var(--tf-color-primary)"} 15%, transparent)`,
-                      borderColor: meta?.color ?? "var(--tf-color-primary-border)",
+                      borderColor:
+                        meta?.color ?? "var(--tf-color-primary-border)",
                       color: meta?.color ?? "var(--tf-color-primary)",
                       fontWeight: 600,
                     }

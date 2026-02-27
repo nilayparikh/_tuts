@@ -5,6 +5,11 @@ import type { CourseDefinition } from "@/data/courses";
 import { CourseFilterBar } from "./CourseFilterBar";
 import { CourseCard } from "./CourseCard";
 
+// ─── Constants ─────────────────────────────────────────────────────────────
+
+/** Courses per page (2 columns × 10 rows) */
+const PAGE_SIZE = 20;
+
 // ─── Types ─────────────────────────────────────────────────────────────────
 
 export interface CourseGridProps {
@@ -38,6 +43,42 @@ const s: Record<string, React.CSSProperties> = {
     color: "var(--tf-text-muted)",
     letterSpacing: "var(--tf-tracking-wide)",
   },
+  pager: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: "var(--tf-space-2)",
+    paddingTop: "var(--tf-space-2)",
+  },
+  pageBtn: {
+    display: "inline-flex",
+    alignItems: "center",
+    justifyContent: "center",
+    minWidth: "2rem",
+    height: "2rem",
+    padding: "0 0.5rem",
+    borderRadius: "var(--tf-radius-md)",
+    border: "1px solid var(--tf-border-default)",
+    background: "transparent",
+    color: "var(--tf-text-secondary)",
+    fontSize: "var(--tf-text-sm)",
+    fontFamily: "var(--tf-font-mono)",
+    fontWeight: 500,
+    cursor: "pointer",
+    transition: "all 150ms ease",
+    userSelect: "none" as const,
+  },
+  pageBtnActive: {
+    background: "var(--tf-color-primary-container)",
+    borderColor: "var(--tf-color-primary-border)",
+    color: "var(--tf-color-primary)",
+    fontWeight: 700,
+  },
+  pageBtnDisabled: {
+    opacity: 0.35,
+    cursor: "default",
+    pointerEvents: "none" as const,
+  },
 };
 
 // ─── Component ─────────────────────────────────────────────────────────────
@@ -45,6 +86,7 @@ const s: Record<string, React.CSSProperties> = {
 export function CourseGrid({ courses }: CourseGridProps) {
   const [activeTags, setActiveTags] = useState<string[]>([]);
   const [activeDifficulty, setActiveDifficulty] = useState<string | null>(null);
+  const [page, setPage] = useState(0);
 
   // Collect all unique tags and difficulties
   const allTags = useMemo(() => {
@@ -58,7 +100,6 @@ export function CourseGrid({ courses }: CourseGridProps) {
     courses.forEach((c) => {
       if (c.difficulty) diffSet.add(c.difficulty);
     });
-    // Fixed order
     return ["beginner", "moderate", "expert"].filter((d) => diffSet.has(d));
   }, [courses]);
 
@@ -66,16 +107,28 @@ export function CourseGrid({ courses }: CourseGridProps) {
   const filtered = useMemo(() => {
     return courses.filter((c) => {
       if (activeDifficulty && c.difficulty !== activeDifficulty) return false;
-      if (
-        activeTags.length > 0 &&
-        !activeTags.some((t) => c.tags.includes(t))
-      )
+      if (activeTags.length > 0 && !activeTags.some((t) => c.tags.includes(t)))
         return false;
       return true;
     });
   }, [courses, activeTags, activeDifficulty]);
 
-  // Only show filter bar if there are enough courses/tags to make it useful
+  // Pagination
+  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  const safePage = Math.min(page, totalPages - 1);
+  const paged = filtered.slice(safePage * PAGE_SIZE, (safePage + 1) * PAGE_SIZE);
+  const showPager = filtered.length > PAGE_SIZE;
+
+  // Reset to page 0 when filters change
+  const handleTagsChange = (tags: string[]) => {
+    setActiveTags(tags);
+    setPage(0);
+  };
+  const handleDifficultyChange = (d: string | null) => {
+    setActiveDifficulty(d);
+    setPage(0);
+  };
+
   const showFilters = courses.length > 1 || allTags.length > 0;
 
   return (
@@ -86,8 +139,8 @@ export function CourseGrid({ courses }: CourseGridProps) {
           allDifficulties={allDifficulties}
           activeTags={activeTags}
           activeDifficulty={activeDifficulty}
-          onTagsChange={setActiveTags}
-          onDifficultyChange={setActiveDifficulty}
+          onTagsChange={handleTagsChange}
+          onDifficultyChange={handleDifficultyChange}
         />
       )}
 
@@ -100,8 +153,8 @@ export function CourseGrid({ courses }: CourseGridProps) {
       )}
 
       <div style={s.grid} className="course-grid">
-        {filtered.length > 0 ? (
-          filtered.map((course) => (
+        {paged.length > 0 ? (
+          paged.map((course) => (
             <CourseCard
               key={course.slug}
               slug={course.slug}
@@ -121,6 +174,49 @@ export function CourseGrid({ courses }: CourseGridProps) {
           </div>
         )}
       </div>
+
+      {/* Pagination */}
+      {showPager && (
+        <div style={s.pager}>
+          <button
+            type="button"
+            style={{
+              ...s.pageBtn,
+              ...(safePage === 0 ? s.pageBtnDisabled : {}),
+            }}
+            onClick={() => setPage(Math.max(0, safePage - 1))}
+            aria-label="Previous page"
+          >
+            ‹
+          </button>
+          {Array.from({ length: totalPages }, (_, i) => (
+            <button
+              key={i}
+              type="button"
+              style={{
+                ...s.pageBtn,
+                ...(i === safePage ? s.pageBtnActive : {}),
+              }}
+              onClick={() => setPage(i)}
+              aria-label={`Page ${i + 1}`}
+              aria-current={i === safePage ? "page" : undefined}
+            >
+              {i + 1}
+            </button>
+          ))}
+          <button
+            type="button"
+            style={{
+              ...s.pageBtn,
+              ...(safePage >= totalPages - 1 ? s.pageBtnDisabled : {}),
+            }}
+            onClick={() => setPage(Math.min(totalPages - 1, safePage + 1))}
+            aria-label="Next page"
+          >
+            ›
+          </button>
+        </div>
+      )}
     </div>
   );
 }

@@ -107,7 +107,7 @@ a:hover > [style*="border-radius"] {
 .course-card-link:hover .course-card {
   box-shadow:
     0 0 20px 3px rgba(99, 102, 241, 0.14),
-    0 0 0 1px rgba(99, 102, 241, 0.10);
+    0 0 0 1px rgba(99, 102, 241, 0.1);
   border-color: var(--tf-color-primary-border);
 }
 
