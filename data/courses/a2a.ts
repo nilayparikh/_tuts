@@ -14,6 +14,7 @@ export const A2A_COURSE: CourseDefinition = {
   totalDuration: "~70 mins",
   tags: ["A2A", "AI Agents", "Python", "LangGraph", "Google ADK", "BeeAI"],
   icon: "🔌",
+  difficulty: "beginner",
   githubUrl: "https://github.com/nilayparikh/a2a-agent2agent-protocol",
   parts: [
     // ── 1. Introduction ──────────────────────────────────────────────────

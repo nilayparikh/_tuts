@@ -67,31 +67,18 @@ export default async function CourseOverviewPage({
       header={{ ...SITE_CONFIG.header, currentPath: `/${slug}/` }}
       footer={SITE_CONFIG.footer}
       maxWidth="narrow"
+      mainStyle={{ gap: "var(--tf-space-4)" }}
     >
       {/* ── Breadcrumb ────────────────────────────────────────────────────── */}
-      <nav aria-label="Breadcrumb" style={{ marginBottom: "var(--tf-space-2)" }}>
-        <ol
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "0.35rem",
-            listStyle: "none",
-            margin: 0,
-            padding: 0,
-            fontSize: "var(--tf-text-sm)",
-            fontFamily: "var(--tf-font-body)",
-            color: "var(--tf-text-muted)",
-          }}
-        >
+      <nav aria-label="Breadcrumb" className="tf-breadcrumb">
+        <ol>
           <li>
-            <a href="/" style={{ color: "var(--tf-color-primary)", textDecoration: "none" }}>
-              Home
-            </a>
+            <a href="/">Courses</a>
           </li>
-          <li aria-hidden="true" style={{ color: "var(--tf-text-muted)" }}>›</li>
-          <li aria-current="page" style={{ color: "var(--tf-text-secondary)" }}>
-            {course.title}
+          <li aria-hidden="true" className="tf-breadcrumb-sep">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M9 6l6 6-6 6"/></svg>
           </li>
+          <li aria-current="page">{course.title}</li>
         </ol>
       </nav>
 
@@ -111,6 +98,9 @@ export default async function CourseOverviewPage({
         }
         tags={course.tags}
       />
+
+      {/* ── Difficulty ────────────────────────────────────────────────────── */}
+      <DifficultyBar difficulty={course.difficulty ?? "beginner"} />
 
       {/* ── What You'll Learn ─────────────────────────────────────────────── */}
       {ov?.learnItems && ov.learnItems.length > 0 && (
@@ -164,7 +154,8 @@ export default async function CourseOverviewPage({
       )}
 
       {/* ── Who Should Join? ──────────────────────────────────────────────── */}
-      {(ov?.prerequisites || (ov?.audienceCards && ov.audienceCards.length > 0)) && (
+      {(ov?.prerequisites ||
+        (ov?.audienceCards && ov.audienceCards.length > 0)) && (
         <>
           <SectionDivider label="Who Should Join?" />
 
@@ -257,4 +248,69 @@ function formatHeadline(title: string): string {
     return `**${before}**: ${rest.join(":").trim()}`;
   }
   return title;
+}
+
+// ─── Difficulty bar ───────────────────────────────────────────────────────
+
+const DIFFICULTY_LEVELS = ["beginner", "moderate", "expert"] as const;
+type Difficulty = (typeof DIFFICULTY_LEVELS)[number];
+
+const DIFFICULTY_COLORS: Record<Difficulty, string> = {
+  beginner: "var(--tf-color-success)",
+  moderate: "var(--tf-color-warning)",
+  expert: "var(--tf-color-danger)",
+};
+
+function DifficultyBar({ difficulty }: { difficulty: Difficulty }) {
+  return (
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        gap: "var(--tf-space-4)",
+        padding: "var(--tf-space-3) var(--tf-space-5)",
+        borderRadius: "var(--tf-radius-lg)",
+        border: "1px solid var(--tf-border-subtle)",
+        background: "var(--tf-bg-surface)",
+      }}
+    >
+      <span
+        style={{
+          fontFamily: "var(--tf-font-mono)",
+          fontSize: "var(--tf-text-xs)",
+          fontWeight: 600,
+          color: "var(--tf-text-muted)",
+          letterSpacing: "var(--tf-tracking-wide)",
+          textTransform: "uppercase",
+          flexShrink: 0,
+        }}
+      >
+        Difficulty
+      </span>
+      <div style={{ display: "flex", gap: "var(--tf-space-3)", alignItems: "center" }}>
+        {DIFFICULTY_LEVELS.map((level) => {
+          const isActive = level === difficulty;
+          return (
+            <span
+              key={level}
+              style={{
+                fontFamily: "var(--tf-font-mono)",
+                fontSize: "var(--tf-text-xs)",
+                fontWeight: isActive ? 700 : 500,
+                letterSpacing: "var(--tf-tracking-wide)",
+                textTransform: "uppercase",
+                color: isActive
+                  ? DIFFICULTY_COLORS[level]
+                  : "var(--tf-text-muted)",
+                opacity: isActive ? 1 : 0.35,
+                transition: "opacity 0.2s ease",
+              }}
+            >
+              {level}
+            </span>
+          );
+        })}
+      </div>
+    </div>
+  );
 }

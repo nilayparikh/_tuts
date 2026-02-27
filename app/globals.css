@@ -42,17 +42,61 @@ body:has(.tf-course-player-body) {
   background: var(--tf-bg-surface);
 }
 
+/* ── Breadcrumb navigation ────────────────────────────────────────────────
+ * Styled pill breadcrumb with chevron separators.
+ * ─────────────────────────────────────────────────────────────────────────── */
+.tf-breadcrumb {
+  margin-bottom: var(--tf-space-1);
+}
+.tf-breadcrumb ol {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  list-style: none;
+  margin: 0;
+  padding: var(--tf-space-2) var(--tf-space-4);
+  border-radius: var(--tf-radius-full);
+  background: var(--tf-bg-elevated);
+  border: 1px solid var(--tf-border-subtle);
+  width: fit-content;
+  font-family: var(--tf-font-mono);
+  font-size: var(--tf-text-xs);
+  letter-spacing: var(--tf-tracking-wide);
+}
+.tf-breadcrumb a {
+  color: var(--tf-color-primary-light);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+.tf-breadcrumb a:hover {
+  color: var(--tf-color-primary);
+  text-decoration: underline;
+}
+.tf-breadcrumb [aria-current="page"] {
+  color: var(--tf-text-secondary);
+  font-weight: 600;
+}
+.tf-breadcrumb-sep {
+  display: flex;
+  align-items: center;
+  color: var(--tf-text-muted);
+  opacity: 0.5;
+}
+
 /* ── Clickable card hover treatment ───────────────────────────────────────
  * Cards inside anchor tags get pointer cursor + subtle glow on hover.
  * No positional animation (no translate / scale) — glass-glow only.
  * ─────────────────────────────────────────────────────────────────────────── */
 a > [style*="border-radius"] {
   cursor: pointer !important;
-  transition: box-shadow 0.2s ease, border-color 0.2s ease !important;
+  transition:
+    box-shadow 0.2s ease,
+    border-color 0.2s ease !important;
 }
 
 a:hover > [style*="border-radius"] {
-  box-shadow: 0 0 16px 2px rgba(187, 134, 252, 0.18),
+  box-shadow:
+    0 0 16px 2px rgba(187, 134, 252, 0.18),
     0 0 0 1px rgba(187, 134, 252, 0.12);
   border-color: var(--tf-color-primary-border) !important;
 }

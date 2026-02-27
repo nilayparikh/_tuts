@@ -83,6 +83,8 @@ export interface CourseDefinition {
   githubUrl?: string;
   /** Emoji or icon for course cards */
   icon?: string;
+  /** Difficulty level */
+  difficulty?: "beginner" | "moderate" | "expert";
   /** Ordered parts (lessons) */
   parts: CoursePartMeta[];
   /** Rich overview content for the course page */

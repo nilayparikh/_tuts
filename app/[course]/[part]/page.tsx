@@ -115,35 +115,21 @@ export default async function LessonPage({
         }}
       >
         {/* ── Breadcrumb ──────────────────────────────────────────── */}
-        <nav aria-label="Breadcrumb">
-          <ol
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "0.35rem",
-              listStyle: "none",
-              margin: 0,
-              padding: 0,
-              fontSize: "var(--tf-text-sm)",
-              fontFamily: "var(--tf-font-body)",
-              color: "var(--tf-text-muted)",
-            }}
-          >
+        <nav aria-label="Breadcrumb" className="tf-breadcrumb">
+          <ol>
             <li>
-              <a href="/" style={{ color: "var(--tf-color-primary)", textDecoration: "none" }}>
-                Home
-              </a>
+              <a href="/">Courses</a>
             </li>
-            <li aria-hidden="true" style={{ color: "var(--tf-text-muted)" }}>›</li>
+            <li aria-hidden="true" className="tf-breadcrumb-sep">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+            </li>
             <li>
-              <a href={`/${courseSlug}/`} style={{ color: "var(--tf-color-primary)", textDecoration: "none" }}>
-                {course.title}
-              </a>
+              <a href={`/${courseSlug}/`}>{course.title}</a>
             </li>
-            <li aria-hidden="true" style={{ color: "var(--tf-text-muted)" }}>›</li>
-            <li aria-current="page" style={{ color: "var(--tf-text-secondary)" }}>
-              {part.title}
+            <li aria-hidden="true" className="tf-breadcrumb-sep">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M9 6l6 6-6 6"/></svg>
             </li>
+            <li aria-current="page">{part.title}</li>
           </ol>
         </nav>
 

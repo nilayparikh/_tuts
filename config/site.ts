@@ -37,12 +37,10 @@ export const BRAND = {
 
 const NAV_ITEMS: NavItem[] = [
   { label: "Courses", href: "/" },
-  { label: "Examples", href: "/examples/" },
 ];
 
 const FOOTER_LINKS: FooterLink[] = [
   { label: "Courses", href: "/" },
-  { label: "Examples", href: "/examples/" },
   { label: "Terms", href: "/terms/" },
   { label: "Privacy", href: "/privacy/" },
   { label: "YouTube", href: BRAND.socials.youtube, external: true },
@@ -61,7 +59,7 @@ export const SITE_HEADER: TutorialHeaderProps = {
 };
 
 export const SITE_FOOTER: TutorialFooterProps = {
-  siteName: BRAND.name,
+  siteName: "LocalM\u2122",
   links: FOOTER_LINKS,
   githubUrl: BRAND.socials.github,
   youtubeUrl: BRAND.socials.youtube,

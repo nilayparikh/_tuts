@@ -52,7 +52,10 @@ export default function TopicHomePage() {
       <Paragraph>{SITE_TOPIC.description}</Paragraph>
 
       {/* ── Courses ───────────────────────────────────────────────────────── */}
-      <span id="courses" style={{ display: "block", height: 0, margin: 0, padding: 0 }} />
+      <span
+        id="courses"
+        style={{ display: "block", height: 0, margin: 0, padding: 0 }}
+      />
       <SectionDivider label="Courses" />
 
       <ConceptGrid columns={2}>
@@ -65,7 +68,7 @@ export default function TopicHomePage() {
             <ConceptCard
               icon={course.icon ?? "📚"}
               title={course.title}
-              description={`${course.parts.length} lessons · ${course.totalDuration} — ${course.description}`}
+              description={`${course.parts.length} lessons · ${course.totalDuration} · ${(course.difficulty ?? "beginner").charAt(0).toUpperCase() + (course.difficulty ?? "beginner").slice(1)} — ${course.description}`}
             />
           </a>
         ))}
