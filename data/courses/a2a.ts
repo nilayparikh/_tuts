@@ -2885,23 +2885,6 @@ export const A2A_COURSE: CourseDefinition = {
             "A2A is at RC v1.0 stage. Key areas of active development include dynamic agent registries, push notifications for async completion, batch operations for bulk task submission, expanded multi-modal support, and enterprise compliance profiles. The patterns you learned here will transfer directly as the spec evolves — the core primitives (Agent Card, tasks/send, SSE streaming) are stable.",
         },
       ],
-      diagrams: [
-        {
-          chart:
-            'graph TB\n  subgraph "Framework Agents — Loan Validation (L08-L13)"\n    MSAF["LoanValidatorOrchestrator<br/>MS AF - Kimi-K2-Thinking - :10008"]\n    ADK["LoanValidatorADK<br/>Google ADK - Kimi-K2-Thinking - :10002"]\n    LG["LoanValidatorLangGraph<br/>LangGraph - Kimi-K2-Thinking - :10003"]\n    CREW["LoanValidatorCrewAI<br/>CrewAI - Kimi-K2-Thinking - :10004"]\n    OAI["LoanValidatorOpenAI<br/>OpenAI SDK - Kimi-K2-Thinking - :10005"]\n    CLAUD["LoanValidatorClaudeStyle<br/>Claude SDK - Kimi-K2-Thinking - :10006"]\n  end\n  subgraph "Capstone: Loan Approval Pipeline (L14)"\n    LoanOrch["LoanApprovalOrchestrator<br/>gpt-4o-mini - :10100"] --> Intake["IntakeAgent"]\n    Intake --> Risk["RiskScorerAgent"]\n    Risk --> Comp["ComplianceAgent"]\n    Comp --> Dec["DecisionAgent"]\n    Dec --> Esc["EscalationAgent"]\n    Esc --> UI["React Dashboard"]\n  end\n  Client["A2A Client"] -->|A2A| MSAF & ADK & LG & CREW & OAI & CLAUD\n  Client -->|A2A| LoanOrch',
-          caption:
-            "Complete system built during the course — six framework loan validators plus the capstone loan-approval pipeline",
-          alt: "Architecture diagram showing six framework-specific loan validator agents and the five-agent capstone loan approval pipeline with React UI.",
-          minHeight: "26rem",
-        },
-        {
-          chart:
-            'graph TD\n  Course["A2A Course<br/>(Complete)"] --> Learning["Continue Learning"]\n  Course --> Production["Go to Production"]\n  Course --> Community["Join Community"]\n  Learning --> NewAgent["Add a new<br/>framework agent"]\n  Learning --> MultiTurn["Implement cross-agent<br/>multi-turn"]\n  Learning --> WebUI["Build real-time<br/>agent visualization"]\n  Production --> Auth["OAuth 2.0 +<br/>mTLS auth"]\n  Production --> OTel["OpenTelemetry +<br/>Prometheus"]\n  Production --> Docker["Containerize<br/>agents"]\n  Community --> SDK["Contribute to<br/>A2A Python SDK"]\n  Community --> Extensions["Submit extension<br/>proposals"]\n  Community --> Registry["Share Agent Cards"]',
-          caption:
-            "Three paths forward: deeper learning, production hardening, and community contribution",
-          alt: "Decision tree showing three continuation paths after completing the course.",
-        },
-      ],
       transcript: [
         {
           time: 0,
@@ -3415,8 +3398,9 @@ export const A2A_COURSE: CourseDefinition = {
     ],
 
     aboutParagraphs: [
-      "Connecting agents built with different frameworks typically requires extensive custom integration work. A2A solves this with an open protocol that standardizes how agents <strong>discover</strong> each other and <strong>communicate</strong> — regardless of which model, language, or framework they were built on.",
-      "In this course, you'll build a complete multi-agent system: six specialized agents using six different frameworks, each wrapped as an A2A server. You'll use four different model providers — from free GitHub Models to fully local inference with Foundry Local. The capstone lesson builds a production-grade loan approval pipeline with six orchestrated agents, human-in-the-loop escalation, and a React approval dashboard.",
+      "The N\u00b2 integration problem is real: connecting N agents without a shared protocol needs custom code for every pair. A2A solves this with one open standard that every agent implements once — so agents built with any framework, model, or language can <strong>discover</strong> each other via Agent Cards and <strong>communicate</strong> through a defined task lifecycle.",
+      "The protocol standardizes every layer of agent interaction: <strong>Agent Cards</strong> at a well-known URL for service discovery, a typed Message\u00a0+\u00a0Part data model, a seven-state Task lifecycle (including <code>INPUT_REQUIRED</code> and <code>AUTH_REQUIRED</code>), Server-Sent Events for real-time streaming, OAuth\u00a02.0\u00a0/\u00a0mTLS\u00a0/\u00a0API-key authentication declared in the Agent Card, and a forward-compatible extension mechanism — all over JSON-RPC\u00a02.0.",
+      "In this course, you'll build a complete multi-agent system: six specialized agents using six different frameworks (Microsoft Agent Framework, Google ADK, LangGraph\u00a0+\u00a0MCP, CrewAI, OpenAI Agents SDK, and Claude Agent SDK), each wrapped as an A2A server and backed by free or local model providers. The capstone builds a production-grade loan approval pipeline with six orchestrated agents, human-in-the-loop escalation, a React approval dashboard, and OpenTelemetry distributed tracing.",
     ],
 
     detailItems: [
