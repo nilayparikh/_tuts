@@ -226,16 +226,17 @@ function PartContent({
 
 // ─── Shared data-driven content blocks ────────────────────────────────────
 //
-// Standard component order:
-//   1. InfoBoxes (prerequisites, setup notes)
-//   2. NoteBoxes
-//   3. Step-by-step guides
-//   4. Mermaid diagrams
-//   5. Polls
-//   6. Code Preview
-//   7. Source Code link (SuccessBox)
-//   8. Q&A Block
-//   9. Video Transcript (collapsed)
+// Render order matches canonical CoursePartMeta field groups
+// (see course.instructions.md §"Canonical CoursePartMeta Field Order"):
+//
+//   Group 2 — Core content:   Objectives
+//   Group 4 — Callouts:       InfoBoxes, NoteBoxes
+//   Group 5 — Visual:         Mermaid Diagrams, Poll
+//   Group 6 — Hands-on:       Code Preview, Step-by-step Guides, Source Code
+//   Group 7 — Learning:       Video Transcript, Q&A
+//
+// Layout-level components (video embeds, notebook splits) are handled by
+// per-type renderers above — this function renders everything else.
 //
 
 function DataDrivenContent({
@@ -247,26 +248,61 @@ function DataDrivenContent({
 }) {
   return (
     <>
-      {/* ── Objectives (for non-video types or when requested) ──── */}
+      {/* ── Group 2: Objectives (non-video types or when requested) ── */}
       {showObjectives && part.objectives && part.objectives.length > 0 && (
         <LessonObjectives objectives={part.objectives} />
       )}
 
-      {/* ── 1. InfoBoxes ────────────────────────────────────────── */}
+      {/* ── Group 4: Callouts ──────────────────────────────────── */}
       {part.infoBoxes?.map((box, i) => (
         <InfoBox key={`info-${i}`} title={box.title}>
           {box.content}
         </InfoBox>
       ))}
 
-      {/* ── 2. NoteBoxes ────────────────────────────────────────── */}
       {part.noteBoxes?.map((box, i) => (
         <NoteBox key={`note-${i}`} title={box.title}>
           {box.content}
         </NoteBox>
       ))}
 
-      {/* ── 3. Step-by-step guides ──────────────────────────────── */}
+      {/* ── Group 5: Visual ────────────────────────────────────── */}
+      {part.diagrams?.map((diagram, i) => (
+        <div
+          key={`diagram-${i}`}
+          style={{ minHeight: diagram.minHeight ?? "12rem" }}
+        >
+          <MermaidDiagram
+            chart={diagram.chart}
+            caption={diagram.caption}
+            alt={diagram.alt}
+          />
+        </div>
+      ))}
+
+      {part.poll && (
+        <PollBlock
+          question={part.poll.question}
+          options={part.poll.options}
+          simulatedVotes={part.poll.simulatedVotes}
+        />
+      )}
+
+      {/* ── Group 6: Hands-on ──────────────────────────────────── */}
+      {part.codePreview && (
+        <CodePreview
+          title={part.codePreview.title ?? "Code Walkthrough"}
+          description={
+            part.codePreview.description ??
+            "Key code from this lesson, explained step by step."
+          }
+          segments={part.codePreview.segments.map((s) => ({
+            ...s,
+            explanation: s.explanation ?? "",
+          }))}
+        />
+      )}
+
       {part.stepGuides?.map((guide, i) => (
         <StepByStepGuide
           key={`guide-${i}`}
@@ -308,45 +344,6 @@ function DataDrivenContent({
         />
       )}
 
-      {/* ── 4. Mermaid Diagrams ─────────────────────────────────── */}
-      {part.diagrams?.map((diagram, i) => (
-        <div
-          key={`diagram-${i}`}
-          style={{ minHeight: diagram.minHeight ?? "12rem" }}
-        >
-          <MermaidDiagram
-            chart={diagram.chart}
-            caption={diagram.caption}
-            alt={diagram.alt}
-          />
-        </div>
-      ))}
-
-      {/* ── 5. Poll ─────────────────────────────────────────────── */}
-      {part.poll && (
-        <PollBlock
-          question={part.poll.question}
-          options={part.poll.options}
-          simulatedVotes={part.poll.simulatedVotes}
-        />
-      )}
-
-      {/* ── 6. Code Preview ─────────────────────────────────────── */}
-      {part.codePreview && (
-        <CodePreview
-          title={part.codePreview.title ?? "Code Walkthrough"}
-          description={
-            part.codePreview.description ??
-            "Key code from this lesson, explained step by step."
-          }
-          segments={part.codePreview.segments.map((s) => ({
-            ...s,
-            explanation: s.explanation ?? "",
-          }))}
-        />
-      )}
-
-      {/* ── 7. Source Code (GitHubRepoCard) ─────────────────────── */}
       {part.codeUrl && (
         <GitHubRepoCard
           url={part.codeUrl}
@@ -354,21 +351,20 @@ function DataDrivenContent({
         />
       )}
 
-      {/* ── 8. Q&A ─────────────────────────────────────────────── */}
-      {part.qa && part.qa.length > 0 && (
-        <section>
-          <SectionDivider label="Q & A" />
-          <QABlock items={part.qa} />
-        </section>
-      )}
-
-      {/* ── 9. Video Transcript (collapsed) ─────────────────────── */}
+      {/* ── Group 7: Learning support ──────────────────────────── */}
       {part.transcript && part.transcript.length > 0 && (
         <VideoTranscript
           title="Video Transcript"
           defaultCollapsed
           entries={part.transcript}
         />
+      )}
+
+      {part.qa && part.qa.length > 0 && (
+        <section>
+          <SectionDivider label="Q & A" />
+          <QABlock items={part.qa} />
+        </section>
       )}
     </>
   );
@@ -620,17 +616,7 @@ function CodeContent({ part }: { part: CoursePartMeta }) {
 function ReadingContent({ part }: { part: CoursePartMeta }) {
   return (
     <>
-      {/* ── InfoBoxes (before objectives for reading context) ──── */}
-      {part.infoBoxes?.map((box, i) => (
-        <InfoBox key={`info-${i}`} title={box.title}>
-          {box.content}
-        </InfoBox>
-      ))}
-
-      {part.objectives && part.objectives.length > 0 && (
-        <LessonObjectives objectives={part.objectives} />
-      )}
-
+      {/* ── Reading URL (type-specific, above standard content) ── */}
       {part.readingUrl && (
         <GitHubRepoCard
           url={part.readingUrl}
@@ -638,86 +624,8 @@ function ReadingContent({ part }: { part: CoursePartMeta }) {
         />
       )}
 
-      {/* ── Step-by-step guides ─────────────────────────────────── */}
-      {part.stepGuides?.map((guide, i) => (
-        <StepByStepGuide
-          key={`guide-${i}`}
-          title={guide.title}
-          steps={guide.steps.map((s) => ({
-            ...s,
-            description: s.description ?? "",
-          }))}
-        />
-      ))}
-
-      {/* ── Auto clone/install from codeUrl ─────────────────────── */}
-      {part.codeUrl && !part.stepGuides?.length && (
-        <StepByStepGuide
-          title="Getting Started"
-          steps={[
-            {
-              title: "Clone the repository",
-              description: "Get the source code for this lesson.",
-              code: `git clone ${part.codeUrl}`,
-              codeLanguage: "bash",
-            },
-            {
-              title: "Navigate to the project",
-              description: "Open the folder in your terminal.",
-              code: `cd $(basename ${part.codeUrl})`,
-              codeLanguage: "bash",
-            },
-            {
-              title: "Install dependencies",
-              description: "Install all required packages.",
-              code: "pip install -r requirements.txt",
-              codeLanguage: "bash",
-            },
-          ]}
-        />
-      )}
-
-      {/* ── Mermaid Diagrams ────────────────────────────────────── */}
-      {part.diagrams?.map((diagram, i) => (
-        <div
-          key={`diagram-${i}`}
-          style={{ minHeight: diagram.minHeight ?? "12rem" }}
-        >
-          <MermaidDiagram
-            chart={diagram.chart}
-            caption={diagram.caption}
-            alt={diagram.alt}
-          />
-        </div>
-      ))}
-
-      {/* ── Code Preview ────────────────────────────────────────── */}
-      {part.codePreview && (
-        <CodePreview
-          title={part.codePreview.title ?? "Code Walkthrough"}
-          description={part.codePreview.description}
-          segments={part.codePreview.segments.map((s) => ({
-            ...s,
-            explanation: s.explanation ?? "",
-          }))}
-        />
-      )}
-
-      {/* ── Source Code ─────────────────────────────────────────── */}
-      {part.codeUrl && (
-        <GitHubRepoCard
-          url={part.codeUrl}
-          description="Complete source code for this lesson."
-        />
-      )}
-
-      {/* ── Q&A ─────────────────────────────────────────────────── */}
-      {part.qa && part.qa.length > 0 && (
-        <section>
-          <SectionDivider label="Q & A" />
-          <QABlock items={part.qa} />
-        </section>
-      )}
+      {/* ── Standard data-driven content (canonical order) ──────── */}
+      <DataDrivenContent part={part} showObjectives />
     </>
   );
 }
