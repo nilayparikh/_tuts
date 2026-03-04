@@ -61,28 +61,6 @@ export const A2A_COURSE: CourseDefinition = {
             "This is the first lesson in the course. No prior setup is needed — just watch and learn. In Lesson 04 (Setup & Resources), you will configure your development environment.",
         },
       ],
-      qa: [
-        {
-          question: "What is the N² problem in multi-agent systems?",
-          answer:
-            "Without a shared protocol, connecting N agents requires up to N×(N-1)/2 custom integrations. A2A reduces this to one standard interface per agent.",
-        },
-        {
-          question: "How is A2A different from MCP?",
-          answer:
-            "MCP connects a single model to tools and data sources (vertical). A2A connects autonomous agents to each other (horizontal). They are complementary — an agent uses MCP for its tools and A2A to talk to other agents.",
-        },
-        {
-          question: "Do I need cloud accounts for this course?",
-          answer:
-            "No. GitHub Models offers free Phi-4 access with a GitHub account. Azure AI Foundry has free tiers for Kimi-K2. Foundry Local runs Qwen2.5 Coder entirely on your machine with no API key.",
-        },
-        {
-          question: "What programming language does this course use?",
-          answer:
-            "Python 3.11+. All six framework integrations and the A2A SDK are Python-based. The A2A protocol itself is language-agnostic.",
-        },
-      ],
       transcript: [
         {
           time: 0,
@@ -155,6 +133,28 @@ export const A2A_COURSE: CourseDefinition = {
           text: "By the end of this course, you will have a deep understanding of the A2A protocol and hands-on experience building real, production-ready multi-agent systems. Let us get started.",
         },
       ],
+      qa: [
+        {
+          question: "What is the N² problem in multi-agent systems?",
+          answer:
+            "Without a shared protocol, connecting N agents requires up to N×(N-1)/2 custom integrations. A2A reduces this to one standard interface per agent.",
+        },
+        {
+          question: "How is A2A different from MCP?",
+          answer:
+            "MCP connects a single model to tools and data sources (vertical). A2A connects autonomous agents to each other (horizontal). They are complementary — an agent uses MCP for its tools and A2A to talk to other agents.",
+        },
+        {
+          question: "Do I need cloud accounts for this course?",
+          answer:
+            "No. GitHub Models offers free Phi-4 access with a GitHub account. Azure AI Foundry has free tiers for Kimi-K2. Foundry Local runs Qwen2.5 Coder entirely on your machine with no API key.",
+        },
+        {
+          question: "What programming language does this course use?",
+          answer:
+            "Python 3.11+. All six framework integrations and the A2A SDK are Python-based. The A2A protocol itself is language-agnostic.",
+        },
+      ],
       tags: ["introduction", "overview", "a2a"],
     },
 
@@ -178,28 +178,6 @@ export const A2A_COURSE: CourseDefinition = {
           title: "Before You Start",
           content:
             "This is a conceptual lesson — no coding required. If you want context on what A2A is, revisit Lesson 01 (Introduction) first.",
-        },
-      ],
-      qa: [
-        {
-          question: "How does A2A differ from MCP (Model Context Protocol)?",
-          answer:
-            "MCP connects a single model to tools and data sources. A2A connects two or more autonomous agents — each potentially running different models — allowing them to discover each other and delegate tasks across organizational boundaries.",
-        },
-        {
-          question: "Why can't agents just call each other's APIs directly?",
-          answer:
-            "They can, but without a common protocol you need custom integration for every pair of agents. A2A provides a standard discovery mechanism (Agent Card), task format, and streaming contract so any A2A-compliant agent can talk to any other.",
-        },
-        {
-          question: "Is A2A tied to Google or any specific cloud provider?",
-          answer:
-            "No. A2A was initiated by Google but is now governed by the Linux Foundation under an Apache 2.0 license. It is completely vendor-neutral. In this course we use GitHub Models, Azure AI Foundry, and Foundry Local — no Google Cloud required.",
-        },
-        {
-          question: "Can I use A2A with frameworks not covered in this course?",
-          answer:
-            "Absolutely. A2A is framework-agnostic. Any language or framework that can serve HTTP and handle JSON-RPC 2.0 can implement an A2A server. The spec also supports gRPC and HTTP+JSON/REST protocol bindings.",
         },
       ],
       transcript: [
@@ -289,6 +267,28 @@ export const A2A_COURSE: CourseDefinition = {
           text: "In the next lesson, we dive deep into A2A's architecture — Agent Cards, Messages, Task lifecycle, SSE streaming, and the JSON-RPC methods that make it all work.",
         },
       ],
+      qa: [
+        {
+          question: "How does A2A differ from MCP (Model Context Protocol)?",
+          answer:
+            "MCP connects a single model to tools and data sources. A2A connects two or more autonomous agents — each potentially running different models — allowing them to discover each other and delegate tasks across organizational boundaries.",
+        },
+        {
+          question: "Why can't agents just call each other's APIs directly?",
+          answer:
+            "They can, but without a common protocol you need custom integration for every pair of agents. A2A provides a standard discovery mechanism (Agent Card), task format, and streaming contract so any A2A-compliant agent can talk to any other.",
+        },
+        {
+          question: "Is A2A tied to Google or any specific cloud provider?",
+          answer:
+            "No. A2A was initiated by Google but is now governed by the Linux Foundation under an Apache 2.0 license. It is completely vendor-neutral. In this course we use GitHub Models, Azure AI Foundry, and Foundry Local — no Google Cloud required.",
+        },
+        {
+          question: "Can I use A2A with frameworks not covered in this course?",
+          answer:
+            "Absolutely. A2A is framework-agnostic. Any language or framework that can serve HTTP and handle JSON-RPC 2.0 can implement an A2A server. The spec also supports gRPC and HTTP+JSON/REST protocol bindings.",
+        },
+      ],
       tags: ["overview", "motivation", "interoperability"],
     },
 
@@ -321,29 +321,6 @@ export const A2A_COURSE: CourseDefinition = {
           caption:
             "A2A Task State Machine (RC v1.0) — eight states govern every task's lifecycle",
           alt: "State diagram: SUBMITTED → WORKING or REJECTED. WORKING branches to COMPLETED, FAILED, CANCELED, INPUT_REQUIRED, or AUTH_REQUIRED. INPUT_REQUIRED and AUTH_REQUIRED loop back to WORKING. Terminal states: COMPLETED, FAILED, CANCELED, REJECTED.",
-        },
-      ],
-      qa: [
-        {
-          question: "What is an Agent Card and where is it published?",
-          answer:
-            "An Agent Card is a JSON document describing the agent's identity, skills, capabilities, supported interfaces, and authentication requirements. It is published at /.well-known/agent-card.json. Clients fetch this card to discover what the agent can do before sending any tasks.",
-        },
-        {
-          question: "How does streaming work in A2A?",
-          answer:
-            "Streaming uses Server-Sent Events (SSE). The client calls SendStreamingMessage and the server opens an SSE connection. The server pushes TaskStatusUpdateEvent and TaskArtifactUpdateEvent objects as JSON lines. Artifacts can stream incrementally via the append and lastChunk flags. The stream closes when the final status event has 'final: true'.",
-        },
-        {
-          question: "What are the three protocol bindings in the RC v1.0 spec?",
-          answer:
-            "JSON-RPC 2.0 over HTTP (the most common, used in this course), gRPC (for high-performance inter-service communication), and HTTP+JSON/REST (a REST-style binding). Each agent declares which bindings it supports in its Agent Card via the supportedInterfaces array.",
-        },
-        {
-          question:
-            "What is the difference between INPUT_REQUIRED and AUTH_REQUIRED states?",
-          answer:
-            "INPUT_REQUIRED means the agent needs additional information from the user to continue — it pauses and waits for the client to send more context. AUTH_REQUIRED means the agent needs the client to authenticate with additional credentials. Both states loop back to WORKING once the client responds.",
         },
       ],
       transcript: [
@@ -458,6 +435,29 @@ export const A2A_COURSE: CourseDefinition = {
           text: "That covers the full A2A architecture. In the next lesson we will set up the course repositories, install the A2A Python SDK, and configure your local model providers — ready to start building.",
         },
       ],
+      qa: [
+        {
+          question: "What is an Agent Card and where is it published?",
+          answer:
+            "An Agent Card is a JSON document describing the agent's identity, skills, capabilities, supported interfaces, and authentication requirements. It is published at /.well-known/agent-card.json. Clients fetch this card to discover what the agent can do before sending any tasks.",
+        },
+        {
+          question: "How does streaming work in A2A?",
+          answer:
+            "Streaming uses Server-Sent Events (SSE). The client calls SendStreamingMessage and the server opens an SSE connection. The server pushes TaskStatusUpdateEvent and TaskArtifactUpdateEvent objects as JSON lines. Artifacts can stream incrementally via the append and lastChunk flags. The stream closes when the final status event has 'final: true'.",
+        },
+        {
+          question: "What are the three protocol bindings in the RC v1.0 spec?",
+          answer:
+            "JSON-RPC 2.0 over HTTP (the most common, used in this course), gRPC (for high-performance inter-service communication), and HTTP+JSON/REST (a REST-style binding). Each agent declares which bindings it supports in its Agent Card via the supportedInterfaces array.",
+        },
+        {
+          question:
+            "What is the difference between INPUT_REQUIRED and AUTH_REQUIRED states?",
+          answer:
+            "INPUT_REQUIRED means the agent needs additional information from the user to continue — it pauses and waits for the client to send more context. AUTH_REQUIRED means the agent needs the client to authenticate with additional credentials. Both states loop back to WORKING once the client responds.",
+        },
+      ],
       tags: ["architecture", "spec", "agent-card", "sse", "json-rpc"],
     },
 
@@ -469,7 +469,6 @@ export const A2A_COURSE: CourseDefinition = {
       duration: "5 mins",
       description:
         "Set up your local development environment — the course repository, Python virtual environment, and all three model providers used across the lessons.",
-      readingUrl: "https://github.com/nilayparikh/tuts-agentic-ai-examples",
       objectives: [
         "Clone the examples repository and create a Python 3.11+ virtual environment",
         "Install the A2A Python SDK with HTTP server support",
@@ -478,6 +477,7 @@ export const A2A_COURSE: CourseDefinition = {
         "Install Foundry Local and run Qwen2.5 Coder on your machine",
         "Verify all three providers with the included smoke test script",
       ],
+      readingUrl: "https://github.com/nilayparikh/tuts-agentic-ai-examples",
       stepGuides: [
         {
           title: "Step 1 — Repository & Python Environment",
