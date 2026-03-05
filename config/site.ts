@@ -20,7 +20,7 @@ export const BRAND = {
   name: "LocalM\u2122 Tuts",
   nameFull: "LocalM\u2122 Tutorials",
   copyright: `\u00A9 ${new Date().getFullYear()} LocalM\u2122. All rights reserved.`,
-  logoUrl: "/brand/og-image-template-1200x630.png",
+  logoUrl: "/brand/logo-horizontal-color-1960x440.png",
   profileUrl: "/brand/profile-pic-512.png",
   socials: {
     twitter: "https://x.com/nilayparikh",

@@ -38,7 +38,7 @@ export const metadata: Metadata = {
     icon: [
       { url: "/favicon.ico", sizes: "any" },
       {
-        url: "/brand/favicon-full-32.png",
+        url: "/brand/icon-mark-gradient-32.png",
         type: "image/png",
         sizes: "32x32",
       },
