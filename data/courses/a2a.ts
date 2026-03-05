@@ -45,7 +45,7 @@ export const A2A_COURSE: CourseDefinition = {
       title: "Introduction",
       type: "video",
       duration: "5 mins",
-      videoId: "placeholder-intro",
+      videoId: "MuhXVA9kvLc",
       description:
         "Get oriented to agentic AI systems, the N² integration problem, and why A2A exists.",
       objectives: [
