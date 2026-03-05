@@ -21,6 +21,8 @@ export const BRAND = {
   nameFull: "LocalM\u2122 Tutorials",
   copyright: `\u00A9 ${new Date().getFullYear()} LocalM\u2122. All rights reserved.`,
   logoUrl: "/brand/logo-horizontal-color-1960x440.png",
+  logoIconUrlHeader: "/brand/icon-mark-gradient-64.png",
+  logoIconUrlFooter: "/brand/icon-mark-gradient-32.png",
   profileUrl: "/brand/profile-pic-512.png",
   socials: {
     twitter: "https://x.com/nilayparikh",
@@ -48,7 +50,7 @@ const FOOTER_LINKS: FooterLink[] = [
 
 export const SITE_HEADER: TutorialHeaderProps = {
   siteName: BRAND.name,
-  logoUrl: BRAND.logoUrl,
+  logoIconUrl: BRAND.logoIconUrlHeader,
   navItems: NAV_ITEMS,
   githubUrl: BRAND.socials.github,
   youtubeUrl: BRAND.socials.youtube,
@@ -58,7 +60,7 @@ export const SITE_HEADER: TutorialHeaderProps = {
 
 export const SITE_FOOTER: TutorialFooterProps = {
   siteName: "LocalM\u2122",
-  logoUrl: BRAND.logoUrl,
+  logoIconUrl: BRAND.logoIconUrlFooter,
   links: FOOTER_LINKS,
   githubUrl: BRAND.socials.github,
   youtubeUrl: BRAND.socials.youtube,

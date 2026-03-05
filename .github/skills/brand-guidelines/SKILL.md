@@ -44,3 +44,9 @@ python _brand/scripts/generate_localm_brand_assets.py
 - Do not dump the entire `_brand/dist/` into the consumer repo.
 - SVGs are transparent (except `og-image-template`). PNGs are transparent.
 - Keep `layout.tsx`, `manifest.webmanifest`, and `site.ts` icon paths pointing to `public/brand/`.
+- Use `<BrandLockup>` component from `@localm/tutorial-framework` — never inline brand styles:
+  - Sizes: `sm` (footer), `md` (header), `lg` (splash)
+  - `localm`: Share Tech Mono (primary), `TM`: superscript Outfit weight 600, `TUTS`: Outfit Light (secondary)
+  - Fallbacks for non-brand content: Mono `Consolas, Courier New, monospace`; Sans `Segoe UI, Roboto, Arial, sans-serif`
+- Footer: 3-column grid — copyright + links (left), brand lockup (center), social icons (right).
+- Primary CTA buttons: blue→purple gradient, pill shape, glow shadow.

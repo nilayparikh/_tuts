@@ -21,6 +21,15 @@ Apply these rules when editing branding, metadata, visual identity, or public as
 - Do not introduce ad-hoc brand colors; use values from `_brand/docs/BRAND_GUIDE.md`.
 - Do not stretch, skew, recolor, or add custom effects to logos.
 - For app metadata (`app/layout.tsx`): ensure icon, apple-touch-icon, favicon, and OG image use canonical brand files.
+- Always use the `<BrandLockup>` component from `@localm/tutorial-framework` for header/footer brand rendering — never inline brand styles.
+  - Sizes: `sm` (footer), `md` (header), `lg` (splash)
+  - `localm`: Share Tech Mono (primary wordmark type)
+  - `TM`: superscript, Outfit weight 600
+  - `TUTS`: Outfit Light (secondary supporting type)
+  - Fallbacks for non-brand content: Mono `Consolas, Courier New, monospace`; Sans `Segoe UI, Roboto, Arial, sans-serif`
+- Footer layout: 3-column grid — copyright + links (left), brand lockup (center), social icons (right).
+- Primary CTA buttons: use blue→purple gradient, pill shape, glow shadow (defined in theme).
+- Prefer icon + typed lockup for site header/footer instead of split wordmark assets.
 
 ## Currently used brand files
 
@@ -28,6 +37,7 @@ Apply these rules when editing branding, metadata, visual identity, or public as
 public/brand/
   favicon-full-32.png              ← layout.tsx (icon 32×32)
   icon-mark-gradient-64.png        ← layout.tsx (icon 64×64), site.ts (logoUrl)
+  icon-mark-gradient-32.png        ← site.ts (footer brand icon)
   icon-mark-gradient-180.png       ← layout.tsx (apple-touch-icon)
   icon-mark-gradient-192.png       ← manifest.webmanifest
   icon-mark-gradient-512.png       ← manifest.webmanifest
