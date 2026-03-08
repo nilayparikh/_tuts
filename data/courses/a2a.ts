@@ -3073,6 +3073,7 @@ export const A2A_COURSE: CourseDefinition = {
       slug: "advanced-concepts",
       title: "Advanced A2A Concepts — Extensions, Security & Observability",
       type: "video",
+      displayTypeOverride: "video",
       duration: "5 mins",
       videoId: "XEGpZop5vWw",
       description:
