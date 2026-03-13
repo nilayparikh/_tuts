@@ -28,7 +28,7 @@ export const CTX_SDLC_COURSE: CourseDefinition = {
   title: "Context Engineering for GitHub Copilot",
   description:
     "Master .github and /docs so GitHub Copilot behaves like a project-aware engineering partner across planning, coding, review, and delivery.",
-  totalDuration: "~120 mins",
+  totalDuration: "~95 mins",
   tags: [
     "Context Engineering",
     "GitHub Copilot",
@@ -37,6 +37,8 @@ export const CTX_SDLC_COURSE: CourseDefinition = {
     "MCP",
     "AI-Assisted SDLC",
   ],
+  githubUrl:
+    "https://github.com/nilayparikh/tuts-agentic-ai-examples/tree/main/ctx-sdlc",
   icon: "🧭",
   difficulty: "beginner",
   instructor: {
@@ -46,24 +48,31 @@ export const CTX_SDLC_COURSE: CourseDefinition = {
   },
   parts: [
     {
-      slug: "welcome",
-      title: "Welcome",
+      slug: "why-context-engineering",
+      title: "Why Context Engineering Matters",
       type: "video",
-      duration: "5 mins",
-      videoId: "placeholder-welcome",
+      duration: "7 mins",
+      videoId: "placeholder-why-context-engineering",
       description:
-        "Understand why context engineering is the most impactful skill for AI-assisted development and what you will build in this course.",
+        "Understand why AI-assisted engineering fails without durable project context and why context engineering is the most impactful skill for AI-assisted development.",
       objectives: [
-        "Explain why AI output quality correlates directly with input context quality",
-        "Distinguish context engineering from prompt engineering",
-        "Identify the gap between generic AI and project-aware AI",
-        "Preview the seven customization surfaces covered in this course",
+        "Explain why AI-assisted engineering fails when project context is missing",
+        "Distinguish prompt engineering from durable repository-level context engineering",
+        "Describe why context should be treated as engineering infrastructure rather than ad hoc chat setup",
+        "Position context engineering as the foundation for planning, implementation, review, and maintenance workflows",
       ],
       infoBoxes: [
         {
           title: "No Prerequisites",
           content:
-            "This is the first lesson. No setup is needed. Follow the course in order because every lesson adds a new customization layer on top of the previous one.",
+            "This is the first lesson. No setup or prior knowledge is needed beyond basic familiarity with a code editor. Follow the course in order because each lesson adds a new context layer on top of the previous one.",
+        },
+      ],
+      noteBoxes: [
+        {
+          title: "Context Engineering Is Not Prompt Engineering",
+          content:
+            "Prompt engineering optimizes one interaction. Context engineering optimizes every interaction across the lifetime of a repository by storing reusable instructions, prompts, agents, and documentation in version control.",
         },
       ],
       diagrams: [
@@ -74,6 +83,13 @@ export const CTX_SDLC_COURSE: CourseDefinition = {
             "AI output quality is a direct function of the context you provide.",
           alt: "Poor context leads to generic suggestions while rich context from .github and docs leads to project-aware code.",
         },
+        {
+          chart:
+            'graph TD\n    A["Level 1: Autocomplete\\nPredict next tokens"] --> B["Level 2: Chat\\nAnswer code questions"]\n    B --> C["Level 3: Agent\\nAutonomous task execution"]\n    C --> D["Level 4: Orchestrated Agents\\nMulti-agent workflows"]',
+          caption:
+            "As AI assistance grows more autonomous, the context requirements increase dramatically.",
+          alt: "Four levels of AI assistance from autocomplete to orchestrated agents.",
+        },
       ],
       poll: {
         question: "How do you use GitHub Copilot today?",
@@ -81,62 +97,77 @@ export const CTX_SDLC_COURSE: CourseDefinition = {
           { id: "autocomplete", text: "Autocomplete only" },
           {
             id: "chat",
-            text: "Chat for one-off questions, but I re-explain context each time",
+            text: "Chat for questions, but I re-explain context every session",
           },
           {
             id: "instructions",
             text: "I have some custom instructions set up",
           },
           {
-            id: "full-stack",
-            text: "Full setup: instructions, agents, prompts, and more",
+            id: "agents",
+            text: "Agents, prompts, and skills — full .github/ setup",
           },
+          { id: "none", text: "I have not started using Copilot yet" },
         ],
+        simulatedVotes: {
+          autocomplete: 22,
+          chat: 38,
+          instructions: 24,
+          agents: 9,
+          none: 7,
+        },
       },
       qa: [
         {
-          question: "What is context engineering?",
+          question: "What is the main failure mode this course addresses?",
           answer:
-            "Context engineering is the systematic practice of building, maintaining, and versioning the artifacts that give AI assistants project-specific knowledge through .github and /docs.",
+            "AI systems are strong generalists but weak at project-specific judgment unless you teach them how your repository works. Wrong frameworks, wrong conventions, and wrong validation steps are usually context failures, not model failures.",
+        },
+        {
+          question: "Why does this matter more for agents than autocomplete?",
+          answer:
+            "Autocomplete only needs the current file. Agents need architecture, tooling, validation commands, and role boundaries to act safely and correctly across a whole repository.",
         },
         {
           question:
-            "How is context engineering different from prompt engineering?",
+            "What is the durable alternative to repeating context in chat?",
           answer:
-            "Prompt engineering optimizes one interaction. Context engineering optimizes every interaction across the lifetime of the repository by storing reusable instructions, prompts, agents, and documentation in version control.",
-        },
-        {
-          question: "What are the seven customization surfaces?",
-          answer:
-            "Custom instructions, prompt files, custom agents, agent skills, MCP servers, hooks, agent plugins, plus supporting systems like memory and docs.",
-        },
-        {
-          question: "Do I need anything beyond Copilot itself?",
-          answer:
-            "No additional cloud setup is required for this course. The demos focus on VS Code and Copilot CLI using local repository configuration.",
+            "Encode the shared knowledge once in .github and /docs so every developer, every session, and every agent run gets the same context automatically.",
         },
       ],
-      tags: ["introduction", "overview", "context-engineering"],
+      tags: [
+        "introduction",
+        "context-engineering",
+        "motivation",
+        "ai-assisted-development",
+      ],
     },
     {
-      slug: "github-folder-anatomy",
-      title: ".github Folder Anatomy",
+      slug: "curate-project-context",
+      title: "Curate Project Context with .github and /docs/",
       type: "video",
-      duration: "8 mins",
-      videoId: "placeholder-github-folder-anatomy",
+      duration: "10 mins",
+      videoId: "placeholder-curate-project-context",
       description:
-        "Explore the complete .github directory structure and the layering model that controls how AI interacts with your project.",
+        "Build the shared context layer that powers every AI interaction in your project by combining .github behavioral guidance with /docs knowledge context.",
       objectives: [
-        "Map the complete .github directory structure for AI-optimized projects",
-        "Explain the purpose of instructions, prompts, agents, skills, and hooks folders",
-        "Apply instruction layering to control which rules activate for which files",
-        "Configure VS Code settings that customize file discovery locations",
+        "Explain why .github and /docs should be treated as one shared context layer",
+        "Distinguish behavioral guidance from knowledge context",
+        "Identify the repository artifacts that provide high-leverage project context to AI systems",
+        "Design a starter context layout that helps both human contributors and AI assistants",
       ],
       infoBoxes: [
         {
-          title: "The .github Control Center",
+          title: "Two Halves of the Same System",
           content:
-            "For Copilot, .github becomes the configuration tree for repository-wide rules, task prompts, custom agents, skills, and lifecycle automation. This lesson maps that structure before you start authoring files.",
+            ".github tells the assistant how to behave: standards, workflows, tools, and roles. /docs tells the assistant what it needs to know: architecture, ADRs, API contracts, and operational constraints. If you only provide one half, the assistant still has to guess too much.",
+        },
+      ],
+      noteBoxes: [
+        {
+          title: "What Not To Put In Instructions",
+          content:
+            "Do not restate linter rules, copy large READMEs, or duplicate code definitions into instruction files. Link to source material instead. The goal is a maintainable context layer, not a bloated one.",
         },
       ],
       diagrams: [
@@ -144,82 +175,179 @@ export const CTX_SDLC_COURSE: CourseDefinition = {
           chart:
             'graph TB\n    subgraph ".github/"\n        A["copilot-instructions.md"] --> |"Always on"| Z["AI Context"]\n        B["instructions/"] --> |"Glob-filtered"| Z\n        C["prompts/"] --> |"User-invoked"| Z\n        D["agents/"] --> |"Agent-selected"| Z\n        E["skills/"] --> |"On-demand"| Z\n        F["hooks/"] --> |"Event-driven"| Z\n    end',
           caption:
-            "Each .github subfolder feeds context to Copilot through a different activation mechanism.",
-          alt: "Six .github configuration surfaces connect to a shared AI context.",
+            "Each .github subfolder feeds context through a different activation mechanism.",
+          alt: "Six .github configuration surfaces connect to shared AI context.",
         },
         {
           chart:
-            'graph TD\n    A["Repository\\ncopilot-instructions.md"] --> B["Path-Specific\\ninstructions/*.instructions.md"]\n    B --> C["Personal\\nUser settings"]\n    C --> D["Final Context"]\n    style C fill:#4a9eff,color:#fff',
+            'graph LR\n    subgraph "HOW to behave"\n        A[".github/\\nInstructions\\nAgents\\nPrompts"]\n    end\n    subgraph "WHAT to know"\n        B["/docs/\\nArchitecture\\nADRs\\nConventions"]\n    end\n    A --> |"References"| B\n    B --> |"Feeds"| A\n    A --> C["AI Context"]\n    B --> C',
           caption:
-            "Instruction precedence runs from repository-wide defaults up to personal overrides.",
-          alt: "Repository rules feed into path-specific rules and finally personal overrides.",
+            ".github provides behavioral rules while /docs provides knowledge context.",
+          alt: ".github behavioral guidance and /docs knowledge context feed into AI context.",
         },
       ],
+      poll: {
+        question:
+          "What does your repo's .github folder currently contain for Copilot?",
+        options: [
+          {
+            id: "nothing",
+            text: "Nothing AI-related — just workflows and templates",
+          },
+          { id: "basic", text: "A basic copilot-instructions.md file" },
+          {
+            id: "layered",
+            text: "Multiple instruction files with applyTo scoping",
+          },
+          {
+            id: "full",
+            text: "Instructions plus prompts plus agents or skills",
+          },
+          { id: "unsure", text: "I am not sure what is in there" },
+        ],
+        simulatedVotes: {
+          nothing: 32,
+          basic: 28,
+          layered: 18,
+          full: 8,
+          unsure: 14,
+        },
+      },
+      codePreview: {
+        title: "Starter Context Layout",
+        description:
+          "A small but effective repository context layer for a loan-workbench project.",
+        segments: [
+          {
+            code: lines(
+              ".github/",
+              "  copilot-instructions.md",
+              "  instructions/",
+              "    frontend.instructions.md",
+              "    backend.instructions.md",
+              "docs/",
+              "  architecture.md",
+              "  adr/",
+              "    001-state-management.md",
+            ),
+            language: "text",
+            filename: "loan-workbench tree",
+            explanation:
+              "Keep behavior in .github and knowledge in docs so the assistant gets both the how and the why.",
+          },
+          {
+            code: lines(
+              "# .github/copilot-instructions.md",
+              "",
+              "- Product: Loan Workbench for underwriting teams.",
+              "- Frontend: React 19 + TypeScript + Tailwind.",
+              "- Backend: FastAPI + Pydantic + SQLAlchemy async.",
+              "- Testing: Vitest for UI, pytest for API.",
+              "- Never invent workflow states; use docs/architecture.md and ADRs.",
+            ),
+            language: "markdown",
+            filename: ".github/copilot-instructions.md",
+            explanation:
+              "Start with a short repository-wide file that gives Copilot identity, stack, and non-obvious global rules.",
+          },
+        ],
+      },
       qa: [
         {
-          question: "What are the main Copilot folders inside .github?",
+          question: "Why do docs matter if the code already exists?",
           answer:
-            "Use .github for copilot-instructions.md, path-scoped instructions, prompts, agents, skills, and hooks. GitHub Actions workflows still live there too, but they are separate from Copilot customization.",
+            "Code shows what exists. Docs explain why it exists, what was rejected, and what operational constraints matter. That missing why is often what the AI needs to avoid wrong suggestions.",
         },
         {
-          question: "What is instruction layering?",
+          question: "What is the highest-value document type for AI context?",
           answer:
-            "It means combining broad repository rules with narrower framework or folder-specific rules so only relevant guidance loads for each file.",
+            "Architecture Decision Records are especially valuable because they teach the assistant both the chosen pattern and the rejected alternatives.",
         },
         {
-          question: "What wins when instructions conflict?",
+          question: "What should live in .github versus docs?",
           answer:
-            "More specific scopes win. Personal settings override path-specific instructions, and path-specific instructions override repository-wide defaults.",
-        },
-        {
-          question: "Can I move these folders?",
-          answer:
-            "Yes. VS Code supports extra discovery paths for instructions, prompts, agents, skills, and hooks through settings, but the default .github structure is the easiest starting point.",
+            "Put behavior and automation in .github. Put architecture, decisions, conventions, and operational knowledge in docs. They solve different but complementary problems.",
         },
       ],
-      tags: [".github", "directory-structure", "layering", "vs-code-settings"],
+      tags: [
+        ".github",
+        "docs-folder",
+        "project-context",
+        "repository-structure",
+        "ADR",
+      ],
     },
     {
-      slug: "custom-instructions",
-      title: "Custom Instructions",
-      type: "video-code",
-      duration: "8 mins",
-      videoId: "placeholder-custom-instructions",
+      slug: "instruction-architecture",
+      title: "Design Instruction Architecture",
+      type: "video",
+      duration: "9 mins",
+      videoId: "placeholder-instruction-architecture",
       description:
-        "Create .instructions.md files with YAML frontmatter, glob scoping, and semantic descriptions that activate automatically.",
+        "Design a layered instruction architecture with repository-wide defaults, path-specific scoping, and the three-axis context model that keeps AI guidance precise and maintainable.",
       objectives: [
-        "Create effective .instructions.md files with proper YAML frontmatter",
-        "Use glob patterns to scope instructions to specific file types and directories",
-        "Explain the dual discovery mechanism: glob matching and semantic description matching",
-        "Organize instructions using the layering pattern for multi-framework projects",
+        "Describe the difference between repository-wide, path-specific, and agent-scoped instruction patterns",
+        "Explain how instruction layering reduces irrelevant context and conflicting guidance",
+        "Use applyTo scoping to encode framework- or domain-specific rules",
+        "Apply the three-axis context model to organize customization files",
       ],
+      codeUrl:
+        "https://github.com/nilayparikh/tuts-agentic-ai-examples/tree/main/ctx-sdlc/lessons/03-instruction-architecture",
       infoBoxes: [
         {
           title: "Two Ways Instructions Activate",
           content:
-            "Instructions load either because the current file matches applyTo or because the description semantically matches the current task. Good descriptions capture intent, not just file types.",
+            "Instructions load either because the current file matches the applyTo glob pattern, or because the description semantically matches the current task. Good descriptions capture intent and trigger phrases, not just file types.",
         },
       ],
       noteBoxes: [
         {
           title: "Keep Instructions Focused",
           content:
-            "Put non-obvious conventions in instructions. Do not duplicate rules already enforced by ESLint, Prettier, type checkers, or test runners.",
+            "Put non-obvious conventions in instructions. Do not duplicate rules already enforced by ESLint, Prettier, type checkers, or test runners. Split by concern using multiple files, not one giant dump.",
         },
       ],
       diagrams: [
         {
           chart:
-            'graph LR\n    A["instructions.md"] --> B{"applyTo glob\\nmatches open file?"}\n    A --> C{"description\\nmatches current task?"}\n    B --> |"Yes"| D["Included in context"]\n    C --> |"Yes"| D\n    B --> |"No"| E["Not included"]\n    C --> |"No"| E',
+            'graph TB\n    subgraph "Horizontal — Always Available"\n        A["Agents"]\n        B["Skills"]\n    end\n    subgraph "Vertical — Filtered by Scope"\n        C["Instructions"]\n        D["Org → Repo → Path → Personal"]\n    end\n    subgraph "Diagonal — Task-Specific"\n        E["Prompts"]\n    end\n    A --> F["Runtime Context"]\n    B --> F\n    C --> F\n    E --> F',
           caption:
-            "Instruction files load through glob matching or semantic matching.",
-          alt: "Instructions can enter context by file match or by description match.",
+            "The three-axis model explains how different context sources activate and combine.",
+          alt: "Horizontal agents and skills, vertical instructions, and diagonal prompts compose into runtime context.",
+        },
+        {
+          chart:
+            'graph TD\n    A["Personal Settings"] --> B["Path-Specific\\n*.instructions.md"]\n    B --> C["Repository-Wide\\ncopilot-instructions.md"]\n    C --> D["Organization Defaults"]',
+          caption:
+            "More specific scopes override broader defaults when instructions conflict.",
+          alt: "Instruction precedence pyramid from organization defaults up to personal settings.",
         },
       ],
+      poll: {
+        question: "How are your Copilot instructions organized today?",
+        options: [
+          { id: "none", text: "No instruction files yet" },
+          {
+            id: "single",
+            text: "One copilot-instructions.md with everything in it",
+          },
+          { id: "few", text: "A few files, loosely organized" },
+          {
+            id: "layered",
+            text: "Layered with applyTo scoping per framework or domain",
+          },
+        ],
+        simulatedVotes: {
+          none: 24,
+          single: 35,
+          few: 23,
+          layered: 18,
+        },
+      },
       codePreview: {
-        title: "Instruction File Examples",
+        title: "Layered Instruction Files",
         description:
-          "Repository-wide and path-scoped instruction files that layer together.",
+          "Repository-wide defaults plus focused path-specific rules for the same loan-workbench repo.",
         segments: [
           {
             code: lines(
@@ -227,615 +355,426 @@ export const CTX_SDLC_COURSE: CourseDefinition = {
               'applyTo: "**"',
               "---",
               "",
-              "# Repository-Wide Rules",
+              "# Loan Workbench Repository Rules",
               "",
-              "- Use TypeScript with strict mode for frontend code.",
-              "- Use Python 3.11+ with type hints for backend code.",
-              "- Write tests for every public function.",
-              "- Use conventional commits.",
-              "- Never hardcode secrets.",
+              "- Use React for apps/web and FastAPI for services/api.",
+              "- Never invent underwriting workflow states.",
+              "- Always reference docs/adr before changing domain behavior.",
             ),
             language: "markdown",
             filename: ".github/copilot-instructions.md",
             explanation:
-              "Repository-wide defaults that apply to every Copilot interaction.",
+              "Keep the repository-wide layer short and universally applicable.",
           },
           {
             code: lines(
               "---",
-              'name: "React Component Standards"',
-              'description: "Rules for building React components with TypeScript and hooks"',
-              'applyTo: "src/components/**/*.tsx"',
+              'name: "Loan UI Standards"',
+              'description: "Rules for React loan workflow screens, accessibility, and form state"',
+              'applyTo: "apps/web/**/*.tsx"',
               "---",
               "",
-              "# React Component Rules",
-              "",
-              "- Use functional components with arrow function syntax.",
-              "- Define props as a named interface.",
-              "- Export components as named exports.",
-              "- Co-locate tests next to the component.",
+              "- Use named exports for components.",
+              "- Forms use React Hook Form with Zod validation.",
+              "- Loan status badges must use the shared status map.",
             ),
             language: "markdown",
-            filename: ".github/instructions/react.instructions.md",
+            filename: ".github/instructions/frontend.instructions.md",
             explanation:
-              "A path-scoped instruction file layered on top of repository-wide rules.",
-          },
-          {
-            code: lines(
-              "---",
-              'name: "FastAPI Backend Standards"',
-              'description: "Rules for Python FastAPI endpoints, Pydantic models, and async patterns"',
-              'applyTo: "src/api/**/*.py"',
-              "---",
-              "",
-              "# FastAPI Rules",
-              "",
-              "- Use async def for route handlers.",
-              "- Define request and response models with Pydantic BaseModel.",
-              "- Use dependency injection for database sessions.",
-              "- Return explicit HTTP status codes.",
-            ),
-            language: "markdown",
-            filename: ".github/instructions/fastapi.instructions.md",
-            explanation:
-              "Backend-specific rules that only activate for matching Python files.",
+              "Path-scoped instructions keep UI-specific guidance out of backend tasks.",
           },
         ],
       },
-      stepGuides: [
-        {
-          title: "Create Your First Instruction Files",
-          steps: [
-            {
-              title: "Create the .github directory",
-              description:
-                "Add .github and .github/instructions at the repository root.",
-            },
-            {
-              title: "Add copilot-instructions.md",
-              description:
-                "Start with 5 to 10 repository-wide rules covering naming, language choices, testing expectations, and safety constraints.",
-            },
-            {
-              title: "Add a path-scoped instruction file",
-              description:
-                "Create a framework-specific .instructions.md file with name, description, and applyTo frontmatter.",
-            },
-            {
-              title: "Test the layering",
-              description:
-                "Open a matching file and verify both repository-wide and path-specific rules apply together.",
-            },
-          ],
-        },
-      ],
       qa: [
         {
-          question:
-            "What is the difference between repository-wide and path-scoped instructions?",
+          question: "Why is one huge instruction file a problem?",
           answer:
-            "Repository-wide rules apply everywhere. Path-scoped instruction files only load when the open file or current task matches their scope and description.",
+            "It loads irrelevant guidance for unrelated tasks, wastes context budget, and becomes difficult to maintain as frameworks and domains evolve.",
         },
         {
-          question: "Why does the description field matter?",
+          question: "What does the description field really do?",
           answer:
-            "Descriptions let VS Code load instructions semantically even when applyTo does not match the open file. They should describe when the rules are useful.",
+            "It is not just documentation. It is a semantic routing hint that helps the runtime decide when a file is relevant even outside strict path matching.",
         },
         {
-          question: "Should I repeat linter rules in instructions?",
+          question: "Where do agent-specific rules belong?",
           answer:
-            "No. Keep instructions focused on architecture, conventions, workflows, and reasoning that static tooling cannot already enforce.",
-        },
-        {
-          question:
-            "How should I organize instructions in a multi-framework repo?",
-          answer:
-            "Keep a small repository-wide base file, then add focused path-specific instruction files for each framework or domain area.",
-        },
-      ],
-      tags: ["instructions", "glob-patterns", "yaml", "copilot-instructions"],
-    },
-    {
-      slug: "prompt-files",
-      title: "Prompt Files",
-      type: "video-code",
-      duration: "7 mins",
-      videoId: "placeholder-prompt-files",
-      description:
-        "Create reusable .prompt.md files with dynamic variables that become slash commands in Copilot Chat.",
-      objectives: [
-        "Create reusable prompt files with proper YAML frontmatter and variables",
-        "Use input variables, selection variables, and file references to make prompts dynamic",
-        "Explain how prompt files relate to custom agents and instructions",
-        "Apply tool list priority rules when prompts reference agents",
-      ],
-      infoBoxes: [
-        {
-          title: "Three Variable Types in Prompt Files",
-          content:
-            "Prompt files can ask for user input, capture the current selection, and reference other files through markdown links. Combining those three patterns makes prompts reusable across many tasks.",
-        },
-      ],
-      diagrams: [
-        {
-          chart:
-            'graph TD\n    A["Prompt File\\n.prompt.md"] --> |"agent: property"| B["Custom Agent\\n.agent.md"]\n    A --> |"Markdown link"| C["Instruction File\\n.instructions.md"]\n    B --> |"tools property"| D["Tool Access"]\n    A --> |"Direct tools"| D\n    style A fill:#4a9eff,color:#fff',
-          caption:
-            "Prompts bridge agents, instructions, and tool access into a single task workflow.",
-          alt: "A prompt file references agents, instruction files, and tools.",
-        },
-      ],
-      codePreview: {
-        title: "Prompt File Examples",
-        description: "Reusable slash commands for scaffolding and test fixing.",
-        segments: [
-          {
-            code: lines(
-              "---",
-              'name: "scaffold-component"',
-              'description: "Scaffold a new React component with tests and stories"',
-              'agent: "agent"',
-              "tools:",
-              "  - create_file",
-              "  - replace_string_in_file",
-              "---",
-              "",
-              "Create a new React component called `${input:componentName}` in `src/components/`.",
-              "",
-              "Follow the rules in [React Standards](../instructions/react.instructions.md).",
-              "",
-              "Generate:",
-              "1. `${input:componentName}.tsx`",
-              "2. `${input:componentName}.test.tsx`",
-              "3. `${input:componentName}.stories.tsx`",
-            ),
-            language: "markdown",
-            filename: ".github/prompts/scaffold-component.prompt.md",
-            explanation:
-              "A scaffolding prompt that asks for a component name and injects existing instruction files.",
-          },
-          {
-            code: lines(
-              "---",
-              'name: "fix-tests"',
-              'description: "Run failing tests and fix them"',
-              'agent: "agent"',
-              "tools:",
-              "  - run_in_terminal",
-              "  - read_file",
-              "  - replace_string_in_file",
-              "---",
-              "",
-              "Run the test suite:",
-              "```",
-              "npm test -- --reporter=verbose 2>&1 | head -100",
-              "```",
-              "",
-              "For each failing test:",
-              "1. Read the test and implementation files",
-              "2. Decide whether the test or implementation is wrong",
-              "3. Fix the correct file",
-              "4. Re-run the failing test",
-            ),
-            language: "markdown",
-            filename: ".github/prompts/fix-tests.prompt.md",
-            explanation:
-              "A test-fixing prompt with tightly scoped tool access.",
-          },
-        ],
-      },
-      stepGuides: [
-        {
-          title: "Create Your First Prompt Files",
-          steps: [
-            {
-              title: "Create the prompts directory",
-              description: "Add .github/prompts to your repository.",
-            },
-            {
-              title: "Add a scaffolding prompt",
-              description:
-                "Author a .prompt.md file with name, description, optional agent, and tools in frontmatter.",
-            },
-            {
-              title: "Reference your instructions",
-              description:
-                "Use markdown links to inject relevant instruction files and docs into the prompt context.",
-            },
-            {
-              title: "Invoke the slash command",
-              description:
-                "Run the prompt from Copilot Chat using slash command syntax and verify that inputs and file references work as expected.",
-            },
-          ],
-        },
-      ],
-      qa: [
-        {
-          question: "How do I invoke a prompt file?",
-          answer:
-            "Type a slash followed by the prompt name in Copilot Chat. VS Code will show matching prompt commands in the picker.",
-        },
-        {
-          question:
-            "What is the difference between a prompt and an instruction?",
-          answer:
-            "Instructions are background rules that load automatically. Prompts are explicit, user-invoked tasks.",
-        },
-        {
-          question: "Can prompt files reference instructions?",
-          answer:
-            "Yes. Markdown links let a prompt bring in instructions, docs, or other reusable text files as supporting context.",
-        },
-        {
-          question: "Which tool list wins when a prompt uses an agent?",
-          answer:
-            "The prompt's tool list is the narrowest scope and takes priority over the agent's broader tool access.",
+            "Inside the relevant .agent.md file, because those rules belong to a role on the horizontal axis rather than to a file path on the vertical axis.",
         },
       ],
       tags: [
-        "prompt-files",
-        "slash-commands",
-        "variables",
-        "reusable-workflows",
+        "instructions",
+        "applyTo",
+        "layering",
+        "three-axis-model",
+        "glob-patterns",
+        "context-pyramid",
       ],
     },
     {
-      slug: "custom-agents",
-      title: "Custom Agents",
-      type: "video-code",
+      slug: "planning-workflows",
+      title: "Planning Workflows with Prompts and Plan Agents",
+      type: "video",
       duration: "10 mins",
-      videoId: "placeholder-custom-agents",
+      videoId: "placeholder-planning-workflows",
       description:
-        "Build .agent.md personas with tool restrictions, model selection, and handoff workflows for specialized AI roles.",
+        "Separate planning from implementation using prompt files for repeatable workflows and read-only planning agents that decompose tasks, surface ambiguity, and produce actionable implementation plans.",
       objectives: [
-        "Define custom agents with YAML frontmatter specifying tools, model, and visibility",
-        "Design agent handoff workflows for multi-step processes",
-        "Control subagent access with the agents property",
-        "Explain when to use agents versus prompt files versus instructions",
+        "Explain why AI-assisted planning should be separated from implementation work",
+        "Use prompt files to standardize recurring planning activities",
+        "Describe how read-only planning agents improve decomposition and clarification",
+        "Design a planning workflow that turns vague requests into actionable implementation tasks",
       ],
+      codeUrl:
+        "https://github.com/nilayparikh/tuts-agentic-ai-examples/tree/main/ctx-sdlc/lessons/04-planning-workflows",
       infoBoxes: [
         {
-          title: "Agents vs Prompts vs Instructions",
+          title: "Plan Before You Code",
           content:
-            "Instructions define how work should be done, prompts define what one task should do, and agents define who is doing the work across an entire session.",
+            "Many teams jump straight from a feature request to code generation. That feels fast, but it usually produces weak results because the AI is asked to interpret requirements, choose architecture, and write code all at once.",
         },
       ],
       noteBoxes: [
         {
-          title: "AGENTS.md vs copilot-instructions.md",
+          title: "Planning Agents Should Be Read-Only",
           content:
-            "Use AGENTS.md for portable, cross-tool base context. Use copilot-instructions.md and path-scoped instruction files for Copilot-specific layering and applyTo behavior.",
+            "Planning agents should inspect the repository, read documentation, and produce a plan — not create or modify files. That separation keeps discovery distinct from implementation and prevents premature changes.",
         },
       ],
       diagrams: [
         {
           chart:
-            'sequenceDiagram\n    participant U as User\n    participant P as Planning Agent\n    participant I as Implementation Agent\n    participant R as Review Agent\n    U->>P: "Plan the auth module"\n    P-->>U: Architecture plan\n    U->>I: "Implement the plan"\n    I-->>U: Code changes\n    U->>R: "Review the implementation"\n    R-->>U: Security and style feedback',
+            'graph LR\n    A["Curate Context\\n.github/ + /docs/"] --> B["Plan\\nPrompts + Read-Only Agents"]\n    B --> C["Build\\nImplementation Agents"]\n    C --> D["Validate\\nReview + Guardrails"]\n    D --> |"Feedback"| A',
           caption:
-            "A common handoff pattern moves from planning to implementation to review.",
-          alt: "User switches between planning, implementation, and review agents for a multi-step workflow.",
+            "Context engineering follows a curate → plan → build → validate cycle.",
+          alt: "Four-phase workflow from curated context to planning, building, and validation.",
+        },
+        {
+          chart:
+            'graph TD\n    A["Vague Request"] --> B["Planning Agent"]\n    B --> C{"Requirements complete?"}\n    C --> |"No"| D["Surface open questions"]\n    D --> E["Developer clarifies"]\n    E --> B\n    C --> |"Yes"| F["Structured plan"]',
+          caption:
+            "Good planning workflows force ambiguous requests to become explicit before coding starts.",
+          alt: "Clarification loop for planning ambiguous feature requests.",
         },
       ],
+      poll: {
+        question:
+          "How do you typically approach a new feature with AI assistance?",
+        options: [
+          {
+            id: "direct",
+            text: "Jump straight to code from the feature request",
+          },
+          {
+            id: "manual",
+            text: "Write a plan manually, then ask AI to implement it",
+          },
+          {
+            id: "prompt",
+            text: "Use a prompt or template to generate a plan first",
+          },
+          {
+            id: "agent",
+            text: "Use a dedicated read-only planning agent",
+          },
+        ],
+        simulatedVotes: {
+          direct: 41,
+          manual: 26,
+          prompt: 20,
+          agent: 13,
+        },
+      },
       codePreview: {
-        title: "Custom Agent Files",
+        title: "Planning Prompt and Agent",
         description:
-          "Three agent roles with progressively broader capabilities.",
+          "A feature-planning slash command and a read-only planner agent for the loan-workbench project.",
         segments: [
           {
             code: lines(
               "---",
-              'name: "planning"',
-              'description: "Read-only planning and research agent"',
-              'iconDescription: "A magnifying glass over a blueprint"',
+              'name: "plan-feature"',
+              'description: "Break down a loan-workbench feature into implementation tasks"',
+              'agent: "planner"',
               "tools:",
-              "  - semantic_search",
               "  - read_file",
               "  - grep_search",
-              "  - file_search",
-              "  - fetch_webpage",
-              'model: "claude-sonnet-4"',
+              "  - semantic_search",
               "---",
               "",
-              "# Planning Agent",
+              "Feature request: ${input:feature}",
               "",
-              "- Explore the codebase before proposing changes.",
-              "- Produce a structured plan.",
-              "- Never edit files.",
+              "Produce:",
+              "1. Summary",
+              "2. Open questions",
+              "3. Tasks with acceptance criteria",
+              "4. Validation steps",
             ),
             language: "markdown",
-            filename: ".github/agents/planning.agent.md",
+            filename: ".github/prompts/plan-feature.prompt.md",
             explanation:
-              "A read-only planning agent that can research but cannot write.",
+              "Prompt files turn repeatable planning motions into one slash command.",
           },
           {
             code: lines(
               "---",
-              'name: "implementation"',
-              'description: "Full-access implementation agent for coding tasks"',
-              "agents:",
-              "  - planning",
-              "  - review",
-              "---",
-              "",
-              "# Implementation Agent",
-              "",
-              "- Follow repository rules.",
-              "- Write tests for every public function.",
-              "- Delegate research to @planning when blocked.",
-            ),
-            language: "markdown",
-            filename: ".github/agents/implementation.agent.md",
-            explanation:
-              "A builder agent with full access and permission to invoke narrower subagents.",
-          },
-          {
-            code: lines(
-              "---",
-              'name: "review"',
-              'description: "Security-focused code review agent"',
+              'name: "planner"',
+              'description: "Read-only planning agent for repository analysis and task decomposition"',
               "tools:",
-              "  - semantic_search",
               "  - read_file",
               "  - grep_search",
-              "  - file_search",
-              "  - get_errors",
-              'model: "o4-mini"',
+              "  - semantic_search",
+              "agents: []",
               "---",
               "",
-              "# Review Agent",
-              "",
-              "- Check OWASP risks.",
-              "- Verify input validation.",
-              "- Look for secrets, auth issues, and error leaks.",
+              "- Never create or edit files.",
+              "- Surface open questions before proposing tasks.",
+              "- Reference ADRs and architecture docs in every plan.",
             ),
             language: "markdown",
-            filename: ".github/agents/review.agent.md",
+            filename: ".github/agents/planner.agent.md",
             explanation:
-              "A review agent with read-only access plus diagnostics.",
+              "The planner agent is intentionally limited to read-only work and structured output.",
           },
         ],
       },
-      stepGuides: [
-        {
-          title: "Create Your First Custom Agents",
-          steps: [
-            {
-              title: "Create the agents directory",
-              description: "Add .github/agents to the repository.",
-            },
-            {
-              title: "Add a planning agent",
-              description:
-                "Start with a read-only research agent that can search, read, and summarize.",
-            },
-            {
-              title: "Add an implementation agent",
-              description:
-                "Create a build agent with write access and an agents list that explicitly allows subagent delegation.",
-            },
-            {
-              title: "Test agent switching",
-              description:
-                "Verify the planning agent cannot edit and the implementation agent can.",
-            },
-          ],
-        },
-      ],
       qa: [
         {
-          question: "What is the difference between an agent and a prompt?",
+          question: "Why not let the implementer do the planning too?",
           answer:
-            "An agent is a persistent role for the duration of a session. A prompt is a one-shot command that runs a specific task.",
+            "Because planning and implementation require different behaviors. A planner should explore, question, and decompose. An implementer should execute against an agreed plan.",
         },
         {
-          question: "How do I restrict tool access for an agent?",
+          question: "What is the value of clarification loops?",
           answer:
-            "Add a tools list in the YAML frontmatter. If tools are omitted entirely, the agent gets full access.",
+            "They force vague requests to become explicit before code changes begin, which reduces rework and avoids hidden assumptions in the implementation phase.",
         },
         {
-          question: "What does the agents property do?",
+          question: "What should every good planning output include?",
           answer:
-            "It defines which other custom agents this agent may invoke as subagents during a task.",
-        },
-        {
-          question: "Where does AGENTS.md fit?",
-          answer:
-            "AGENTS.md holds portable, cross-tool context. It complements Copilot-specific instruction files instead of replacing them.",
+            "A summary, open questions, concrete tasks, dependencies, risks, and validation steps. Planning is only useful if it becomes actionable.",
         },
       ],
-      tags: ["agents", "personas", "tool-restrictions", "handoff", "AGENTS.md"],
+      tags: [
+        "prompt-files",
+        "planning-agent",
+        "slash-commands",
+        "variables",
+        "clarification-loops",
+        "read-only",
+      ],
     },
     {
-      slug: "agent-skills",
-      title: "Agent Skills",
-      type: "video-code",
-      duration: "8 mins",
-      videoId: "placeholder-agent-skills",
+      slug: "implementation-workflows",
+      title: "Implementation Workflows with Agents and Skills",
+      type: "video",
+      duration: "11 mins",
+      videoId: "placeholder-implementation-workflows",
       description:
-        "Package domain knowledge into portable SKILL.md capability folders that work across AI tools through the Agent Skills standard.",
+        "Design implementation workflows using custom agents for role separation, skills for reusable patterns, and TDD handoffs for disciplined execution — all governed by least-privilege tool boundaries.",
       objectives: [
-        "Create SKILL.md files with proper frontmatter for name, description, and invocation control",
-        "Explain the three-level progressive disclosure model: discovery, instructions, resources",
-        "Control skill visibility using user-invocable and disable-model-invocation flags",
-        "Distinguish agent skills from custom instructions and explain when to use each",
+        "Explain how custom agents and skills support role-specialized implementation work",
+        "Apply least-privilege principles to implementation and review workflows",
+        "Describe how TDD handoffs improve reliability in AI-assisted coding",
+        "Design an implementation workflow that separates planning, coding, and review concerns",
       ],
       infoBoxes: [
         {
-          title: "One Standard, Many Tools",
+          title: "Role Separation Beats Monolithic Agents",
           content:
-            "Agent Skills are the most portable customization format in this course. A well-designed skill can work in Copilot and any other tool that adopts the same standard.",
+            "Implementation is not one undifferentiated act. Planning, coding, testing, and review need different tools, different context windows, and different behavioral constraints. Splitting these roles improves output at every stage.",
+        },
+      ],
+      noteBoxes: [
+        {
+          title: "Least-Privilege Boundaries",
+          content:
+            "A review agent should never have write access. An implementation agent should not carry deployment tools by default. Restricting capabilities reduces accidental behavior and limits blast radius.",
         },
       ],
       diagrams: [
         {
           chart:
-            'graph TD\n    A["Level 1: Discovery\\nName + description"] --> B["Level 2: Instructions\\nSKILL.md body"]\n    B --> C["Level 3: Resources\\nTemplates, examples, docs"]\n    style A fill:#e8f4ff,color:#333\n    style B fill:#b3d9ff,color:#333\n    style C fill:#4a9eff,color:#fff',
+            'graph TB\n    P["Planner Agent\\nread-only"] --> I["Implementer Agent\\nwrite scoped"]\n    I --> R["Reviewer Agent\\nread-only + diagnostics"]\n    R --> |"feedback"| I\n    R --> |"approved"| D["Done"]',
           caption:
-            "Skills use progressive disclosure so only the needed context loads at each stage.",
-          alt: "A three-level model shows discovery, instructions, and resources loading progressively.",
+            "Three-agent implementation trio: planner decomposes, implementer codes, reviewer validates.",
+          alt: "Planner agent passes a structured plan to implementer, which passes changes to reviewer with a feedback loop.",
+        },
+        {
+          chart:
+            "sequenceDiagram\n    participant Dev as Developer\n    participant T as Test Agent\n    participant I as Implement Agent\n    participant R as Review Agent\n    Dev->>T: Describe expected behavior\n    T->>I: Handoff: make test pass\n    I->>R: Handoff: validate changes\n    R-->>I: Fix issues if needed\n    R->>Dev: All green",
+          caption:
+            "TDD handoff keeps test creation, implementation, and review separated.",
+          alt: "Test agent, implementer, and reviewer form a TDD handoff sequence.",
         },
       ],
+      poll: {
+        question:
+          "How many distinct agents or roles do you currently use in your coding workflow?",
+        options: [
+          { id: "one", text: "Just one — default chat or inline agent" },
+          { id: "two", text: "Two — a planner and an implementer" },
+          {
+            id: "three",
+            text: "Three or more — planner, implementer, reviewer, and more",
+          },
+          { id: "none", text: "I do not use AI agents for implementation" },
+        ],
+        simulatedVotes: {
+          one: 48,
+          two: 22,
+          three: 12,
+          none: 18,
+        },
+      },
       codePreview: {
-        title: "Skill Package Structure",
+        title: "Role-Separated Agent Definitions",
         description:
-          "A folder-based skill with frontmatter, templates, and references.",
+          "Three complementary agents plus a small TDD skill package.",
         segments: [
           {
             code: lines(
-              ".github/skills/",
-              "  test-driven-development/",
-              "    SKILL.md",
-              "    templates/",
-              "      test-template.ts",
-              "    examples/",
-              "      calculator.test.ts",
-              "    docs/",
-              "      testing-strategy.md",
+              "---",
+              'name: "implementer"',
+              'description: "Write code for approved loan-workbench tasks"',
+              "tools:",
+              "  - read_file",
+              "  - create_file",
+              "  - replace_string_in_file",
+              "  - run_in_terminal",
+              "agents:",
+              "  - reviewer",
+              "---",
+              "",
+              "- Follow the plan exactly.",
+              "- Prefer existing utilities before writing new ones.",
+              "- Hand off to reviewer after implementation.",
             ),
-            language: "text",
-            filename: "skill-folder-structure",
+            language: "markdown",
+            filename: ".github/agents/implementer.agent.md",
             explanation:
-              "Each skill is a folder with SKILL.md as the entry point and supporting resources loaded on demand.",
+              "The implementer gets write access, but only the tools needed for implementation and local validation.",
           },
           {
             code: lines(
               "---",
               'name: "test-driven-development"',
-              'description: "TDD workflow: write failing test first, implement to pass, refactor. Use when implementing any feature or bugfix, before writing implementation code."',
-              "user-invocable: true",
-              "disable-model-invocation: false",
+              'description: "Use when implementing any feature or bugfix before writing implementation code"',
               "---",
               "",
-              "# Test-Driven Development Skill",
-              "",
-              "1. Write a failing test",
-              "2. Run the test and confirm it fails",
-              "3. Write the minimum code to pass",
-              "4. Re-run the test",
-              "5. Refactor",
+              "1. Write a failing test.",
+              "2. Run the test and confirm the failure.",
+              "3. Write the minimum code to pass.",
+              "4. Re-run tests.",
+              "5. Refactor if needed.",
             ),
             language: "markdown",
             filename: ".github/skills/test-driven-development/SKILL.md",
             explanation:
-              "Frontmatter controls invocation while the body defines the workflow and links to resource files.",
+              "Skills package reusable workflows and supporting resources without forcing them into every session.",
           },
         ],
       },
-      stepGuides: [
-        {
-          title: "Create Your First Agent Skill",
-          steps: [
-            {
-              title: "Create the skills directory",
-              description: "Add .github/skills to the repository.",
-            },
-            {
-              title: "Create a skill folder",
-              description:
-                "Use one folder per skill with a SKILL.md entry point and any supporting resources nested below it.",
-            },
-            {
-              title: "Add supporting resources",
-              description:
-                "Link templates, examples, and docs from SKILL.md so they load only when needed.",
-            },
-            {
-              title: "Test the skill",
-              description:
-                "Mention the workflow in chat and confirm that the skill activates semantically.",
-            },
-          ],
-        },
-      ],
       qa: [
         {
-          question: "How are skills different from instructions?",
+          question: "Why are skills useful if I already have agents?",
           answer:
-            "Instructions hold always-on rules. Skills hold task-specific workflows and supporting resources that load on demand.",
+            "Agents define roles. Skills define reusable capabilities or workflows that those roles can invoke when needed. They solve different problems.",
         },
         {
-          question: "What does progressive disclosure mean for skills?",
+          question:
+            "What is the practical benefit of a reviewer agent with no write tools?",
           answer:
-            "The model sees the skill metadata first, then the SKILL.md body, then any linked resources only if it actually needs them.",
+            "It must report findings instead of silently changing code, which makes review explicit, auditable, and easier for the developer to reason about.",
         },
         {
-          question: "Do skills work outside VS Code?",
+          question: "What does TDD handoff improve?",
           answer:
-            "Yes, that is the point of using a standard package format. Skills are designed for portability across compatible tools.",
-        },
-        {
-          question: "What do the invocation flags do?",
-          answer:
-            "They control whether users can invoke the skill directly and whether the model may activate it automatically.",
+            "It preserves discipline. A test-focused role writes the failing test first, and the implementer focuses on the smallest change that satisfies it.",
         },
       ],
       tags: [
-        "skills",
-        "SKILL.md",
-        "agentskills.io",
-        "progressive-disclosure",
-        "portability",
+        "custom-agents",
+        "agent-skills",
+        "tdd-handoffs",
+        "role-separation",
+        "least-privilege",
+        "implementation",
       ],
     },
     {
-      slug: "mcp-servers",
-      title: "MCP Servers",
-      type: "video-code",
-      duration: "8 mins",
-      videoId: "placeholder-mcp-servers",
+      slug: "tools-and-guardrails",
+      title: "MCP, Hooks, and Guardrails",
+      type: "video",
+      duration: "10 mins",
+      videoId: "placeholder-tools-and-guardrails",
       description:
-        "Configure MCP servers in .vscode/mcp.json to extend Copilot with external tools, resources, prompts, and interactive apps.",
+        "Extend agent capabilities with MCP servers for external tool access, then enforce safety with hooks and validation scripts that run at key lifecycle points — keeping your AI workflows powerful and trustworthy.",
       objectives: [
-        "Configure MCP servers in .vscode/mcp.json for workspace and user-level use",
-        "Explain MCP capabilities beyond tools: resources, prompts, and MCP apps",
-        "Apply security best practices: trust model, sandboxing, and input variable use",
-        "Reference MCP tools from custom agents and prompt files",
+        "Distinguish between capability extensions and enforcement mechanisms in AI-assisted workflows",
+        "Explain when to use MCP servers versus hooks for a given requirement",
+        "Describe how validation and guardrails reduce operational risk in AI-assisted work",
+        "Design a tooling layer that expands capability without sacrificing safety",
       ],
       infoBoxes: [
         {
-          title: "MCP Security: Trust but Verify",
+          title: "Capability Without Guardrails Is Not Enough",
           content:
-            "MCP servers can do real work in your environment. Review server code before approving it, and never commit secrets directly into mcp.json.",
+            "MCP servers let your agents browse the web, query databases, call APIs, and interact with external services. That is powerful — but every new capability needs a corresponding guardrail.",
         },
       ],
       noteBoxes: [
         {
-          title: "Secrets in mcp.json",
+          title: "Hook Safety: Never Call the Model from a Hook",
           content:
-            "Use input variables for tokens and API keys so VS Code prompts at runtime and stores the values securely outside version control.",
+            "Hooks must stay fast and deterministic. Do not call AI models from hooks. Use them for validation, formatting, and hard checks only.",
         },
       ],
       diagrams: [
         {
           chart:
-            'graph LR\n    MCP["MCP Server"] --> T["Tools\\nCallable functions"]\n    MCP --> R["Resources\\nRead-only data"]\n    MCP --> P["Prompts\\nTemplated commands"]\n    MCP --> A["MCP Apps\\nInteractive UI"]\n    style T fill:#4a9eff,color:#fff\n    style R fill:#5bb974,color:#fff\n    style P fill:#f5a623,color:#fff\n    style A fill:#9b59b6,color:#fff',
+            'graph TB\n    subgraph Capability["Expand: MCP Servers"]\n        A["GitHub MCP"]\n        B["Playwright MCP"]\n        C["Postgres MCP"]\n    end\n    subgraph Guardrails["Enforce: Hooks + Validation"]\n        D["onSave Hook"]\n        E["onEdit Guard"]\n        F["onTerminal Guard"]\n    end\n    Capability --> Guardrails\n    Guardrails --> S["Safe, Capable Workflow"]',
           caption:
-            "MCP servers can expose tools, resources, prompts, and interactive apps.",
-          alt: "One MCP server fans out to four capability categories.",
+            "MCP expands what agents can do. Hooks and validation enforce what they must not do.",
+          alt: "Capability layer from MCP servers feeds a guardrail layer of hooks and validation.",
+        },
+        {
+          chart:
+            "sequenceDiagram\n    participant Agent\n    participant VSCode as VS Code\n    participant Hook\n    Agent->>VSCode: Edit file\n    VSCode->>Hook: onEdit\n    Hook-->>VSCode: Allow or block\n    Agent->>VSCode: Save file\n    VSCode->>Hook: onSave\n    Hook-->>VSCode: Format and lint\n    Agent->>VSCode: Terminal command\n    VSCode->>Hook: onTerminal\n    Hook-->>VSCode: Allow or require approval",
+          caption:
+            "Hooks fire at key lifecycle points to validate, transform, or block actions.",
+          alt: "Edit, save, and terminal lifecycle hooks intercept actions before or after they occur.",
         },
       ],
+      poll: {
+        question:
+          "Which external tool integration would be most valuable for your workflow?",
+        options: [
+          { id: "browser", text: "Browser automation" },
+          { id: "database", text: "Database access" },
+          { id: "api", text: "API integration" },
+          { id: "none", text: "I have not added MCP servers yet" },
+        ],
+        simulatedVotes: {
+          browser: 24,
+          database: 18,
+          api: 36,
+          none: 22,
+        },
+      },
       codePreview: {
-        title: "MCP Configuration Examples",
+        title: "Capability and Guardrail Files",
         description:
-          "A repository-level mcp.json file and an agent that consumes MCP tools.",
+          "A small MCP config plus a blocking hook for protected paths.",
         segments: [
           {
             code: lines(
               "{",
               '  "servers": {',
-              '    "playwright": {',
-              '      "type": "stdio",',
-              '      "command": "npx",',
-              '      "args": ["-y", "@playwright/mcp@latest"],',
-              '      "description": "Browser automation for testing and web scraping"',
-              "    },",
               '    "github": {',
-              '      "type": "stdio",',
               '      "command": "npx",',
               '      "args": ["-y", "@modelcontextprotocol/server-github"],',
-              '      "env": { "GITHUB_TOKEN": "${input:githubToken}" },',
-              '      "description": "GitHub API access"',
+              '      "env": { "GITHUB_TOKEN": "${input:githubToken}" }',
               "    }",
               "  }",
               "}",
@@ -843,967 +782,310 @@ export const CTX_SDLC_COURSE: CourseDefinition = {
             language: "json",
             filename: ".vscode/mcp.json",
             explanation:
-              "Workspace-level MCP server configuration using secure runtime input variables for secrets.",
-          },
-          {
-            code: lines(
-              "---",
-              'name: "web-tester"',
-              'description: "Test web applications using Playwright browser automation"',
-              "tools:",
-              "  - mcp_playwright_browser_navigate",
-              "  - mcp_playwright_browser_snapshot",
-              "  - mcp_playwright_browser_click",
-              "  - read_file",
-              "  - replace_string_in_file",
-              "---",
-              "",
-              "# Web Testing Agent",
-              "",
-              "Follow the test plan in [testing docs](../../docs/testing-strategy.md).",
-            ),
-            language: "markdown",
-            filename: ".github/agents/web-tester.agent.md",
-            explanation:
-              "An agent that combines MCP browser tools with a small set of native file tools.",
-          },
-        ],
-      },
-      stepGuides: [
-        {
-          title: "Connect Your First MCP Server",
-          steps: [
-            {
-              title: "Create .vscode/mcp.json",
-              description: "Add a servers object at the workspace level.",
-            },
-            {
-              title: "Add a Playwright server",
-              description:
-                "Register a stdio-based server launched through npx so the tool starts on demand.",
-            },
-            {
-              title: "Approve the server",
-              description:
-                "Trigger a tool call once so VS Code can ask for user approval and establish trust.",
-            },
-            {
-              title: "Reference the tools from an agent",
-              description:
-                "Grant explicit MCP tool names in the agent's tools list instead of broad access.",
-            },
-          ],
-        },
-      ],
-      qa: [
-        {
-          question: "Where does MCP configuration live?",
-          answer:
-            "Repository-level MCP configuration goes in .vscode/mcp.json so the team can share a consistent setup.",
-        },
-        {
-          question: "What can MCP servers expose besides tools?",
-          answer:
-            "They can also expose read-only resources, prompts, and interactive MCP apps.",
-        },
-        {
-          question: "How should I handle secrets?",
-          answer:
-            "Use input variables or secure environment references. Do not hardcode credentials inside the committed configuration file.",
-        },
-        {
-          question: "Can an agent be limited to specific MCP tools?",
-          answer:
-            "Yes. Add only the exact MCP tool names that the agent should be allowed to call.",
-        },
-      ],
-      tags: ["mcp", "mcp-servers", "tools", "mcp.json", "security"],
-    },
-    {
-      slug: "hooks",
-      title: "Hooks",
-      type: "video-code",
-      duration: "7 mins",
-      videoId: "placeholder-hooks",
-      description:
-        "Configure lifecycle hooks that execute deterministic code before and after AI actions, creating guardrails the model cannot bypass.",
-      objectives: [
-        "Configure hook JSON files for lifecycle events in .github/hooks",
-        "Write PreToolUse hooks that enforce security policies by blocking tool calls",
-        "Use PostToolUse hooks to automate formatting and validation",
-        "Explain hook input and output schemas, exit codes, and permission decisions",
-      ],
-      infoBoxes: [
-        {
-          title: "Hooks vs Instructions",
-          content:
-            "Instructions are probabilistic guidance. Hooks are deterministic enforcement. Use instructions to steer behavior and hooks to block or modify unsafe actions.",
-        },
-      ],
-      diagrams: [
-        {
-          chart:
-            'graph LR\n    A["SessionStart"] --> B["UserPromptSubmit"]\n    B --> C["PreToolUse"]\n    C --> D["Tool Execution"]\n    D --> E["PostToolUse"]\n    E --> F["PreCompact"]\n    F --> G["SubagentStart/Stop"]\n    G --> H["Stop"]\n    style C fill:#ff6b6b,color:#fff\n    style E fill:#5bb974,color:#fff',
-          caption:
-            "Lifecycle hooks let you enforce behavior before a tool call and automate cleanup after it.",
-          alt: "A session lifecycle highlights PreToolUse and PostToolUse as the main enforcement points.",
-        },
-      ],
-      codePreview: {
-        title: "Lifecycle Hook Files",
-        description:
-          "A hook config plus a Python guard script that blocks edits to protected paths.",
-        segments: [
-          {
-            code: lines(
-              "{",
-              '  "hooks": {',
-              '    "pre-tool-use": [',
-              "      {",
-              '        "event": "PreToolUse",',
-              '        "command": "python .github/hooks/block-protected-files.py",',
-              '        "description": "Block edits to protected source files"',
-              "      }",
-              "    ],",
-              '    "post-tool-use": [',
-              "      {",
-              '        "event": "PostToolUse",',
-              '        "command": "npx prettier --write ${filePath}",',
-              '        "description": "Auto-format files after AI edits"',
-              "      }",
-              "    ]",
-              "  }",
-              "}",
-            ),
-            language: "json",
-            filename: ".github/hooks/lifecycle.json",
-            explanation:
-              "Hook metadata that runs code before and after file-editing operations.",
+              "MCP configuration should use input variables or environment references, never hardcoded secrets.",
           },
           {
             code: lines(
               "#!/usr/bin/env python3",
-              '"""PreToolUse hook: block edits to protected source files."""',
+              '"""Block edits to protected workflow and secrets files."""',
               "import json",
               "import sys",
               "",
-              "PROTECTED_PATHS = [",
-              '    "src/core/",',
-              '    "src/auth/",',
-              '    ".env",',
-              '    "package-lock.json",',
-              "]",
-              "",
-              "def main() -> None:",
-              "    hook_input = json.loads(sys.stdin.read())",
-              '    tool_name = hook_input.get("toolName", "")',
-              '    file_path = hook_input.get("parameters", {}).get("filePath", "")',
-              "",
-              '    if tool_name not in ("create_file", "replace_string_in_file"):',
-              "        sys.exit(0)",
-              "",
-              "    for protected in PROTECTED_PATHS:",
-              "        if file_path.startswith(protected):",
-              '            print(json.dumps({"decision": "deny", "message": f"Blocked: {file_path} is protected"}))',
-              "            sys.exit(1)",
-              "",
-              "    sys.exit(0)",
-              "",
-              'if __name__ == "__main__":',
-              "    main()",
+              "PROTECTED = ('.github/workflows/', '.env', 'infra/')",
+              "payload = json.loads(sys.stdin.read())",
+              "path = payload.get('parameters', {}).get('filePath', '')",
+              "if any(path.startswith(prefix) for prefix in PROTECTED):",
+              "    print(json.dumps({'decision': 'deny'}))",
+              "    sys.exit(1)",
+              "sys.exit(0)",
             ),
             language: "python",
             filename: ".github/hooks/block-protected-files.py",
             explanation:
-              "A deterministic guard that denies edits to protected paths before the tool executes.",
+              "When failure would be expensive, use a deterministic hook rather than a polite natural-language instruction.",
           },
         ],
       },
-      stepGuides: [
-        {
-          title: "Create Your First Lifecycle Hooks",
-          steps: [
-            {
-              title: "Create the hooks directory",
-              description: "Add .github/hooks to the repository.",
-            },
-            {
-              title: "Add a hook configuration",
-              description:
-                "Define which event triggers each command and give the hook a short description.",
-            },
-            {
-              title: "Write a PreToolUse guard",
-              description:
-                "Read the incoming tool call JSON from stdin, decide whether to allow it, and return the correct exit code.",
-            },
-            {
-              title: "Test the hook",
-              description:
-                "Try editing a protected file and confirm that the runtime blocks the action.",
-            },
-          ],
-        },
-      ],
       qa: [
         {
+          question: "When should I use MCP instead of a hook?",
+          answer:
+            "Use MCP when the assistant needs a new capability such as browser automation, API access, or database inspection. Use hooks when you need deterministic enforcement or automation around actions the assistant already performs.",
+        },
+        {
           question:
-            "What is the key safety difference between hooks and instructions?",
+            "Why are hooks better for protected paths than instructions?",
           answer:
-            "Instructions ask the model to behave a certain way. Hooks run code that can allow, deny, or modify tool calls regardless of model intent.",
+            "Because hooks can block the action outright. Instructions are guidance. Hooks are enforcement.",
         },
         {
-          question: "What do the exit codes mean?",
+          question: "What is the practical rollout strategy here?",
           answer:
-            "Use exit code 0 to allow, 1 to deny, and 2 when the hook rewrites tool call parameters before execution.",
-        },
-        {
-          question: "Which events are most useful first?",
-          answer:
-            "PreToolUse for safety checks and PostToolUse for formatting, linting, or validation are the highest-leverage starting points.",
-        },
-        {
-          question: "Can hooks inspect MCP tools too?",
-          answer:
-            "Yes. Hook events trigger around tool usage generally, so they can guard MCP-backed operations as well.",
+            "Add external capabilities incrementally, and add guardrails where failure would be costly. Do not collect tools without a workflow.",
         },
       ],
-      tags: ["hooks", "lifecycle", "PreToolUse", "PostToolUse", "guardrails"],
+      tags: [
+        "mcp-servers",
+        "hooks",
+        "guardrails",
+        "lifecycle-automation",
+        "validation",
+        "safety",
+      ],
     },
     {
-      slug: "subagents-orchestration",
-      title: "Subagents and Orchestration",
-      type: "video",
+      slug: "surface-strategy",
+      title: "Surface Strategy and Portability",
+      type: "reading",
       duration: "8 mins",
-      videoId: "placeholder-subagents-orchestration",
       description:
-        "Understand how subagents work in isolated context windows and design coordinator-worker orchestration patterns for complex tasks.",
+        "Not every Copilot surface supports the same context artifacts. Learn to invest in portable foundations first, then layer surface-specific capabilities where they deliver clear value.",
       objectives: [
-        "Explain how subagent execution works: isolated context, synchronous return, and parallel spawning",
-        "Design coordinator-worker orchestration patterns for complex tasks",
-        "Control subagent access using the agents property and visibility settings",
-        "Apply multi-perspective review and TDD patterns with custom agents",
+        "Compare how context artifacts behave across VS Code, Copilot CLI, coding agent, and review surfaces",
+        "Explain why portability matters when choosing where to invest in customization work",
+        "Use surface strategy to decide which artifacts should be foundational and which should be optional layers",
+        "Treat surface support as a design constraint rather than an afterthought",
       ],
+      readingUrl:
+        "https://code.visualstudio.com/docs/copilot/customization/overview",
       infoBoxes: [
         {
-          title: "Why Context Isolation Matters",
+          title: "Build Portable Foundations First",
           content:
-            "Subagents can research or explore dead ends without polluting the coordinator's main context window. Only their summaries flow back.",
+            "The most common mistake is optimizing for the richest surface and forgetting the rest. Repository instructions and documentation should form the portable foundation that every surface can benefit from.",
+        },
+      ],
+      noteBoxes: [
+        {
+          title: "Surface Support Changes Frequently",
+          content:
+            "Treat support matrices as design guidance, not timeless truth. Always verify the current documentation before making long-lived architecture decisions.",
         },
       ],
       diagrams: [
         {
           chart:
-            'sequenceDiagram\n    participant U as User\n    participant M as Main Agent\n    participant S1 as Subagent A\n    participant S2 as Subagent B\n    U->>M: "Build the auth module"\n    M->>S1: "Research auth patterns"\n    M->>S2: "Analyze API structure"\n    Note over S1,S2: Run in parallel, isolated contexts\n    S1-->>M: Summary of auth patterns\n    S2-->>M: Summary of API structure\n    M->>U: Combined implementation plan',
+            'graph TB\n    subgraph Foundation["Portable Foundation — All Surfaces"]\n        A["Repository Instructions"]\n        B["Documentation"]\n    end\n    subgraph Mid["Broad Support — Most Surfaces"]\n        C["Custom Instructions"]\n        D["MCP Servers"]\n    end\n    subgraph Specialized["Surface-Specific"]\n        E["Agents"]\n        F["Skills"]\n        G["Hooks"]\n        H["Prompts"]\n    end\n    Foundation --> Mid --> Specialized',
           caption:
-            "Subagents execute in parallel and return only summarized results to the coordinator.",
-          alt: "A main agent spawns two parallel subagents that return summaries.",
-        },
-        {
-          chart:
-            'graph TD\n    C["Coordinator Agent"] --> |"Research"| R["Research Subagent\\n(read-only)"]\n    C --> |"Implement"| I["Implementation Subagent\\n(full access)"]\n    C --> |"Test"| T["Testing Subagent\\n(terminal + read)"]\n    C --> |"Review"| V["Review Subagent\\n(read-only)"]\n    R --> |"Summary"| C\n    I --> |"Summary"| C\n    T --> |"Summary"| C\n    V --> |"Summary"| C\n    style C fill:#4a9eff,color:#fff',
-          caption:
-            "Coordinator-worker is the canonical orchestration pattern for complex coding tasks.",
-          alt: "A coordinator delegates research, implementation, testing, and review to specialized subagents.",
+            "Invest in portable foundations first, then layer specialized features on top.",
+          alt: "Portability pyramid from repository instructions and docs up to surface-specific features.",
         },
       ],
       poll: {
-        question: "Have you used multi-agent patterns before?",
+        question: "Which Copilot surface do you use most often?",
         options: [
-          { id: "never", text: "Never, this is my first exposure" },
-          { id: "heard", text: "I've heard of it but never built one" },
-          { id: "vscode", text: "Yes, with VS Code Copilot" },
-          {
-            id: "other-tools",
-            text: "Yes, with other tools such as Claude, CrewAI, or similar",
-          },
+          { id: "vscode", text: "VS Code chat or inline" },
+          { id: "cli", text: "Copilot CLI" },
+          { id: "coding-agent", text: "Coding agent" },
+          { id: "review", text: "Code review" },
         ],
+        simulatedVotes: {
+          vscode: 66,
+          cli: 12,
+          "coding-agent": 12,
+          review: 10,
+        },
       },
       qa: [
         {
-          question: "What does context isolation buy you?",
+          question: "What should I build first if portability matters?",
           answer:
-            "It keeps the main agent's context clean while allowing subagents to do deep research or experimentation in parallel.",
+            "Repository instructions and docs. They are the broadest, most reusable context layer across surfaces.",
         },
         {
-          question: "Can subagents run in parallel?",
+          question: "Should I avoid VS Code-specific features entirely?",
           answer:
-            "Yes. A coordinator can spawn multiple subagents at once and then merge their summaries.",
-        },
-        {
-          question: "What is coordinator-worker?",
-          answer:
-            "It is a pattern where one coordinating agent decomposes the task and delegates phases to specialized subagents with appropriate permissions.",
-        },
-        {
-          question: "How do I control subagent access?",
-          answer:
-            "Use the agents property in an agent's frontmatter to explicitly list which custom agents it may invoke.",
+            "No. They add real value. The principle is to build portable foundations first, then layer deeper IDE-specific workflows where they are justified.",
         },
       ],
-      tags: ["subagents", "orchestration", "multi-agent", "coordinator-worker"],
+      tags: [
+        "surface-strategy",
+        "portability",
+        "copilot-cli",
+        "coding-agent",
+        "code-review",
+        "cross-surface",
+      ],
     },
     {
-      slug: "memory-and-plugins",
-      title: "Memory and Plugins",
-      type: "video",
-      duration: "6 mins",
-      videoId: "placeholder-memory-and-plugins",
+      slug: "operating-model",
+      title: "Operating the Context System",
+      type: "reading",
+      duration: "8 mins",
       description:
-        "Explore Copilot's automated memory system and agent plugins, two features that extend context without manual configuration files.",
+        "Context engineering is not a one-time setup. Learn the operating model for maintaining, measuring, and cleaning up your context artifacts so AI assistance stays aligned as your codebase evolves.",
       objectives: [
-        "Explain how Copilot's agentic memory works: citations, validation, and 28-day TTL",
-        "Describe the relationship between memory and custom instructions",
-        "Configure agent plugins from the marketplace and install them",
-        "Evaluate when to use plugins versus local customization files",
+        "Explain why context engineering requires ongoing maintenance rather than one-time setup",
+        "Describe the role of memory, measurement, and review in keeping AI behavior aligned",
+        "Identify common anti-patterns that degrade context quality over time",
+        "Build an operating model for reviewing, updating, and validating context artifacts",
       ],
+      readingUrl:
+        "https://docs.github.com/en/copilot/how-tos/custom-instructions/adding-repository-custom-instructions-for-github-copilot",
       infoBoxes: [
         {
-          title: "Agentic Memory",
+          title: "Context Is a Living System",
           content:
-            "Memory captures observed repository patterns with citations, validates them against the current codebase before reuse, and expires automatically if they go stale.",
+            "If .github and /docs do not evolve with the codebase, they stop being context and start becoming misinformation. The operating model matters as much as the initial setup.",
         },
       ],
       noteBoxes: [
         {
-          title: "Memory vs Instructions",
+          title: "Memory Complements But Does Not Replace Instructions",
           content:
-            "Instructions are proactive and explicit. Memory is reactive and learned from observed patterns. Use each for what it does best.",
-        },
-        {
-          title: "Tell Agents to Remember",
-          content:
-            "Custom agents can be instructed to store useful project patterns in memory deliberately instead of waiting for passive observation alone.",
+            "Copilot memory is reactive and probabilistic. Critical architectural decisions and mandatory conventions still belong in explicit, version-controlled files.",
         },
       ],
       diagrams: [
         {
           chart:
-            'graph LR\n    A["Copilot observes\\na pattern"] --> B["Stores memory\\nwith citations"]\n    B --> C{"Validate:\\ncited code exists?"}\n    C --> |"Yes"| D["Apply memory\\nreset TTL"]\n    C --> |"No"| E["Discard memory"]\n    D --> F{"Used in 28 days?"}\n    F --> |"Yes"| D\n    F --> |"No"| G["Auto-delete"]',
-          caption: "Memory only survives if it stays valid and gets reused.",
-          alt: "Observed patterns become validated memories or are discarded if citations no longer match.",
+            'graph LR\n    A["Use Context"] --> B["Measure Failures"]\n    B --> C["Review Artifacts"]\n    C --> D["Update or Remove"]\n    D --> E["Validate"]\n    E --> A',
+          caption:
+            "The operating model is a continuous cycle: use, measure, review, update, and validate.",
+          alt: "Context maintenance cycle from use through validation back to use.",
         },
       ],
+      poll: {
+        question:
+          "How often do you review or update your AI context configuration?",
+        options: [
+          { id: "never", text: "Never — I set it up once" },
+          { id: "broken", text: "Only when something breaks" },
+          { id: "monthly", text: "Monthly or with architecture changes" },
+          { id: "quarterly", text: "Quarterly with a formal audit" },
+        ],
+        simulatedVotes: {
+          never: 32,
+          broken: 28,
+          monthly: 24,
+          quarterly: 16,
+        },
+      },
       qa: [
         {
-          question: "What is agentic memory?",
+          question: "What is the most common long-term failure mode?",
           answer:
-            "It is Copilot's ability to learn recurring repository patterns, store them with citations, validate them before use, and discard them when they become stale.",
+            "Stale context. The repo changes, but the instruction and documentation layer does not. That teaches the assistant outdated or contradictory behavior.",
         },
         {
-          question: "How is memory validated?",
+          question: "What signals tell me the context system is thin or stale?",
           answer:
-            "Copilot checks that the cited code still exists and still represents the pattern before using the memory again.",
-        },
-        {
-          question: "When should I prefer instructions over memory?",
-          answer:
-            "Use instructions for non-negotiable rules such as security, architecture, or explicit team conventions. Let memory capture patterns that are safe to infer from repository history.",
-        },
-        {
-          question: "Are plugins portable across surfaces?",
-          answer:
-            "No. Plugins are much more surface-specific than local configuration files, so prefer .github customization when portability matters.",
+            "Repeated AI mistakes, repeated clarification questions, inconsistent behavior across developers, and instructions that reference files or patterns that no longer exist.",
         },
       ],
-      tags: ["memory", "plugins", "agentic-memory", "marketplace", "automated"],
+      tags: [
+        "operating-model",
+        "maintenance",
+        "memory",
+        "measurement",
+        "anti-patterns",
+        "context-hygiene",
+      ],
     },
     {
-      slug: "docs-folder",
-      title: "/docs/ Folder",
-      type: "video-code",
-      duration: "7 mins",
-      videoId: "placeholder-docs-folder",
+      slug: "ai-assisted-sdlc-capstone",
+      title: "End-to-End AI-Assisted SDLC Workflow",
+      type: "video",
+      duration: "12 mins",
+      videoId: "placeholder-ai-assisted-sdlc-capstone",
       description:
-        "Build a /docs folder optimized for AI consumption, including ADRs and project knowledge that complements .github behavior rules.",
+        "Synthesize the entire course into one end-to-end AI-assisted engineering workflow. Map shared context, planning, implementation, tooling, and maintenance into a curate → plan → build → validate delivery loop.",
       objectives: [
-        "Structure a /docs folder that AI can consume effectively",
-        "Write Architecture Decision Records that prevent AI from suggesting rejected patterns",
-        "Reference documentation from instructions, prompts, and agent definitions",
-        "Explain the synergy between .github behavior rules and /docs knowledge",
+        "Synthesize all course layers into a single curate → plan → build → validate delivery loop",
+        "Map each customization surface to its corresponding SDLC phase",
+        "Design a minimum viable context stack for a real team starting from scratch",
+        "Apply the progressive complexity principle to sequence a team adoption plan",
       ],
       infoBoxes: [
         {
-          title: ".github for Behavior, /docs for Knowledge",
+          title: "From Surfaces to System",
           content:
-            ".github tells the AI how to behave. /docs tells the AI what it needs to know about architecture, rejected decisions, and operational context.",
+            "The goal of the capstone is not to use every surface. It is to use the right surfaces at the right stage of delivery: curate context, plan against it, build with it, and validate the result.",
+        },
+      ],
+      noteBoxes: [
+        {
+          title: "Start Small, Prove Value",
+          content:
+            "Most teams get most of the value from instructions plus docs. Add prompts, agents, MCP, hooks, and skills only when they solve an actual friction point.",
         },
       ],
       diagrams: [
         {
           chart:
-            'graph LR\n    subgraph "Behavior (.github/)"\n        A["Instructions\\nHow to write code"]\n        B["Agents\\nWho does what"]\n        C["Hooks\\nWhat is enforced"]\n    end\n    subgraph "Knowledge (/docs/)"\n        D["architecture.md\\nSystem design"]\n        E["adr/\\nDecision records"]\n        F["api/\\nEndpoint specs"]\n    end\n    A --> |"References"| D\n    B --> |"References"| E\n    style A fill:#4a9eff,color:#fff\n    style D fill:#5bb974,color:#fff',
+            'graph LR\n    A["Curate\\n.github/ + /docs/"] --> B["Plan\\nRead-only planner"]\n    B --> C["Build\\nImplementation agent"]\n    C --> D["Validate\\nHooks + review"]\n    D --> E["Deploy"]\n    E --> A',
           caption:
-            "Behavior files point to knowledge files so Copilot gets both the how and the why.",
-          alt: "A behavior layer in .github references a knowledge layer in /docs.",
+            "The delivery loop: curate context, plan deliberately, build with scoped roles, validate with guardrails, then feed improvements back into the context layer.",
+          alt: "Curate, plan, build, validate, and deploy form a continuous delivery loop.",
         },
       ],
+      poll: {
+        question:
+          "Which stage of the minimum viable context stack has your team reached?",
+        options: [
+          { id: "none", text: "No context setup yet" },
+          { id: "stage1", text: "Repository instructions only" },
+          { id: "stage2", text: "Instructions plus docs" },
+          { id: "stage3", text: "Prompts or planning workflow" },
+          { id: "stage4", text: "Agents, skills, and guardrails" },
+        ],
+        simulatedVotes: {
+          none: 18,
+          stage1: 32,
+          stage2: 26,
+          stage3: 14,
+          stage4: 10,
+        },
+      },
       codePreview: {
-        title: "Docs Folder Patterns",
-        description:
-          "An AI-friendly documentation structure, a sample ADR, and an instruction file that links to docs.",
+        title: "Minimum Viable Context Stack",
+        description: "A compact stack for a real team starting from scratch.",
         segments: [
           {
             code: lines(
-              "# docs/",
-              "  README.md",
-              "  architecture.md",
-              "  adr/",
-              "    001-database-choice.md",
-              "    002-auth-strategy.md",
-              "  api/",
-              "    endpoints.md",
-              "    error-codes.md",
-              "  guides/",
-              "    deployment.md",
-              "  standards/",
-              "    naming-conventions.md",
-              "    error-handling.md",
+              "# Day 1",
+              ".github/copilot-instructions.md",
+              "docs/architecture.md",
+              "",
+              "# Week 1",
+              ".github/instructions/frontend.instructions.md",
+              ".github/instructions/backend.instructions.md",
+              "docs/adr/001-state-management.md",
+              "",
+              "# Month 1",
+              ".github/prompts/plan-feature.prompt.md",
+              ".github/agents/planner.agent.md",
+              ".github/agents/implementer.agent.md",
             ),
             language: "text",
-            filename: "docs-folder-structure",
+            filename: "minimum-viable-context-stack",
             explanation:
-              "A documentation layout that keeps architecture, operational guides, ADRs, and standards separate but easy to link.",
-          },
-          {
-            code: lines(
-              "# ADR-001: Database Choice",
-              "",
-              "## Status",
-              "Accepted",
-              "",
-              "## Context",
-              "We need a primary database for the application.",
-              "",
-              "## Decision",
-              "PostgreSQL with TypeORM.",
-              "",
-              "## Consequences",
-              "- All models use TypeORM decorators.",
-              "- Migrations are managed via TypeORM CLI.",
-              "",
-              "## Rejected Alternatives",
-              "- MongoDB: not needed for this workload.",
-              "- SQLite: not suitable for concurrent production use.",
-            ),
-            language: "markdown",
-            filename: "docs/adr/001-database-choice.md",
-            explanation:
-              "ADRs are especially valuable because they teach the AI what was rejected as well as what was chosen.",
-          },
-          {
-            code: lines(
-              "---",
-              'name: "Backend Standards"',
-              'description: "Rules for Python FastAPI backend code"',
-              'applyTo: "src/api/**/*.py"',
-              "---",
-              "",
-              "# Backend Rules",
-              "",
-              "- Use async def for all route handlers.",
-              "- Follow architecture decisions in [ADR docs](../../docs/adr/).",
-              "- See [API endpoint spec](../../docs/api/endpoints.md).",
-              "- See [error handling guide](../../docs/standards/error-handling.md).",
-            ),
-            language: "markdown",
-            filename: ".github/instructions/backend.instructions.md",
-            explanation:
-              "Instruction files can link directly into docs so the model follows rules and understands architectural intent.",
+              "Earn each layer of complexity. Do not start with the most sophisticated setup if the foundation is still weak.",
           },
         ],
       },
-      stepGuides: [
-        {
-          title: "Build Your /docs Folder for AI",
-          steps: [
-            {
-              title: "Create the docs structure",
-              description:
-                "Start with README, architecture, adr, api, guides, and standards sections.",
-            },
-            {
-              title: "Write README as an index",
-              description:
-                "Make docs/README.md the navigational entry point for both humans and AI tools.",
-            },
-            {
-              title: "Add your first ADR",
-              description:
-                "Capture one important architecture decision with accepted and rejected alternatives.",
-            },
-            {
-              title: "Reference docs from instructions",
-              description:
-                "Link relevant docs from .github files so behavior guidance can pull in supporting knowledge.",
-            },
-          ],
-        },
-      ],
       qa: [
         {
-          question: "Why do I need /docs if I already have .github?",
+          question:
+            "Do I need all seven customization surfaces to be effective?",
           answer:
-            ".github covers behavior. /docs covers architecture, decisions, and context that are not obvious from the code alone.",
+            "No. Most teams get substantial value from instructions and docs first. The rest are optional layers that should earn their complexity by solving real workflow problems.",
         },
         {
-          question: "Why are ADRs especially useful for AI?",
+          question:
+            "What is the capstone lesson trying to teach beyond feature inventory?",
           answer:
-            "Because they record both the chosen approach and rejected alternatives, which prevents the model from suggesting patterns the team has already ruled out.",
-        },
-        {
-          question: "How do I connect docs to Copilot instructions?",
-          answer:
-            "Use markdown links from instructions, prompts, or agents so the model can read deeper context only when needed.",
-        },
-        {
-          question: "Should everything live in docs instead of .github?",
-          answer:
-            "No. Keep behavior rules in .github and knowledge artifacts in docs. They solve different problems and work best together.",
+            "It teaches a delivery system. Context engineering is valuable because it improves the whole flow from planning through validation, not because it gives you a collection of isolated configuration files.",
         },
       ],
       tags: [
-        "docs",
-        "documentation",
-        "ADR",
-        "architecture-decision-records",
-        "knowledge-context",
-      ],
-    },
-    {
-      slug: "context-layering",
-      title: "Context Layering",
-      type: "video",
-      duration: "8 mins",
-      videoId: "placeholder-context-layering",
-      description:
-        "Master the three-axis context model and learn to design context architectures that compose automatically.",
-      objectives: [
-        "Apply the three-axis context model to organize customization files",
-        "Design a context pyramid with appropriate rules at each layer",
-        "Use progressive disclosure to manage context budget efficiently",
-        "Explain how horizontal, vertical, and diagonal axes compose together",
-      ],
-      diagrams: [
-        {
-          chart:
-            'graph TB\n    subgraph "Axis 1: Horizontal"\n        A["Agents"]\n        B["Skills"]\n        C["MCP"]\n    end\n    subgraph "Axis 2: Vertical"\n        D["Org instructions"]\n        E["Repo instructions"]\n        F["Path-specific instructions"]\n        G["Personal instructions"]\n    end\n    subgraph "Axis 3: Diagonal"\n        H["Prompts"]\n        I["Bridge agents + skills + instructions"]\n    end',
-          caption:
-            "The three-axis model explains how different context sources activate and combine.",
-          alt: "Horizontal, vertical, and diagonal context axes shown as separate but complementary groups.",
-        },
-        {
-          chart:
-            'graph TD\n    A["Repository\\ncopilot-instructions.md"] --> B["Path-Specific\\ninstructions/*.instructions.md"]\n    B --> C["Task-Specific\\nprompts + agents"]\n    C --> D["Automated\\nmemory + plugins"]\n    style A fill:#e8f4ff,color:#333\n    style D fill:#4a9eff,color:#fff',
-          caption:
-            "The context pyramid moves from broad repository defaults to narrow task-specific overrides.",
-          alt: "Repository rules feed into path-specific rules and then task-specific context layers.",
-        },
-      ],
-      qa: [
-        {
-          question: "What are the three axes?",
-          answer:
-            "Horizontal includes agents, skills, and MCP. Vertical includes layered instructions. Diagonal includes task-specific prompts that bridge the other two.",
-        },
-        {
-          question: "What is the context pyramid?",
-          answer:
-            "It is the idea that broad repository rules sit at the base, narrower path-specific rules sit above them, and task-specific prompts or agent workflows sit at the top.",
-        },
-        {
-          question: "What is the flat dump anti-pattern?",
-          answer:
-            "It means putting everything in one huge repository instruction file instead of splitting context by scope and concern.",
-        },
-        {
-          question: "How do I manage context budget?",
-          answer:
-            "Keep files focused, rely on scope-specific activation, and use progressive disclosure so extra resources load only when needed.",
-        },
-      ],
-      tags: [
-        "three-axis",
-        "horizontal",
-        "vertical",
-        "diagonal",
-        "context-budget",
-      ],
-    },
-    {
-      slug: "copilot-across-surfaces",
-      title: "Copilot Across Surfaces",
-      type: "video",
-      duration: "7 mins",
-      videoId: "placeholder-copilot-across-surfaces",
-      description:
-        "Map which context-engineering features work on each Copilot surface and design your .github folder for maximum portability.",
-      objectives: [
-        "Map which customization features work on each surface",
-        "Explain how the coding agent reads custom instructions autonomously",
-        "Configure excludeAgent to control surface-specific rules",
-        "Design a .github folder that maximizes portability across surfaces",
-      ],
-      infoBoxes: [
-        {
-          title: "Portability Matrix",
-          content:
-            "Custom instructions are the most portable feature and work across VS Code, CLI, coding agent, code review, and JetBrains. MCP also travels widely. Agents, skills, hooks, memory, and plugins are much more VS Code specific.",
-        },
-      ],
-      noteBoxes: [
-        {
-          title: "Course Scope",
-          content:
-            "Hands-on demos in this course target VS Code first and Copilot CLI second. Other surfaces are discussed for portability awareness rather than as primary demo environments.",
-        },
-        {
-          title: "Design for Portability",
-          content:
-            "Build around instructions and MCP first. Layer VS Code-only features on top so the same repository remains useful across multiple Copilot surfaces.",
-        },
-      ],
-      qa: [
-        {
-          question: "Which customization feature works everywhere?",
-          answer:
-            "Custom instruction files are the most portable and should be the foundation of any cross-surface setup.",
-        },
-        {
-          question: "Which features are effectively VS Code-only?",
-          answer:
-            "Custom agents, skills, hooks, subagents, memory, and plugins are much more tied to VS Code than instructions or MCP.",
-        },
-        {
-          question: "What does excludeAgent do?",
-          answer:
-            "It prevents a given instruction file from loading on specific surfaces, such as the coding agent, when those rules would not make sense there.",
-        },
-        {
-          question: "What is the main portability principle?",
-          answer:
-            "Start with the features that travel the farthest, then layer deeper IDE-specific features only where they add clear value.",
-        },
-      ],
-      tags: [
-        "surfaces",
-        "vs-code",
-        "cli",
-        "coding-agent",
-        "portability",
-        "excludeAgent",
-      ],
-    },
-    {
-      slug: "ai-assisted-sdlc",
-      title: "AI-Assisted SDLC",
-      type: "video-code",
-      duration: "10 mins",
-      videoId: "placeholder-ai-assisted-sdlc",
-      description:
-        "Map context engineering to every phase of the software development lifecycle and see a full AI-assisted workflow in action.",
-      objectives: [
-        "Map AI assistance to every phase of the SDLC",
-        "Explain why context quality drives AI output quality",
-        "Design a phased AI-assisted workflow using context engineering",
-        "Articulate the shift from autocomplete to orchestrated agents",
-      ],
-      infoBoxes: [
-        {
-          title: "Context Engineering Across the SDLC",
-          content:
-            "Use prompts for planning and design, agents plus skills for coding, TDD workflows for testing, review agents for feedback, hooks for deployment guardrails, and memory plus docs for long-term maintenance.",
-        },
-      ],
-      noteBoxes: [
-        {
-          title: "Four Levels of AI Assistance",
-          content:
-            "The progression is autocomplete, chat, agentic tooling, and finally orchestrated multi-agent workflows. Each level demands more context and rewards it with better output.",
-        },
-        {
-          title: "Context Quality Is the Multiplier",
-          content:
-            "The same model can produce generic or production-ready results depending on how much structured project context you provide.",
-        },
-      ],
-      diagrams: [
-        {
-          chart:
-            'graph LR\n    A["Plan\\nPrompt Files"] --> B["Design\\nPrompts + Instructions"]\n    B --> C["Code\\nAgents + Skills"]\n    C --> D["Test\\nTDD Agent"]\n    D --> E["Review\\nReview Agent"]\n    E --> F["Deploy\\nHooks + Coding Agent"]\n    F --> G["Monitor\\nMCP Servers"]\n    G --> H["Maintain\\nMemory + Docs"]\n    H -->|"feedback"| A',
-          caption:
-            "Different context features become primary at different stages of the SDLC.",
-          alt: "An SDLC loop maps prompts, agents, hooks, MCP, memory, and docs to each development phase.",
-        },
-      ],
-      codePreview: {
-        title: "Planning and TDD Workflow Files",
-        description:
-          "A planning prompt and a TDD-focused custom agent that work together across the delivery lifecycle.",
-        segments: [
-          {
-            code: lines(
-              "---",
-              "description: Break down a feature into implementation tasks",
-              'agent: "agent"',
-              "tools:",
-              "  - github",
-              "---",
-              "",
-              "Break down the following feature request into implementation tasks.",
-              "",
-              "For each task:",
-              "1. Write a clear description with acceptance criteria",
-              "2. Identify which files need changes",
-              "3. Note testing requirements",
-              "4. Flag any dependencies",
-              "",
-              "Feature: ${input:featureDescription}",
-            ),
-            language: "markdown",
-            filename: ".github/prompts/plan-feature.prompt.md",
-            explanation:
-              "A planning prompt that turns a feature request into implementation tasks.",
-          },
-          {
-            code: lines(
-              "---",
-              "name: TDD Agent",
-              "description: Test-driven development workflow agent",
-              "tools:",
-              "  - run_in_terminal",
-              "  - read_file",
-              "  - replace_string_in_file",
-              "  - create_file",
-              "---",
-              "",
-              "You follow strict test-driven development.",
-              "",
-              "1. Read the requirement",
-              "2. Write a failing test first",
-              "3. Run the test and confirm it fails",
-              "4. Write the minimum code to pass",
-              "5. Re-run the test",
-              "6. Refactor if needed",
-            ),
-            language: "markdown",
-            filename: ".github/agents/tdd-agent.agent.md",
-            explanation:
-              "A dedicated TDD agent encodes a specific workflow instead of relying on ad hoc prompting.",
-          },
-        ],
-      },
-      stepGuides: [
-        {
-          title: "Feature Lifecycle Walkthrough",
-          steps: [
-            {
-              title: "Plan with a prompt",
-              description:
-                "Run a planning prompt that breaks a feature into tasks, acceptance criteria, and dependencies.",
-            },
-            {
-              title: "Code with your framework agent",
-              description:
-                "Use an implementation agent backed by instructions and skills to execute the first task.",
-            },
-            {
-              title: "Test with the TDD agent",
-              description:
-                "Switch to a TDD-focused agent that writes the failing test first, then drives the implementation loop.",
-            },
-            {
-              title: "Review with a review prompt or agent",
-              description:
-                "Run security, performance, and convention checks using your review-oriented context files.",
-            },
-            {
-              title: "Deploy with hooks",
-              description:
-                "Use lifecycle hooks to enforce formatting, tests, and validation before code ships.",
-            },
-            {
-              title: "Maintain with memory",
-              description:
-                "Capture the resulting patterns so future work on adjacent features starts from a richer baseline.",
-            },
-          ],
-        },
-      ],
-      qa: [
-        {
-          question: "How does context engineering map to the SDLC?",
-          answer:
-            "Each phase gets a different dominant context surface: prompts for planning, agents and skills for coding, TDD flows for testing, review agents for review, hooks for deployment, and memory plus docs for maintenance.",
-        },
-        {
-          question: "What are the four levels of AI assistance?",
-          answer:
-            "Autocomplete, chat, agentic tooling, and orchestrated workflows. Each stage needs more context and produces more capable output.",
-        },
-        {
-          question: "Why is a TDD agent effective?",
-          answer:
-            "Because it encodes an explicit workflow that consistently writes tests first instead of depending on the model to remember that discipline ad hoc.",
-        },
-        {
-          question: "What is the central lesson of this module?",
-          answer:
-            "Context quality is the highest-leverage input in AI-assisted delivery. Better structure produces better results from the same models.",
-        },
-      ],
-      tags: [
+        "capstone",
         "sdlc",
-        "planning",
-        "coding",
-        "testing",
-        "review",
-        "deployment",
-        "orchestration",
+        "delivery-loop",
+        "minimum-viable-stack",
+        "progressive-complexity",
+        "workflow",
       ],
-    },
-    {
-      slug: "advanced-patterns",
-      title: "Advanced Patterns",
-      type: "video",
-      duration: "8 mins",
-      videoId: "placeholder-advanced-patterns",
-      description:
-        "Learn the advanced patterns that separate good context engineering from great, including description strategy, agent design, anti-patterns, and maintenance discipline.",
-      objectives: [
-        "Apply the description field strategy for intent-based instruction matching",
-        "Design agents using progressive complexity and read-only versus read-write separation",
-        "Identify and remediate the core context engineering anti-patterns",
-        "Implement a maintenance checklist for keeping context synchronized with code",
-      ],
-      infoBoxes: [
-        {
-          title: "Common Anti-Patterns",
-          content:
-            "Watch for instruction bloat, monolithic rule files, duplicating linters, over-privileged agents, stale context, overly restrictive guidance, and flat unlayered rule dumps.",
-        },
-      ],
-      noteBoxes: [
-        {
-          title: "Description Field Strategy",
-          content:
-            "Write descriptions like trigger phrases for user intent, not like passive labels. The description is part of discovery and matching, not just documentation.",
-        },
-        {
-          title: "Maintenance Neglect Is a Real Risk",
-          content:
-            "Stale context becomes harmful because it teaches the model outdated patterns. Treat .github files like code and review them regularly.",
-        },
-        {
-          title: "Three Agent Design Principles",
-          content:
-            "Start simple, separate read-only and write-capable agents, and match model power to the complexity of the task.",
-        },
-      ],
-      diagrams: [
-        {
-          chart:
-            'graph TD\n    A["General Agent\\nSimple prompts"] -->|"growing needs"| B["Specialized Agent\\nDomain-specific"]\n    B -->|"distinct workflows"| C["Read-Only Explorer\\nresearch + search"]\n    B -->|"distinct workflows"| D["Read-Write Builder\\ncode + test"]\n    C -->|"fast model"| E["Speed-Optimized"]\n    D -->|"powerful model"| F["Quality-Optimized"]',
-          caption:
-            "Agent architectures should specialize gradually and preserve least privilege.",
-          alt: "A general agent branches into read-only and read-write specializations mapped to different model strengths.",
-        },
-      ],
-      qa: [
-        {
-          question: "What is the description field strategy?",
-          answer:
-            "Write description fields as search-style intent phrases that help the runtime decide when a file is relevant.",
-        },
-        {
-          question: "What are the main agent design principles?",
-          answer:
-            "Start with one general agent, separate read-only from write-capable roles, and choose models based on the complexity and speed needs of each role.",
-        },
-        {
-          question: "How do you fix instruction bloat?",
-          answer:
-            "Split large files by concern and scope so only relevant guidance loads for each task.",
-        },
-        {
-          question: "How often should context files be reviewed?",
-          answer:
-            "Quarterly is a good default. Audit rules, tool permissions, and references against the actual state of the codebase.",
-        },
-      ],
-      tags: [
-        "best-practices",
-        "anti-patterns",
-        "description-field",
-        "agent-design",
-        "maintenance",
-      ],
-    },
-    {
-      slug: "conclusion",
-      title: "Conclusion",
-      type: "video",
-      duration: "5 mins",
-      videoId: "placeholder-conclusion",
-      description:
-        "Wrap up the course with a seven-surface recap, a practical implementation checklist, and resources for staying current as the tooling evolves.",
-      objectives: [
-        "Summarize the seven customization surfaces and when to use each",
-        "Recall the three-axis context model and feature mapping",
-        "Build a prioritized implementation checklist for any project",
-        "Identify resources for staying current as features evolve",
-      ],
-      infoBoxes: [
-        {
-          title: "Seven Surfaces, One Mental Model",
-          content:
-            "Use custom instructions for rules, prompt files for repeatable tasks, agents for roles, skills for on-demand knowledge, MCP for external tools, hooks for enforcement, and subagents for delegated work.",
-        },
-        {
-          title: "Day-One Implementation Checklist",
-          content:
-            "Start with copilot-instructions.md, then add path-scoped instructions, one custom agent, one prompt file, one MCP server, a skill, and finally hooks. Build incrementally instead of all at once.",
-        },
-      ],
-      noteBoxes: [
-        {
-          title: "Stay Current",
-          content:
-            "Follow the VS Code Copilot docs, GitHub changelog, and the Agent Skills ecosystem to keep your context architecture aligned with the latest capabilities.",
-        },
-      ],
-      diagrams: [
-        {
-          chart:
-            'graph TB\n    subgraph "Horizontal"\n        A["Agents"]\n        B["Skills"]\n        C["MCP"]\n        D["Subagents"]\n    end\n    subgraph "Vertical"\n        E["Instructions"]\n        F["Hooks"]\n    end\n    subgraph "Diagonal"\n        G["Prompts"]\n    end\n    subgraph "Supporting Features"\n        H["Memory"]\n        I["Plugins"]\n        J["Docs"]\n    end',
-          caption:
-            "The full context engineering ecosystem combines three core axes with a few supporting systems.",
-          alt: "Horizontal, vertical, and diagonal customization layers appear alongside memory, plugins, and docs.",
-        },
-      ],
-      qa: [
-        {
-          question: "What are the seven customization surfaces?",
-          answer:
-            "Instructions, prompts, custom agents, skills, MCP servers, hooks, and subagents form the core customization set taught in the course.",
-        },
-        {
-          question: "What is the recommended implementation order?",
-          answer:
-            "Start small with repository instructions, then path-scoped instructions, then add higher-power features such as agents, prompts, MCP, skills, and hooks.",
-        },
-        {
-          question: "How should I organize the features mentally?",
-          answer:
-            "Use the three-axis model: horizontal for capabilities, vertical for scope-filtered rules, and diagonal for task workflows.",
-        },
-        {
-          question: "How do I keep the system healthy?",
-          answer:
-            "Review context files like application code, remove dead rules, tighten permissions, and keep docs aligned with actual architecture changes.",
-        },
-      ],
-      tags: ["recap", "reference", "implementation-checklist", "resources"],
     },
     {
       slug: "questions",
@@ -1811,304 +1093,235 @@ export const CTX_SDLC_COURSE: CourseDefinition = {
       type: "quiz",
       duration: "10 mins",
       description:
-        "Test your knowledge of GitHub Copilot customization surfaces, the three-axis model, file formats, portability, and best practices.",
+        "Test your context engineering knowledge with scenario-based and concept-check questions covering the full curate → plan → build → validate workflow and the seven customization surfaces.",
       objectives: [
-        "Validate understanding of the customization surfaces",
-        "Demonstrate knowledge of the three-axis context model",
-        "Identify correct file formats and activation mechanisms",
-        "Apply best practices and anti-pattern awareness",
+        "Validate understanding of context engineering principles and the delivery loop",
+        "Test knowledge of the seven customization surfaces and when to use each",
+        "Assess judgment on progressive complexity, least-privilege, and maintenance",
+        "Apply course concepts to realistic scenarios",
       ],
       infoBoxes: [
         {
           title: "Assessment Overview",
           content:
-            "This quiz covers instructions, prompts, agents, skills, MCP, hooks, memory, portability, and implementation order.",
+            "This quiz mixes concept checks with scenario-based questions. When two answers seem plausible, ask which one best follows progressive complexity, least privilege, and long-term maintainability.",
+        },
+      ],
+      noteBoxes: [
+        {
+          title: "Target Score",
+          content:
+            "Aim for 80 percent or higher. If you miss multiple questions in one area, revisit the corresponding lesson before moving on.",
         },
       ],
       quizQuestions: [
         makeQuizQuestion(
           "q1",
-          "What is the primary file that provides repository-wide context to GitHub Copilot?",
+          "What is the core thesis of context engineering in this course?",
           [
-            ".github/copilot-instructions.md",
-            ".github/README.md",
-            ".vscode/settings.json",
-            "package.json",
+            "AI should replace manual code review",
+            "AI output quality tracks input context quality",
+            "Every repo needs all seven customization surfaces",
+            "The best model solves repository context automatically",
           ],
-          0,
-          "copilot-instructions.md is the repository-wide instruction file that applies across Copilot interactions.",
+          1,
+          "The course is built on the idea that AI output quality correlates directly with input context quality.",
         ),
         makeQuizQuestion(
           "q2",
-          "Which YAML front-matter property scopes an instruction file to specific file paths?",
-          ["scope", "applyTo", "glob", "matchPath"],
-          1,
-          "applyTo accepts glob patterns and controls when a path-scoped instruction file should load.",
+          "What is the best first step for a repository with no Copilot customization yet?",
+          [
+            "Create five agents",
+            "Add MCP servers for every external system",
+            "Create a short copilot-instructions.md file",
+            "Install plugins before writing any files",
+          ],
+          2,
+          "Start with a small repository-wide instruction file. It is the highest-leverage, lowest-complexity step.",
         ),
         makeQuizQuestion(
           "q3",
-          "What are the two discovery mechanisms for instruction files?",
+          "How do path-specific instructions normally activate?",
           [
-            "Manual import and auto-import",
-            "Glob matching and semantic matching",
-            "File search and text search",
-            "Static loading and dynamic loading",
+            "Only through manual invocation",
+            "By applyTo glob matching and semantic description matching",
+            "Only when the coding agent asks for them",
+            "Only when a prompt file links to them",
           ],
           1,
-          "Instructions can load because a file matches applyTo or because the description semantically matches the task.",
+          "Path-specific instructions load through applyTo matching and can also be discovered through semantic description matching.",
         ),
         makeQuizQuestion(
           "q4",
-          "What syntax is used for input variables in prompt files?",
+          "What is the strongest reason to separate planning from implementation?",
           [
-            "${input:variableName}",
-            "{{variableName}}",
-            "{variableName}",
-            "$(variableName)",
+            "Planning agents are cheaper",
+            "It keeps discovery and clarification distinct from code changes",
+            "It avoids writing docs",
+            "Implementation agents cannot read files",
           ],
-          0,
-          "Prompt files use ${input:name} to collect runtime values from the user.",
+          1,
+          "Planning is a different kind of work. Separating it reduces premature code changes and forces ambiguity into the open.",
         ),
         makeQuizQuestion(
           "q5",
-          "Which front-matter property in a prompt file delegates execution to an agent with tool access?",
-          ["type: agent", 'agent: "agent"', "tools: enabled", "mode: run"],
+          "Which role should usually be read-only?",
+          ["Implementation agent", "Review agent", "MCP server", "Prompt file"],
           1,
-          "The agent property routes a prompt through agent mode or a named custom agent.",
+          "Review roles should usually report findings, not silently modify the implementation.",
         ),
         makeQuizQuestion(
           "q6",
-          "Where are custom agent definition files stored?",
+          "What is the practical value of agent skills?",
           [
-            ".vscode/agents/",
-            ".github/agents/",
-            "src/agents/",
-            "Any location with .agent.md extension",
+            "They replace instructions entirely",
+            "They package reusable workflows and resources that load on demand",
+            "They are only for UI theming",
+            "They make applyTo glob patterns unnecessary",
           ],
           1,
-          "The standard repository location is .github/agents for .agent.md files.",
+          "Skills package capabilities and supporting resources without forcing them into every session.",
         ),
         makeQuizQuestion(
           "q7",
-          "What principle should guide tool assignment in custom agents?",
+          "When should you choose a hook instead of an instruction?",
           [
-            "Maximum capability",
-            "Least privilege",
-            "Tool mirroring",
-            "User preference per session",
+            "When you need deterministic enforcement",
+            "When you want longer prose explanations",
+            "When you need semantic discovery",
+            "When you want the model to infer the rule",
           ],
-          1,
-          "Each agent should get only the tools required for its role.",
+          0,
+          "Use hooks when failure would be expensive and you need deterministic enforcement rather than polite guidance.",
         ),
         makeQuizQuestion(
           "q8",
-          "What is the key file in an agent skill package?",
-          ["README.md", "SKILL.md", "skill.json", "index.md"],
-          1,
-          "SKILL.md is the entry point that defines metadata and instructions for a skill package.",
+          "What is the portability-first design rule?",
+          [
+            "Build VS Code-specific features first",
+            "Avoid prompts entirely",
+            "Build portable foundations first, then layer specialized features",
+            "Only use the coding agent surface",
+          ],
+          2,
+          "Repository instructions and docs should form the portable foundation. Specialized features can layer on top.",
         ),
         makeQuizQuestion(
           "q9",
-          "How do agent skills manage context budget?",
+          "What makes context engineering an operating model rather than a setup task?",
           [
-            "By loading everything at startup",
-            "By compressing content before sending",
-            "Through progressive disclosure",
-            "By limiting files to 1KB",
+            "It requires expensive cloud tooling",
+            "It needs ongoing review, updates, and cleanup as the codebase evolves",
+            "It only works for enterprise teams",
+            "It depends on personal memory rather than shared files",
           ],
-          2,
-          "Skills expose metadata first and only load detailed resources when a relevant task actually invokes them.",
+          1,
+          "Context files become harmful if they drift. Maintenance, measurement, and cleanup are part of the discipline.",
         ),
         makeQuizQuestion(
           "q10",
-          "Which file configures MCP servers for a repository?",
+          "What is the progressive complexity principle?",
           [
-            ".github/mcp-servers.json",
-            ".vscode/mcp.json",
-            ".github/mcp.json",
-            "mcp-config.json",
+            "Always adopt the most powerful setup immediately",
+            "Add complexity only when each new layer earns its place",
+            "Keep all rules in one file until the repo is large",
+            "Prefer more tools over clearer workflows",
           ],
           1,
-          ".vscode/mcp.json is the repository-level MCP configuration file used in VS Code workspaces.",
+          "Start simple and add layers only when a real workflow limitation justifies them.",
         ),
         makeQuizQuestion(
           "q11",
-          "What should you never put in an MCP server configuration file?",
+          "Which pair forms the shared project context foundation?",
           [
-            "Server command paths",
-            "Tool descriptions",
-            "Plain-text secrets or API keys",
-            "Environment variable names",
+            ".github and /docs",
+            "MCP and hooks",
+            "Prompts and plugins",
+            "Subagents and memory",
           ],
-          2,
-          "Secrets must be injected securely at runtime rather than committed to source control.",
+          0,
+          "Behavior in .github plus knowledge in /docs form the reusable foundation for later workflows.",
         ),
         makeQuizQuestion(
           "q12",
-          "How does a hook script communicate its decision back to Copilot?",
+          "Which statement best describes the capstone delivery loop?",
           [
-            "By writing to a configuration file",
-            "Through exit codes and hook output",
-            "By modifying VS Code settings",
-            "Through a WebSocket connection",
+            "Plan, code, and deploy in one monolithic step",
+            "Curate context, plan, build, validate, then feed improvements back",
+            "Write prompts first and docs later if needed",
+            "Rely on memory instead of version-controlled files",
           ],
           1,
-          "Hooks allow, deny, or modify tool calls through their process exit code and optional structured output.",
-        ),
-        makeQuizQuestion(
-          "q13",
-          "Which hook event is the primary security gate for blocking dangerous tool calls?",
-          ["SessionStart", "PreToolUse", "PostToolUse", "UserPromptSubmit"],
-          1,
-          "PreToolUse fires before the tool executes, making it the main enforcement point.",
-        ),
-        makeQuizQuestion(
-          "q14",
-          "How do subagents differ from the main agent?",
-          [
-            "They run in the same shared context",
-            "They are stateless and isolated per invocation",
-            "They always have more tools",
-            "They can only read files",
-          ],
-          1,
-          "Each subagent invocation starts fresh in its own context window and returns only a summary.",
-        ),
-        makeQuizQuestion(
-          "q15",
-          "How does Copilot memory validate stored observations?",
-          [
-            "It hashes the repository",
-            "It validates that cited code still exists and matches",
-            "It asks the user every time",
-            "It compares memories to instruction files",
-          ],
-          1,
-          "Memory is citation-backed and must still match the current codebase before reuse.",
-        ),
-        makeQuizQuestion(
-          "q16",
-          "Which customization feature works on every Copilot surface?",
-          ["Custom agents", "Hooks", "Custom instructions", "Agent skills"],
-          2,
-          "Instruction files are the most portable customization mechanism in the current ecosystem.",
-        ),
-        makeQuizQuestion(
-          "q17",
-          "What does the horizontal axis in the three-axis model represent?",
-          [
-            "Features filtered by file path",
-            "Features always available when selected, such as agents, skills, and MCP",
-            "User-invoked workflows",
-            "Organization-wide governance rules only",
-          ],
-          1,
-          "Horizontal context refers to capabilities and personas that are selected or available independent of file path.",
-        ),
-        makeQuizQuestion(
-          "q18",
-          "Which anti-pattern repeats rules that ESLint or Prettier already enforce?",
-          [
-            "Instruction bloat",
-            "Stale context",
-            "Linter duplication",
-            "Fighting the AI",
-          ],
-          2,
-          "Instructions should focus on intent, architecture, and conventions that static tooling cannot already encode.",
-        ),
-        makeQuizQuestion(
-          "q19",
-          "What is the recommended first step when adding context engineering to a project?",
-          [
-            "Create a custom agent",
-            "Set up MCP servers",
-            "Add .github/copilot-instructions.md with project conventions",
-            "Configure hooks for pre-commit validation",
-          ],
-          2,
-          "Start with repository-wide instructions because they are quick to author and provide immediate leverage everywhere.",
-        ),
-        makeQuizQuestion(
-          "q20",
-          "What is the purpose of the excludeAgent property in instruction YAML front matter?",
-          [
-            "Hide the instruction from custom agents",
-            "Exclude specific Copilot surfaces from reading the instruction",
-            "Remove the instruction from version control",
-            "Disable the instruction temporarily",
-          ],
-          1,
-          "excludeAgent lets you keep surface-specific rules from loading where they would be misleading, such as inside the coding agent.",
+          "The course culminates in a curate → plan → build → validate loop with feedback returning to the context layer.",
         ),
       ],
-      tags: ["quiz", "assessment", "review"],
+      tags: ["quiz", "assessment", "review", "knowledge-check"],
     },
   ],
   overview: {
     heroSubheading:
-      "Master the seven customization surfaces that turn GitHub Copilot from a generic assistant into a project-aware engineering partner.",
+      "Master the seven customization surfaces — instructions, prompts, agents, skills, MCP, hooks, and plugins — that transform GitHub Copilot from a generic assistant into a domain expert for your project.",
     learnItems: [
       {
         icon: "",
         title: "The .github folder, end to end",
         description:
-          "Understand the full layout for instructions, prompts, agents, skills, hooks, and supporting configuration so every customization surface has a clear home.",
+          "How custom instructions activate via glob patterns, how prompt files create reusable slash commands, how agents define specialized personas — the complete directory anatomy, explained through a real-world project.",
       },
       {
         icon: "",
-        title: "Seven surfaces, one architecture",
+        title: "Seven surfaces, one context architecture",
         description:
-          "Build instructions, prompts, agents, skills, MCP, hooks, and portability patterns into a coherent three-axis context system.",
+          "Build each customization layer individually — instructions, prompts, agents, skills, MCP servers, hooks, and plugins — then combine them into a composable three-axis context system that activates automatically.",
       },
       {
         icon: "",
         title: "Full SDLC integration",
         description:
-          "Use context engineering across planning, coding, testing, review, deployment, and maintenance instead of treating Copilot as a one-off chat tool.",
+          "Apply context engineering across the entire software development lifecycle: plan with prompts, code with instructions, review with agents, and automate with hooks — from first commit to production CI or CD.",
       },
       {
         icon: "",
         title: "VS Code and CLI throughout",
         description:
-          "Every demo centers on VS Code and Copilot CLI, with portability guidance for other surfaces where it matters.",
+          "Every demo runs in VS Code with GitHub Copilot Chat and the Copilot CLI. No cloud accounts or paid APIs required — you build a real .github setup that works on your local machine from lesson one.",
       },
     ],
     aboutParagraphs: [
-      "GitHub Copilot can generate strong code, but it starts as a generalist. It does not automatically know your architecture decisions, naming conventions, testing strategy, security posture, or deployment workflow. Context engineering fixes that by storing project knowledge and behavioral guidance in version-controlled artifacts.",
-      "This course covers the major customization surfaces available today: custom instructions, prompt files, custom agents, agent skills, MCP servers, hooks, and cross-surface portability. It also shows how memory and documentation complement those files so the assistant keeps learning from the repository instead of starting from zero every session.",
-      "By the end of the course, you will know how to design a layered .github plus /docs architecture that supports planning, coding, review, and delivery with the same repository-aware mental model.",
+      "GitHub Copilot is a powerful code generation tool. But out of the box, it does not know your project's naming conventions, preferred libraries, architecture decisions, or testing patterns. Every new chat session starts from zero — an amnesiac genius that writes excellent code in the wrong framework. Context engineering fixes that by building structured, version-controlled configuration files that teach the AI how your project works.",
+      "The customization system has seven distinct surfaces. <strong>Custom instructions</strong> activate automatically based on file paths. <strong>Prompt files</strong> create reusable slash commands for recurring tasks. <strong>Custom agents</strong> define specialized personas with restricted tool access. <strong>Skills</strong> package domain knowledge for cross-tool portability. <strong>MCP servers</strong> connect external tools. <strong>Hooks</strong> automate pre- and post-chat actions. <strong>Plugins</strong> extend agent capabilities from the marketplace. Each surface has a defined file format, trigger mechanism, and scope — and they compose together through a three-axis model.",
+      "In this course you build the complete picture. Starting with a blank .github folder, each lesson adds one layer of context capability — from always-on instructions through lifecycle hooks. By the end, you have a production-grade .github and /docs tree that makes Copilot behave like a project-aware expert. Every demo uses VS Code and the Copilot CLI.",
     ],
     detailItems: [
       {
         title: "Understand why context engineering matters",
         description:
-          "Learn why context quality drives AI output quality and why agentic workflows require much more structure than autocomplete or ad hoc chat.",
+          "Learn why AI output quality correlates directly with input context quality, how context engineering differs from prompt engineering, and why the shift to agentic AI demands a systematic approach.",
       },
       {
         title: "Master the .github directory structure",
         description:
-          "See how instructions, prompts, agents, skills, and hooks fit together, how they activate, and how they should be layered in a real repository.",
+          "Explore the complete .github folder anatomy — six subfolders, each controlling a different aspect of AI behavior. Learn the instruction layering pattern, precedence rules, and VS Code settings that customize file discovery.",
       },
       {
-        title: "Build the seven customization surfaces",
+        title: "Build all seven customization surfaces",
         description:
-          "Each lesson adds a new surface or supporting concept so the course builds toward a complete context architecture instead of isolated tricks.",
+          "Create custom instructions with glob-scoped activation, prompt files with dynamic variables, agent personas with tool restrictions, SKILL.md capability packages, MCP server connections, and lifecycle hooks.",
       },
       {
-        title: "Apply the three-axis model",
+        title: "Apply the three-axis context model",
         description:
-          "Organize context horizontally, vertically, and diagonally so each rule, workflow, and capability loads in the right place.",
+          "Understand horizontal (agents and skills), vertical (instructions), and diagonal (prompts) context axes. Learn how they compose automatically and design layered architectures for multi-framework projects.",
       },
       {
-        title: "Integrate context into the SDLC",
+        title: "Integrate context into your SDLC",
         description:
-          "Use prompts for planning, agents and skills for implementation, hooks for enforcement, and memory plus docs for long-term maintainability.",
+          "Apply context engineering to planning, coding, review, testing, and CI or CD. Build role-based workflows that move from curated context to validated changes.",
       },
       {
-        title: "Avoid anti-patterns early",
+        title: "Avoid common anti-patterns",
         description:
-          "Learn how to prevent rule bloat, stale context, over-privileged agents, and other mistakes that make AI assistance worse instead of better.",
+          "Recognize and fix instruction bloat, monolithic rule files, duplicated linter guidance, over-privileged agents, and stale context that fights the AI instead of guiding it.",
       },
     ],
     prerequisites: {
@@ -2116,32 +1329,32 @@ export const CTX_SDLC_COURSE: CourseDefinition = {
       subtitle: "What you need before starting",
       tags: ["VS Code", "GitHub Copilot", "Git", "TypeScript"],
       description:
-        "This course targets developers already using GitHub Copilot who want to move from one-off prompting to systematic, project-wide AI customization. Familiarity with VS Code and basic Git is recommended.",
+        "Developers who use GitHub Copilot and want to move beyond one-off prompting to systematic, project-wide AI customization. Familiarity with VS Code and basic Git is recommended. No specific programming language expertise is required.",
     },
     audienceCards: [
       {
         icon: "💻",
         title: "Individual Developers",
         description:
-          "You use Copilot daily and want it to follow your project conventions without constant re-explaining.",
+          "You use Copilot daily and want it to generate code that matches your project conventions without constant manual correction.",
       },
       {
         icon: "🏗️",
         title: "Tech Leads and Architects",
         description:
-          "You want to encode architecture decisions, standards, and guardrails so the whole team gets consistent AI assistance.",
+          "You want to encode architecture decisions, coding standards, and security policies into AI configuration that applies automatically for the whole team.",
       },
       {
         icon: "⚙️",
-        title: "Platform and DevOps Engineers",
+        title: "DevOps and Platform Engineers",
         description:
-          "You manage tooling and delivery workflows and need a way to integrate AI behavior into existing governance and automation.",
+          "You manage CI or CD pipelines and developer tooling, and want to integrate AI context into existing automation and governance workflows.",
       },
       {
         icon: "🤖",
         title: "Teams Adopting Agentic AI",
         description:
-          "Your team is moving beyond autocomplete toward tools, agents, and orchestrated workflows, and needs a disciplined context model.",
+          "Your team is moving from autocomplete to agents, and needs a structured approach to agent configuration, skills, and multi-agent orchestration.",
       },
     ],
   },
